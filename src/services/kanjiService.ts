@@ -1,0 +1,206 @@
+import type { Kanji, KanjiExample } from '../types';
+
+// Mock data para los kanji de la primera lección
+export const mockKanjiData: Kanji[] = [
+  {
+    id: '1',
+    character: '日',
+    meaning: 'sol, día',
+    readings: {
+      onyomi: ['ニチ', 'ジツ'],
+      kunyomi: ['ひ', '-び', '-か']
+    },
+    strokeCount: 4,
+    difficulty: 'beginner',
+    jlptLevel: 'N5',
+    examples: ['日本', '今日', '明日'],
+    radicals: ['日'],
+    frequency: 1,
+    grade: 1
+  },
+  {
+    id: '2',
+    character: '月',
+    meaning: 'luna, mes',
+    readings: {
+      onyomi: ['ゲツ', 'ガツ'],
+      kunyomi: ['つき']
+    },
+    strokeCount: 4,
+    difficulty: 'beginner',
+    jlptLevel: 'N5',
+    examples: ['月曜日', '一ヶ月', '月見'],
+    radicals: ['月'],
+    frequency: 2,
+    grade: 1
+  },
+  {
+    id: '3',
+    character: '火',
+    meaning: 'fuego',
+    readings: {
+      onyomi: ['カ'],
+      kunyomi: ['ひ', '-び', 'ほ-']
+    },
+    strokeCount: 4,
+    difficulty: 'beginner',
+    jlptLevel: 'N5',
+    examples: ['火曜日', '火山', '火事'],
+    radicals: ['火'],
+    frequency: 3,
+    grade: 1
+  },
+  {
+    id: '4',
+    character: '水',
+    meaning: 'agua',
+    readings: {
+      onyomi: ['スイ'],
+      kunyomi: ['みず']
+    },
+    strokeCount: 4,
+    difficulty: 'beginner',
+    jlptLevel: 'N5',
+    examples: ['水曜日', '水泳', '水道'],
+    radicals: ['水'],
+    frequency: 4,
+    grade: 1
+  },
+  {
+    id: '5',
+    character: '木',
+    meaning: 'árbol, madera',
+    readings: {
+      onyomi: ['ボク', 'モク'],
+      kunyomi: ['き', 'こ-']
+    },
+    strokeCount: 4,
+    difficulty: 'beginner',
+    jlptLevel: 'N5',
+    examples: ['木曜日', '木造', '木製'],
+    radicals: ['木'],
+    frequency: 5,
+    grade: 1
+  }
+];
+
+// Ejemplos de frases para cada kanji
+export const mockKanjiExamples: Record<string, KanjiExample[]> = {
+  '日': [
+    {
+      japanese: '今日は良い天気です。',
+      romaji: 'Kyou wa ii tenki desu.',
+      english: 'Today is good weather.',
+      difficulty: 'beginner'
+    },
+    {
+      japanese: '日本に行きたいです。',
+      romaji: 'Nihon ni ikitai desu.',
+      english: 'I want to go to Japan.',
+      difficulty: 'beginner'
+    },
+    {
+      japanese: '明日は忙しいです。',
+      romaji: 'Ashita wa isogashii desu.',
+      english: 'Tomorrow I am busy.',
+      difficulty: 'beginner'
+    }
+  ],
+  '月': [
+    {
+      japanese: '月がきれいです。',
+      romaji: 'Tsuki ga kirei desu.',
+      english: 'The moon is beautiful.',
+      difficulty: 'beginner'
+    },
+    {
+      japanese: '月曜日に会いましょう。',
+      romaji: 'Getsuyoubi ni aimashou.',
+      english: 'Let\'s meet on Monday.',
+      difficulty: 'beginner'
+    },
+    {
+      japanese: '一ヶ月日本語を勉強しています。',
+      romaji: 'Ikkagetsu nihongo wo benkyou shiteimasu.',
+      english: 'I have been studying Japanese for one month.',
+      difficulty: 'intermediate'
+    }
+  ],
+  '火': [
+    {
+      japanese: '火曜日にテストがあります。',
+      romaji: 'Kayoubi ni tesuto ga arimasu.',
+      english: 'There is a test on Tuesday.',
+      difficulty: 'beginner'
+    },
+    {
+      japanese: '火山が噴火しました。',
+      romaji: 'Kazan ga funka shimashita.',
+      english: 'The volcano erupted.',
+      difficulty: 'intermediate'
+    },
+    {
+      japanese: '火事が起きました。',
+      romaji: 'Kaji ga okimashita.',
+      english: 'A fire broke out.',
+      difficulty: 'intermediate'
+    }
+  ],
+  '水': [
+    {
+      japanese: '水曜日に映画を見ます。',
+      romaji: 'Suiyoubi ni eiga wo mimasu.',
+      english: 'I will watch a movie on Wednesday.',
+      difficulty: 'beginner'
+    },
+    {
+      japanese: '水泳が好きです。',
+      romaji: 'Suiei ga suki desu.',
+      english: 'I like swimming.',
+      difficulty: 'beginner'
+    },
+    {
+      japanese: '水道の水を飲みます。',
+      romaji: 'Suidou no mizu wo nomimasu.',
+      english: 'I drink tap water.',
+      difficulty: 'intermediate'
+    }
+  ],
+  '木': [
+    {
+      japanese: '木曜日に買い物に行きます。',
+      romaji: 'Mokuyoubi ni kaimono ni ikimasu.',
+      english: 'I will go shopping on Thursday.',
+      difficulty: 'beginner'
+    },
+    {
+      japanese: '木造の家に住んでいます。',
+      romaji: 'Mokuzou no ie ni sundeimasu.',
+      english: 'I live in a wooden house.',
+      difficulty: 'intermediate'
+    },
+    {
+      japanese: '木製のテーブルを買いました。',
+      romaji: 'Mokusei no teeburu wo kaimashita.',
+      english: 'I bought a wooden table.',
+      difficulty: 'intermediate'
+    }
+  ]
+};
+
+// Función para obtener kanji por ID
+export const getKanjiById = (id: string): Kanji | undefined => {
+  return mockKanjiData.find(kanji => kanji.id === id);
+};
+
+// Función para obtener ejemplos de un kanji
+export const getKanjiExamples = (character: string): KanjiExample[] => {
+  return mockKanjiExamples[character] || [];
+};
+
+// Función para obtener todos los kanji de una lección
+export const getLessonKanji = (lessonId: string): Kanji[] => {
+  // Por ahora retornamos los primeros 5 kanji como ejemplo
+  // En el backend esto vendría de la base de datos
+  return mockKanjiData;
+};

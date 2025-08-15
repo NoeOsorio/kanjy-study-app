@@ -1,9 +1,11 @@
 import { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import type { Lesson } from '../types';
 
 type JLPTLevel = 'N5' | 'N4' | 'N3' | 'N2' | 'N1' | 'all';
 
 export default function LessonsPage() {
+  const navigate = useNavigate();
   const [selectedJLPTLevel, setSelectedJLPTLevel] = useState<JLPTLevel>('all');
   
   // Mock data for lessons - esto se reemplazará con datos del backend
@@ -169,8 +171,8 @@ export default function LessonsPage() {
   );
 
   const handleLessonClick = (lesson: Lesson) => {
-    // Aquí se implementará la lógica para iniciar la lección
-    console.log('Iniciando lección:', lesson.title);
+    // Navegar a la página de detalle de la lección
+    navigate(`/lesson/${lesson.id}`);
   };
 
   return (

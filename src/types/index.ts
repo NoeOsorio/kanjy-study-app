@@ -20,6 +20,17 @@ export interface Kanji {
   difficulty: 'beginner' | 'intermediate' | 'advanced';
   jlptLevel: 'N5' | 'N4' | 'N3' | 'N2' | 'N1';
   examples: string[];
+  // Información adicional para la lección
+  radicals?: string[];
+  frequency?: number;
+  grade?: number; // Grado escolar en Japón
+}
+
+export interface KanjiExample {
+  japanese: string;
+  romaji: string;
+  english: string;
+  difficulty: 'beginner' | 'intermediate' | 'advanced';
 }
 
 export interface Lesson {
