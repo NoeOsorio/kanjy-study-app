@@ -10,13 +10,17 @@ export default function AppLayout() {
   const { activeTab, navigateTo } = useNavigation();
   const [searchParams] = useSearchParams();
 
-  // Leer el parámetro tab de la URL y establecer la tab activa
+  // Leer el parámetro tab de la URL solo al cargar la página inicialmente
   useEffect(() => {
     const tabParam = searchParams.get('tab') as NavigationTab;
     if (tabParam && ['home', 'lessons', 'practice', 'profile'].includes(tabParam)) {
       navigateTo(tabParam);
+      // Limpiar el parámetro de la URL después de establecer la tab
+      const newSearchParams = new URLSearchParams(searchParams);
+      newSearchParams.delete('tab');
+      window.history.replaceState({}, '', `${window.location.pathname}${newSearchParams.toString() ? '?' + newSearchParams.toString() : ''}`);
     }
-  }, [searchParams, navigateTo]);
+  }, []); // Solo se ejecuta una vez al montar el componente
 
   const renderCurrentPage = () => {
     switch (activeTab) {
