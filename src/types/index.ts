@@ -18,6 +18,7 @@ export interface Kanji {
   };
   strokeCount: number;
   difficulty: 'beginner' | 'intermediate' | 'advanced';
+  jlptLevel: 'N5' | 'N4' | 'N3' | 'N2' | 'N1';
   examples: string[];
 }
 
@@ -27,6 +28,7 @@ export interface Lesson {
   description: string;
   kanjiList: string[]; // Array of kanji IDs
   difficulty: 'beginner' | 'intermediate' | 'advanced';
+  jlptLevel: 'N5' | 'N4' | 'N3' | 'N2' | 'N1';
   estimatedTime: number; // in minutes
   isCompleted: boolean;
   progress: number; // 0-100
