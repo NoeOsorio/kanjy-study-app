@@ -33,6 +33,30 @@ export interface KanjiExample {
   difficulty: 'beginner' | 'intermediate' | 'advanced';
 }
 
+export type QuizMode = 
+  | 'kanji-to-meaning'      // Kanji → 4 opciones en español
+  | 'kanji-to-onyomi'       // Kanji → 4 opciones en onyomi
+  | 'meaning-to-kanji'      // Español → 4 opciones de kanji
+  | 'onyomi-to-kanji'       // Onyomi → 4 opciones de kanji
+  | 'kunyomi-to-kanji'      // Kunyomi → 4 opciones de kanji
+  | 'mixed';                 // Modo mixto con todos los tipos
+
+export interface QuizQuestion {
+  id: string;
+  question: string;
+  correctAnswer: string;
+  options: string[];
+  type: QuizMode;
+  kanjiId: string;
+}
+
+export interface QuizResult {
+  questionId: string;
+  selectedAnswer: string;
+  isCorrect: boolean;
+  timeSpent: number;
+}
+
 export interface Lesson {
   id: string;
   title: string;

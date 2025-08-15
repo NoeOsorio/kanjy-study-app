@@ -1,10 +1,22 @@
+import { useEffect } from 'react';
+import { useSearchParams } from 'react-router-dom';
 import { useNavigation } from '../hooks/useNavigation';
 import BottomNavigation from './BottomNavigation';
 import HomePage from '../pages/HomePage';
 import LessonsPage from '../pages/LessonsPage';
+import type { NavigationTab } from '../types';
 
 export default function AppLayout() {
   const { activeTab, navigateTo } = useNavigation();
+  const [searchParams] = useSearchParams();
+
+  // Leer el parámetro tab de la URL y establecer la tab activa
+  useEffect(() => {
+    const tabParam = searchParams.get('tab') as NavigationTab;
+    if (tabParam && ['home', 'lessons', 'practice', 'profile'].includes(tabParam)) {
+      navigateTo(tabParam);
+    }
+  }, [searchParams, navigateTo]);
 
   const renderCurrentPage = () => {
     switch (activeTab) {
