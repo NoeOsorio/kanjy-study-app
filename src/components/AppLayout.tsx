@@ -14,6 +14,15 @@ export default function AppLayout() {
     return 'home';
   };
 
+  const shouldShowNavbar = (): boolean => {
+    const path = location.pathname;
+    // Ocultar navbar en páginas de detalles y modo de estudio
+    if (path.includes('/kanji/') || path.includes('/study')) {
+      return false;
+    }
+    return true;
+  };
+
   const handleTabChange = (tab: NavigationTab) => {
     navigate(`/${tab}`);
   };
@@ -21,7 +30,9 @@ export default function AppLayout() {
   return (
     <div className="relative">
       <Outlet />
-      <BottomNavigation activeTab={getCurrentTab()} onTabChange={handleTabChange} />
+      {shouldShowNavbar() && (
+        <BottomNavigation activeTab={getCurrentTab()} onTabChange={handleTabChange} />
+      )}
     </div>
   );
 }

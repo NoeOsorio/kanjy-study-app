@@ -33,14 +33,8 @@ export default function QuizResults({ results, onClose, onRetry }: QuizResultsPr
   };
 
   return (
-    <div 
-      className="fixed inset-0 bg-gray-900/20 backdrop-blur-sm flex items-center justify-center p-4 z-50"
-      onClick={onClose}
-    >
-      <div 
-        className="bg-white/95 backdrop-blur-md rounded-3xl max-w-2xl w-full max-h-[90vh] overflow-y-auto shadow-2xl border border-white/20"
-        onClick={(e) => e.stopPropagation()}
-      >
+    <div className="bg-white rounded-3xl shadow-lg border border-gray-100 overflow-hidden">
+      <div className="w-full">
         {/* Header */}
         <div className="p-6 border-b border-gray-100 bg-gradient-to-r from-green-50 to-blue-50 rounded-t-3xl">
           <div className="text-center">
@@ -141,7 +135,7 @@ export default function QuizResults({ results, onClose, onRetry }: QuizResultsPr
         </div>
 
         {/* Footer */}
-        <div className="p-6 border-t border-gray-100 bg-gradient-to-r from-gray-50 to-blue-50 rounded-b-3xl">
+        <div className="p-6 border-t border-gray-100 bg-gradient-to-r from-gray-50 to-blue-50">
           <div className="flex gap-4">
             <button
               onClick={onRetry}

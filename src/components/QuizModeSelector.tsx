@@ -3,7 +3,7 @@ import { getQuizModeTitle, getQuizModeDescription } from '../services/quizServic
 
 interface QuizModeSelectorProps {
   onModeSelect: (mode: QuizMode) => void;
-  onClose: () => void;
+  onClose?: () => void; // Ahora es opcional
 }
 
 export default function QuizModeSelector({ onModeSelect, onClose }: QuizModeSelectorProps) {
@@ -79,61 +79,46 @@ export default function QuizModeSelector({ onModeSelect, onClose }: QuizModeSele
   };
 
   return (
-    <div 
-      className="fixed inset-0 bg-gray-900/20 backdrop-blur-sm flex items-center justify-center p-2 z-50"
-      onClick={onClose}
-    >
-      <div 
-        className="bg-white/95 backdrop-blur-md rounded-3xl max-w-4xl w-full h-[95vh] flex flex-col shadow-2xl border border-white/20"
-        onClick={(e) => e.stopPropagation()}
-      >
-        {/* Header */}
-        <div className="p-4 sm:p-6 border-b border-gray-100 bg-gradient-to-r from-blue-50 to-indigo-50 rounded-t-3xl flex-shrink-0">
-          <div className="flex items-center justify-between">
-            <div>
-              <h2 className="text-xl sm:text-3xl font-bold text-gray-800 mb-2">Selecciona el Modo de Quiz</h2>
-              <p className="text-sm sm:text-base text-gray-600">Elige cómo quieres practicar los kanji de esta lección</p>
+    <div className="w-full">
+      {/* Header */}
+      <div className="text-center mb-8">
+        <h2 className="text-2xl sm:text-3xl font-bold text-gray-800 mb-3">Selecciona el Modo de Quiz</h2>
+        <p className="text-sm sm:text-base text-gray-600">Elige cómo quieres practicar los kanji</p>
+      </div>
+
+      {/* Quiz Modes Grid */}
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6">
+        {quizModes.map((mode) => (
+          <button
+            key={mode}
+            onClick={() => onModeSelect(mode)}
+            className={`
+              bg-white rounded-2xl p-6 border-2 border-gray-100 
+              hover:scale-105 transition-all duration-300 cursor-pointer
+              shadow-lg hover:shadow-xl ${getModeColor(mode)}
+            `}
+          >
+            <div className="flex flex-col items-center text-center space-y-4">
+              {getModeIcon(mode)}
+              <div>
+                <h3 className="font-bold text-gray-800 text-lg mb-2">
+                  {getQuizModeTitle(mode)}
+                </h3>
+                <p className="text-sm text-gray-600 leading-relaxed">
+                  {getQuizModeDescription(mode)}
+                </p>
+              </div>
             </div>
-            <button
-              onClick={onClose}
-              className="w-8 h-8 sm:w-10 sm:h-10 bg-white/80 hover:bg-white rounded-full flex items-center justify-center text-gray-500 hover:text-gray-700 transition-all duration-200 shadow-lg hover:shadow-xl"
-            >
-              <svg className="w-4 h-4 sm:w-5 sm:h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
-              </svg>
-            </button>
-          </div>
-        </div>
+          </button>
+        ))}
+      </div>
 
-        {/* Quiz Modes Grid */}
-        <div className="p-4 sm:p-6 flex-1 overflow-y-auto">
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 sm:gap-4">
-            {quizModes.map((mode) => (
-              <button
-                key={mode}
-                onClick={() => onModeSelect(mode)}
-                className={`bg-white rounded-2xl p-4 sm:p-6 shadow-lg hover:shadow-xl transition-all duration-300 border-2 border-gray-100 hover:scale-105 ${getModeColor(mode)}`}
-              >
-                <div className="text-center">
-                  <div className="flex justify-center mb-3 sm:mb-4">
-                    {getModeIcon(mode)}
-                  </div>
-                  <h3 className="text-base sm:text-lg font-bold text-gray-800 mb-2">
-                    {getQuizModeTitle(mode)}
-                  </h3>
-                  <p className="text-xs sm:text-sm text-gray-600 leading-relaxed">
-                    {getQuizModeDescription(mode)}
-                  </p>
-                </div>
-              </button>
-            ))}
-          </div>
-        </div>
-
-        {/* Footer */}
-        <div className="p-4 sm:p-6 border-t border-gray-100 bg-gradient-to-r from-gray-50 to-blue-50 rounded-b-3xl flex-shrink-0">
-          <p className="text-center text-gray-600 text-xs sm:text-sm">
-            Cada modo te ayudará a practicar diferentes aspectos de los kanji
+      {/* Información adicional */}
+      <div className="mt-8 text-center">
+        <div className="bg-gradient-to-r from-blue-50 to-purple-50 rounded-2xl p-6 border border-blue-200">
+          <h3 className="font-bold text-gray-800 mb-2">💡 Consejo</h3>
+          <p className="text-sm text-gray-600">
+            Comienza con "Kanji → Significado" si eres principiante, o prueba el "Quiz Mixto" para un desafío completo.
           </p>
         </div>
       </div>

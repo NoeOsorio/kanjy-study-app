@@ -16,15 +16,49 @@ export default function Quiz({ questions, mode, onComplete, onClose }: QuizProps
   const [results, setResults] = useState<QuizResult[]>([]);
   const [startTime, setStartTime] = useState<number>(Date.now());
 
+  // Validación de seguridad
+  if (!questions || questions.length === 0) {
+    return (
+      <div className="bg-white rounded-3xl p-8 shadow-lg border border-gray-100 text-center">
+        <div className="text-6xl mb-4">😕</div>
+        <h2 className="text-2xl font-bold text-gray-800 mb-2">No hay preguntas disponibles</h2>
+        <p className="text-gray-600 mb-6">No se pudieron generar preguntas para este modo de quiz.</p>
+        <button
+          onClick={onClose}
+          className="bg-gradient-to-r from-blue-500 to-purple-600 hover:from-blue-600 hover:to-purple-700 text-white px-6 py-3 rounded-xl font-medium transition-all duration-200 shadow-lg hover:shadow-xl"
+        >
+          Cerrar
+        </button>
+      </div>
+    );
+  }
+
   const currentQuestion = questions[currentQuestionIndex];
   const isLastQuestion = currentQuestionIndex === questions.length - 1;
+
+  // Validación adicional para currentQuestion
+  if (!currentQuestion) {
+    return (
+      <div className="bg-white rounded-3xl p-8 shadow-lg border border-gray-100 text-center">
+        <div className="text-6xl mb-4">😕</div>
+        <h2 className="text-2xl font-bold text-gray-800 mb-2">Error en la pregunta</h2>
+        <p className="text-gray-600 mb-6">No se pudo cargar la pregunta actual.</p>
+        <button
+          onClick={onClose}
+          className="bg-gradient-to-r from-blue-500 to-purple-600 hover:from-blue-600 hover:to-purple-700 text-white px-6 py-3 rounded-xl font-medium transition-all duration-200 shadow-lg hover:shadow-xl"
+        >
+          Cerrar
+        </button>
+      </div>
+    );
+  }
 
   useEffect(() => {
     setStartTime(Date.now());
   }, [currentQuestionIndex]);
 
   const handleAnswerSelect = (answer: string) => {
-    if (isAnswered) return;
+    if (isAnswered || !currentQuestion) return;
     
     setSelectedAnswer(answer);
     setIsAnswered(true);
@@ -54,6 +88,8 @@ export default function Quiz({ questions, mode, onComplete, onClose }: QuizProps
   };
 
   const getQuestionDisplay = () => {
+    if (!currentQuestion) return null;
+    
     // Para el modo mixto, usar el tipo de la pregunta actual
     const questionType = mode === 'mixed' ? currentQuestion.type : mode;
     
@@ -83,6 +119,8 @@ export default function Quiz({ questions, mode, onComplete, onClose }: QuizProps
   };
 
   const getOptionStyle = (option: string) => {
+    if (!currentQuestion) return 'bg-gray-100 border-gray-200 text-gray-600';
+    
     if (!isAnswered) {
       return 'bg-white hover:bg-gray-50 border-gray-200 hover:border-blue-300';
     }
@@ -103,14 +141,8 @@ export default function Quiz({ questions, mode, onComplete, onClose }: QuizProps
   };
 
   return (
-    <div 
-      className="fixed inset-0 bg-gray-900/20 backdrop-blur-sm flex items-center justify-center p-2 z-50"
-      onClick={onClose}
-    >
-      <div 
-        className="bg-white/95 backdrop-blur-md rounded-3xl max-w-2xl w-full h-[95vh] flex flex-col shadow-2xl border border-white/20"
-        onClick={(e) => e.stopPropagation()}
-      >
+    <div className="bg-white rounded-3xl shadow-lg border border-gray-100 overflow-hidden">
+      <div className="flex flex-col">
         {/* Header */}
         <div className="p-4 sm:p-6 border-b border-gray-100 bg-gradient-to-r from-blue-50 to-indigo-50 rounded-t-3xl flex-shrink-0">
           <div className="flex items-center justify-between mb-3 sm:mb-4">
@@ -136,11 +168,9 @@ export default function Quiz({ questions, mode, onComplete, onClose }: QuizProps
             </div>
             <button
               onClick={onClose}
-              className="w-8 h-8 bg-white/80 hover:bg-white rounded-full flex items-center justify-center text-gray-500 hover:text-gray-700 transition-colors"
+              className="bg-gradient-to-r from-red-500 to-red-600 hover:from-red-600 hover:to-red-700 text-white px-4 py-2 rounded-xl font-medium transition-all duration-200 shadow-lg hover:shadow-xl"
             >
-              <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
-              </svg>
+              Salir del Quiz
             </button>
           </div>
           
@@ -159,27 +189,33 @@ export default function Quiz({ questions, mode, onComplete, onClose }: QuizProps
 
           {/* Answer Options */}
           <div className="space-y-2 sm:space-y-3 mt-4">
-            {currentQuestion.options.map((option, index) => (
-              <button
-                key={index}
-                onClick={() => handleAnswerSelect(option)}
-                disabled={isAnswered}
-                className={`w-full p-3 sm:p-4 rounded-2xl border-2 text-left font-medium transition-all duration-200 ${getOptionStyle(option)} ${
-                  !isAnswered ? 'hover:shadow-md cursor-pointer' : 'cursor-default'
-                }`}
-              >
-                <div className="flex items-center">
-                  <span className="flex-shrink-0 w-6 h-6 sm:w-8 sm:h-8 bg-gray-200 rounded-full flex items-center justify-center text-xs sm:text-sm font-bold text-gray-600 mr-3 sm:mr-4">
-                    {String.fromCharCode(65 + index)} {/* A, B, C, D */}
-                  </span>
-                  <span className="flex-1 text-left text-sm sm:text-base">{option}</span>
-                </div>
-              </button>
-            ))}
+            {currentQuestion.options && currentQuestion.options.length > 0 ? (
+              currentQuestion.options.map((option, index) => (
+                <button
+                  key={index}
+                  onClick={() => handleAnswerSelect(option)}
+                  disabled={isAnswered}
+                  className={`w-full p-3 sm:p-4 rounded-2xl border-2 text-left font-medium transition-all duration-200 ${getOptionStyle(option)} ${
+                    !isAnswered ? 'hover:shadow-md cursor-pointer' : 'cursor-default'
+                  }`}
+                >
+                  <div className="flex items-center">
+                    <span className="flex-shrink-0 w-6 h-6 sm:w-8 sm:h-8 bg-gray-200 rounded-full flex items-center justify-center text-xs sm:text-sm font-bold text-gray-600 mr-3 sm:mr-4">
+                      {String.fromCharCode(65 + index)} {/* A, B, C, D */}
+                    </span>
+                    <span className="flex-1 text-left text-sm sm:text-base">{option}</span>
+                  </div>
+                </button>
+              ))
+            ) : (
+              <div className="text-center py-8 text-gray-500">
+                <p>No hay opciones disponibles para esta pregunta.</p>
+              </div>
+            )}
           </div>
 
           {/* Feedback */}
-          {isAnswered && (
+          {isAnswered && currentQuestion && (
             <div className={`mt-4 sm:mt-6 p-3 sm:p-4 rounded-2xl ${
               selectedAnswer === currentQuestion.correctAnswer 
                 ? 'bg-green-100 border border-green-200' 
@@ -213,7 +249,7 @@ export default function Quiz({ questions, mode, onComplete, onClose }: QuizProps
         </div>
 
         {/* Footer */}
-        <div className="p-4 sm:p-6 border-t border-gray-100 bg-gradient-to-r from-gray-50 to-blue-50 rounded-b-3xl flex-shrink-0">
+        <div className="p-4 sm:p-6 border-t border-gray-100 bg-gradient-to-r from-gray-50 to-blue-50 flex-shrink-0">
           {isAnswered && (
             <button
               onClick={handleNextQuestion}
