@@ -171,8 +171,8 @@ export default function LessonsPage() {
   );
 
   const handleLessonClick = (lesson: Lesson) => {
-    // Navegar a la página de detalle de la lección
-    navigate(`/lesson/${lesson.id}`);
+    // Navegar a la página de detalle de la lección usando la nueva estructura de rutas
+    navigate(`/lessons/${lesson.id}`);
   };
 
   return (

@@ -1,11 +1,8 @@
 import { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import type { Kanji, KanjiExample, QuizMode, QuizQuestion, QuizResult } from '../types';
+import type { Kanji, KanjiExample } from '../types';
 import { getLessonKanji, getKanjiExamples } from '../services/kanjiService';
-import { generateQuizQuestions } from '../services/quizService';
-import QuizModeSelector from '../components/QuizModeSelector';
-import Quiz from '../components/Quiz';
-import QuizResults from '../components/QuizResults';
+import KanjiCard from '../components/KanjiCard';
 
 export default function LessonDetailPage() {
   const navigate = useNavigate();
@@ -14,14 +11,8 @@ export default function LessonDetailPage() {
   const [selectedKanji, setSelectedKanji] = useState<Kanji | null>(null);
   const [selectedKanjiExamples, setSelectedKanjiExamples] = useState<KanjiExample[]>([]);
   const [isModalOpen, setIsModalOpen] = useState(false);
-  
-  // Quiz states
-  const [showQuizModeSelector, setShowQuizModeSelector] = useState(false);
-  const [currentQuizMode, setCurrentQuizMode] = useState<QuizMode | null>(null);
-  const [quizQuestions, setQuizQuestions] = useState<QuizQuestion[]>([]);
-  const [showQuiz, setShowQuiz] = useState(false);
-  const [showResults, setShowResults] = useState(false);
-  const [quizResults, setQuizResults] = useState<QuizResult[]>([]);
+  const [isStudyModeActive, setIsStudyModeActive] = useState(false);
+  const [currentKanjiIndex, setCurrentKanjiIndex] = useState(0);
 
   useEffect(() => {
     // Simular carga de datos del backend
@@ -46,41 +37,22 @@ export default function LessonDetailPage() {
     setSelectedKanjiExamples([]);
   };
 
-  // Quiz functions
-  const handlePracticeClick = () => {
-    setShowQuizModeSelector(true);
+  // Study mode functions
+  const handleNextKanji = () => {
+    if (currentKanjiIndex < kanjiList.length - 1) {
+      setCurrentKanjiIndex(currentKanjiIndex + 1);
+    }
   };
 
-  const handleQuizModeSelect = (mode: QuizMode) => {
-    setCurrentQuizMode(mode);
-    setShowQuizModeSelector(false);
-    
-    // Generate questions for the selected mode
-    const questions = generateQuizQuestions(lessonId || '1', mode);
-    setQuizQuestions(questions);
-    setShowQuiz(true);
+  const handlePreviousKanji = () => {
+    if (currentKanjiIndex > 0) {
+      setCurrentKanjiIndex(currentKanjiIndex - 1);
+    }
   };
 
-  const handleQuizComplete = (results: QuizResult[]) => {
-    setQuizResults(results);
-    setShowQuiz(false);
-    setShowResults(true);
-  };
-
-  const handleQuizClose = () => {
-    setShowQuiz(false);
-    setCurrentQuizMode(null);
-    setQuizQuestions([]);
-  };
-
-  const handleResultsClose = () => {
-    setShowResults(false);
-    setQuizResults([]);
-  };
-
-  const handleRetry = () => {
-    setShowResults(false);
-    setShowQuizModeSelector(true);
+  const toggleStudyMode = () => {
+    setIsStudyModeActive(!isStudyModeActive);
+    setCurrentKanjiIndex(0);
   };
 
   const getDifficultyColor = (difficulty: Kanji['difficulty']) => {
@@ -132,11 +104,21 @@ export default function LessonDetailPage() {
               <p className="text-sm text-gray-600">5 kanji • Nivel N5 • 15 minutos estimados</p>
             </div>
           </div>
-          <div className="flex items-center space-x-2">
-            <div className="bg-blue-100 px-3 py-1 rounded-full">
-              <span className="text-blue-600 text-sm font-semibold">📚 {kanjiList.length}</span>
-            </div>
-          </div>
+                     <div className="flex items-center space-x-2">
+             <div className="bg-blue-100 px-3 py-1 rounded-full">
+               <span className="text-blue-600 text-sm font-semibold">📚 {kanjiList.length}</span>
+             </div>
+             <button
+               onClick={toggleStudyMode}
+               className={`px-4 py-2 rounded-lg transition-colors ${
+                 isStudyModeActive
+                   ? 'bg-purple-600 text-white hover:bg-purple-700'
+                   : 'bg-blue-600 text-white hover:bg-blue-700'
+               }`}
+             >
+               {isStudyModeActive ? 'Volver a la Lección' : 'Modo Estudio'}
+             </button>
+           </div>
         </div>
       </div>
 
@@ -154,73 +136,94 @@ export default function LessonDetailPage() {
             Haz clic en cada kanji para aprender más detalles
           </p>
           
-          {/* Practice Button */}
+          {/* Study Mode Button */}
           <button
-            onClick={handlePracticeClick}
-            className="w-full bg-gradient-to-r from-green-500 to-green-600 text-white py-4 px-6 rounded-2xl font-bold text-lg transition-colors duration-200 shadow-lg"
+            onClick={toggleStudyMode}
+            className="w-full bg-gradient-to-r from-purple-500 to-purple-600 text-white py-4 px-6 rounded-2xl font-bold text-lg transition-colors duration-200 shadow-lg"
           >
             <div className="flex items-center justify-center space-x-3">
               <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z" />
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.746 0 3.332.477 4.5 1.253v13C19.832 18.477 18.246 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" />
               </svg>
-              <span>Practicar Lección</span>
+              <span>Modo Estudio con Tarjetas</span>
             </div>
           </button>
         </div>
       </div>
 
-      {/* Kanji Grid */}
-      <div className="px-6 py-4">
-        <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4">
-          {kanjiList.map((kanji, index) => (
-            <div
-              key={kanji.id}
-              className="bg-gradient-to-br from-white to-gray-50 rounded-3xl p-6 shadow-lg hover:shadow-xl transition-all duration-300 cursor-pointer text-center border border-gray-100 hover:border-blue-200 hover:scale-105"
-              onClick={() => handleKanjiClick(kanji)}
-            >
-              {/* Kanji Character */}
-              <div className="w-24 h-24 bg-gradient-to-br from-blue-50 to-indigo-100 rounded-2xl flex items-center justify-center mx-auto mb-4 border-2 border-blue-200 shadow-inner">
-                <span className="text-5xl font-bold text-gray-800">{kanji.character}</span>
-              </div>
+             {/* Kanji Grid or Study Mode */}
+       {isStudyModeActive ? (
+         // Modo Estudio con Tarjetas
+         <div className="px-6 py-4">
+           {kanjiList.length > 0 && (
+             <>
+               <div className="text-center mb-4">
+                 <p className="text-gray-600">
+                   Kanji {currentKanjiIndex + 1} de {kanjiList.length}
+                 </p>
+               </div>
+               <KanjiCard
+                 kanji={kanjiList[currentKanjiIndex]}
+                 onNext={currentKanjiIndex < kanjiList.length - 1 ? handleNextKanji : undefined}
+                 onPrevious={currentKanjiIndex > 0 ? handlePreviousKanji : undefined}
+               />
+             </>
+           )}
+         </div>
+       ) : (
+         // Vista Normal de la Lección
+         <div className="px-6 py-4">
+           <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4">
+             {kanjiList.map((kanji) => (
+               <div
+                 key={kanji.id}
+                 className="bg-gradient-to-br from-white to-gray-50 rounded-3xl p-6 shadow-lg hover:shadow-xl transition-all duration-300 cursor-pointer text-center border border-gray-100 hover:border-blue-200 hover:scale-105"
+                 onClick={() => handleKanjiClick(kanji)}
+               >
+                 {/* Kanji Character */}
+                 <div className="w-24 h-24 bg-gradient-to-br from-blue-50 to-indigo-100 rounded-2xl flex items-center justify-center mx-auto mb-4 border-2 border-blue-200 shadow-inner">
+                   <span className="text-5xl font-bold text-gray-800">{kanji.character}</span>
+                 </div>
 
-              {/* Kanji Meaning */}
-              <h3 className="text-lg font-bold text-gray-800 mb-3">{kanji.meaning}</h3>
-              
-              {/* Main Reading - Onyomi */}
-              <div className="mb-3">
-                <p className="text-xs text-gray-500 mb-2">Lectura principal</p>
-                <div className="bg-blue-100 rounded-xl p-2">
-                  <span className="font-mono text-lg font-bold text-blue-700">
-                    {kanji.readings.onyomi[0]}
-                  </span>
-                </div>
-              </div>
+                 {/* Kanji Meaning */}
+                 <h3 className="text-lg font-bold text-gray-800 mb-3">{kanji.meaning}</h3>
+                 
+                 {/* Main Reading - Onyomi */}
+                 <div className="mb-3">
+                   <p className="text-xs text-gray-500 mb-2">Lectura principal</p>
+                   <div className="bg-blue-100 rounded-xl p-2">
+                     <span className="font-mono text-lg font-bold text-blue-700">
+                       {kanji.readings.onyomi[0]}
+                     </span>
+                   </div>
+                 </div>
 
-              {/* Alternative Readings */}
-              <div className="mb-3">
-                <p className="text-xs text-gray-500 mb-2">Otras lecturas</p>
-                <div className="flex flex-wrap gap-1 justify-center">
-                  {kanji.readings.onyomi.slice(1).map((reading, idx) => (
-                    <span key={idx} className="text-xs bg-gray-100 px-2 py-1 rounded-lg text-gray-600 font-mono">
-                      {reading}
-                    </span>
-                  ))}
-                  {kanji.readings.kunyomi.slice(0, 2).map((reading, idx) => (
-                    <span key={idx} className="text-xs bg-green-100 px-2 py-1 rounded-lg text-green-600 font-mono">
-                      {reading}
-                    </span>
-                  ))}
-                </div>
-              </div>
+                 {/* Alternative Readings */}
+                 <div className="mb-3">
+                   <p className="text-xs text-gray-500 mb-2">Otras lecturas</p>
+                   <div className="flex flex-wrap gap-1 justify-center">
+                     {kanji.readings.onyomi.slice(1).map((reading, idx) => (
+                       <span key={idx} className="text-xs bg-gray-100 px-2 py-1 rounded-lg text-gray-600 font-mono">
+                         {reading}
+                       </span>
+                     ))}
+                     {kanji.readings.kunyomi.slice(0, 2).map((reading, idx) => (
+                       <span key={idx} className="text-xs bg-green-100 px-2 py-1 rounded-lg text-green-600 font-mono">
+                         {reading}
+                       </span>
+                     ))}
+                   </div>
+                 </div>
 
-              {/* Stroke Count Badge */}
-              <div className="inline-block bg-gradient-to-r from-purple-100 to-pink-100 px-3 py-1 rounded-full border border-purple-200">
-                <span className="text-sm font-medium text-purple-700">{kanji.strokeCount} trazos</span>
-              </div>
-            </div>
-          ))}
-        </div>
-      </div>
+                 {/* Stroke Count Badge */}
+                 <div className="inline-block bg-gradient-to-r from-purple-100 to-pink-100 px-3 py-1 rounded-full border border-purple-200">
+                   <span className="text-sm font-medium text-purple-700">{kanji.strokeCount} trazos</span>
+                 </div>
+               </div>
+             ))}
+           </div>
+         </div>
+       )}
 
       {/* Modal for Kanji Details */}
       {isModalOpen && selectedKanji && (
@@ -371,32 +374,7 @@ export default function LessonDetailPage() {
         </div>
       )}
 
-      {/* Quiz Mode Selector */}
-      {showQuizModeSelector && (
-        <QuizModeSelector
-          onModeSelect={handleQuizModeSelect}
-          onClose={() => setShowQuizModeSelector(false)}
-        />
-      )}
-
-      {/* Quiz */}
-      {showQuiz && currentQuizMode && (
-        <Quiz
-          questions={quizQuestions}
-          mode={currentQuizMode}
-          onComplete={handleQuizComplete}
-          onClose={handleQuizClose}
-        />
-      )}
-
-      {/* Quiz Results */}
-      {showResults && (
-        <QuizResults
-          results={quizResults}
-          onClose={handleResultsClose}
-          onRetry={handleRetry}
-        />
-      )}
+      
     </div>
   );
 }
