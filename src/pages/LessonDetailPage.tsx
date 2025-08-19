@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
+import PageHeader from '../components/PageHeader';
 import { getLessonKanji } from '../services/kanjiService';
 import type { Kanji } from '../types';
 
@@ -25,34 +26,27 @@ export default function LessonDetailPage() {
     navigate(`/lessons/${lessonId}/study`);
   };
 
-
-
   return (
     <div className="min-h-screen bg-gradient-to-br from-blue-50 via-indigo-50 to-purple-50 pb-20">
       {/* Header */}
-      <div className="bg-white shadow-sm px-6 py-4">
-        <div className="flex items-center justify-between">
-          <div className="flex items-center space-x-4">
-            <button
-              onClick={() => navigate('/lessons')}
-              className="p-2 text-gray-600 hover:text-gray-800 hover:bg-gray-100 rounded-lg transition-colors"
-            >
-              <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
-              </svg>
-            </button>
-            <div className="text-center">
-              <h1 className="text-3xl font-bold bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
-                Fundamentos Básicos
-              </h1>
-              <p className="text-sm text-gray-600 mt-1">Nivel N5 • {kanjiList.length} kanji</p>
-            </div>
-          </div>
-        </div>
-      </div>
+      <PageHeader
+        title="Fundamentos Básicos"
+        description={`Nivel N5 • ${kanjiList.length} kanji`}
+        leftContent={
+          <button
+            onClick={() => navigate('/lessons')}
+            className="p-2 text-gray-600 hover:text-gray-800 hover:bg-gray-100 rounded-lg transition-colors"
+          >
+            <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
+            </svg>
+          </button>
+        }
+      />
 
-      {/* Progress Bar */}
-      <div className="px-6 py-4">
+      {/* Main Content */}
+      <div className="px-6 py-6 space-y-6">
+        {/* Progress Bar */}
         <div className="bg-white rounded-2xl p-6 shadow-sm border border-gray-100">
           <div className="flex items-center justify-between mb-4">
             <h2 className="text-lg font-bold text-gray-800">Progreso de la Lección</h2>
@@ -72,16 +66,14 @@ export default function LessonDetailPage() {
           >
             <div className="flex items-center justify-center space-x-3">
               <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.746 0 3.332.477 4.5 1.253v13C19.832 18.477 18.246 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" />
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.746 0 3.332.477 4.5 1.253v13C19.832 18.477 18.246 18 16.5 18c-1.746 0-3.332.477 4.5 1.253" />
               </svg>
               <span>Modo Estudio con Tarjetas</span>
             </div>
           </button>
         </div>
-      </div>
 
-      {/* Kanji Grid */}
-      <div className="px-6 py-4">
+        {/* Kanji Grid */}
         <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4">
           {kanjiList.map((kanji) => (
             <div

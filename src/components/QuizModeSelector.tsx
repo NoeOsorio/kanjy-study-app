@@ -79,15 +79,15 @@ export default function QuizModeSelector({ onModeSelect, onClose }: QuizModeSele
   };
 
   return (
-    <div className="w-full">
+    <div className="space-y-6">
       {/* Header */}
-      <div className="text-center mb-8">
-        <h2 className="text-2xl sm:text-3xl font-bold text-gray-800 mb-3">Selecciona el Modo de Quiz</h2>
-        <p className="text-sm sm:text-base text-gray-600">Elige cómo quieres practicar los kanji</p>
+      <div className="text-center">
+        <h2 className="text-2xl font-bold text-gray-800 mb-3">Selecciona el Modo de Quiz</h2>
+        <p className="text-gray-600">Elige cómo quieres practicar los kanji</p>
       </div>
 
       {/* Quiz Modes Grid */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6">
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
         {quizModes.map((mode) => (
           <button
             key={mode}
@@ -95,7 +95,7 @@ export default function QuizModeSelector({ onModeSelect, onClose }: QuizModeSele
             className={`
               bg-white rounded-2xl p-6 border-2 border-gray-100 
               hover:scale-105 transition-all duration-300 cursor-pointer
-              shadow-lg hover:shadow-xl ${getModeColor(mode)}
+              shadow-sm hover:shadow-md ${getModeColor(mode)}
             `}
           >
             <div className="flex flex-col items-center text-center space-y-4">
@@ -114,8 +114,8 @@ export default function QuizModeSelector({ onModeSelect, onClose }: QuizModeSele
       </div>
 
       {/* Información adicional */}
-      <div className="mt-8 text-center">
-        <div className="bg-gradient-to-r from-blue-50 to-purple-50 rounded-2xl p-6 border border-blue-200">
+      <div className="bg-white rounded-2xl p-6 shadow-sm border border-gray-100">
+        <div className="text-center">
           <h3 className="font-bold text-gray-800 mb-2">💡 Consejo</h3>
           <p className="text-sm text-gray-600">
             Comienza con "Kanji → Significado" si eres principiante, o prueba el "Quiz Mixto" para un desafío completo.

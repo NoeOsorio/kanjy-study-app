@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import PageHeader from '../components/PageHeader';
 import type { Lesson } from '../types';
 
 type JLPTLevel = 'N5' | 'N4' | 'N3' | 'N2' | 'N1' | 'all';
@@ -178,19 +179,10 @@ export default function LessonsPage() {
   return (
     <div className="min-h-screen bg-gradient-to-br from-blue-50 via-indigo-50 to-purple-50 pb-20">
       {/* Header */}
-      <div className="bg-white shadow-sm px-6 py-4">
-        <div className="flex items-center justify-between">
-          <div>
-            <h1 className="text-2xl font-bold text-gray-800">Lecciones</h1>
-            <p className="text-sm text-gray-600">Elige tu próxima aventura de aprendizaje</p>
-          </div>
-          <div className="flex items-center space-x-2">
-            <div className="bg-blue-100 px-3 py-1 rounded-full">
-              <span className="text-blue-600 text-sm font-semibold">📚 {lessons.length}</span>
-            </div>
-          </div>
-        </div>
-      </div>
+      <PageHeader
+        title="Lecciones"
+        description="Elige tu próxima aventura de aprendizaje"
+      />
 
       {/* JLPT Level Selector */}
       <div className="px-6 py-4">
@@ -256,111 +248,57 @@ export default function LessonsPage() {
                     <div className={`w-8 h-8 rounded-full flex items-center justify-center text-sm font-bold border-2 ${getDifficultyColor(lesson.difficulty)}`}>
                       {index + 1}
                     </div>
-                                         <div>
-                       <h3 className="text-lg font-bold text-gray-800">{lesson.title}</h3>
-                       <div className="flex flex-wrap gap-2 mt-1">
-                         <span className={`inline-block px-2 py-1 rounded-full text-xs font-medium border ${getDifficultyColor(lesson.difficulty)}`}>
-                           {getDifficultyLabel(lesson.difficulty)}
-                         </span>
-                         <span className={`inline-block px-2 py-1 rounded-full text-xs font-medium border ${getJLPTLevelColor(lesson.jlptLevel)}`}>
-                           {lesson.jlptLevel}
-                         </span>
-                       </div>
-                     </div>
+                    <div>
+                      <h3 className="text-lg font-bold text-gray-800">{lesson.title}</h3>
+                      <div className="flex flex-wrap gap-2 mt-1">
+                        <span className={`inline-block px-2 py-1 rounded-full text-xs font-medium border ${getDifficultyColor(lesson.difficulty)}`}>
+                          {getDifficultyLabel(lesson.difficulty)}
+                        </span>
+                        <span className={`inline-block px-2 py-1 rounded-full text-xs font-medium border ${getJLPTLevelColor(lesson.jlptLevel)}`}>
+                          {lesson.jlptLevel}
+                        </span>
+                      </div>
+                    </div>
                   </div>
                   <p className="text-gray-600 text-sm mb-3">{lesson.description}</p>
                 </div>
-                
-                {/* Lesson Status */}
-                <div className="text-right">
-                  <div className="flex items-center space-x-2 mb-2">
-                    <svg className="w-4 h-4 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              </div>
+
+              {/* Lesson Details */}
+              <div className="flex items-center justify-between">
+                <div className="flex items-center space-x-4">
+                  <div className="flex items-center space-x-2">
+                    <svg className="w-4 h-4 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
                     </svg>
-                    <span className="text-sm text-gray-500">{lesson.estimatedTime} min</span>
+                    <span className="text-sm text-gray-600">{lesson.estimatedTime} min</span>
                   </div>
-                  {lesson.isCompleted && (
-                    <div className="w-8 h-8 bg-green-500 rounded-full flex items-center justify-center">
-                      <svg className="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <div className="flex items-center space-x-2">
+                    <svg className="w-4 h-4 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+                    </svg>
+                    <span className="text-sm text-gray-600">{lesson.kanjiList.length} kanji</span>
+                  </div>
+                </div>
+                <div className="flex items-center space-x-2">
+                  {lesson.isCompleted ? (
+                    <div className="w-6 h-6 bg-green-500 rounded-full flex items-center justify-center">
+                      <svg className="w-4 h-4 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+                      </svg>
+                    </div>
+                  ) : (
+                    <div className="w-6 h-6 bg-gray-300 rounded-full flex items-center justify-center">
+                      <svg className="w-4 h-4 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
                       </svg>
                     </div>
                   )}
                 </div>
               </div>
-
-              {/* Kanji Preview */}
-              <div className="mb-4">
-                <p className="text-sm text-gray-500 mb-2">Kanji que aprenderás:</p>
-                <div className="flex space-x-2">
-                  {lesson.kanjiList.map((kanji, kanjiIndex) => (
-                    <div
-                      key={kanjiIndex}
-                      className="w-10 h-10 bg-gray-100 rounded-lg flex items-center justify-center text-lg font-bold text-gray-700 hover:bg-gray-200 transition-colors"
-                      title={`Kanji ${kanjiIndex + 1}`}
-                    >
-                      {kanji}
-                    </div>
-                  ))}
-                </div>
-              </div>
-
-              {/* Progress Bar */}
-              {lesson.progress > 0 && !lesson.isCompleted && (
-                <div className="mb-4">
-                  <div className="flex items-center justify-between mb-2">
-                    <span className="text-sm text-gray-600">Progreso</span>
-                    <span className="text-sm font-medium text-gray-800">{lesson.progress}%</span>
-                  </div>
-                  <div className="w-full bg-gray-200 rounded-full h-2">
-                    <div 
-                      className="bg-gradient-to-r from-blue-400 to-purple-500 h-2 rounded-full transition-all duration-300"
-                      style={{ width: `${lesson.progress}%` }}
-                    ></div>
-                  </div>
-                </div>
-              )}
-
-              {/* Action Button */}
-              <button
-                className={`w-full py-3 px-4 rounded-xl font-semibold transition-colors duration-200 ${
-                  lesson.isCompleted
-                    ? 'bg-gray-100 text-gray-500 cursor-not-allowed'
-                    : 'bg-gradient-to-r from-blue-500 to-blue-600 text-white hover:from-blue-600 hover:to-blue-700'
-                }`}
-                disabled={lesson.isCompleted}
-              >
-                {lesson.isCompleted ? 'Lección Completada' : 'Comenzar Lección'}
-              </button>
             </div>
           ))}
         </div>
-
-        {/* No Lessons Message */}
-        {filteredLessons.length === 0 && (
-          <div className="px-6 py-8 text-center">
-            <div className="bg-white rounded-2xl p-8 shadow-sm border border-gray-100">
-              <div className="w-24 h-24 bg-gray-100 rounded-full flex items-center justify-center mx-auto mb-6">
-                <svg className="w-12 h-12 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-2.5L13.732 4c-.77-.833-1.964-.833-2.732 0L3.732 16.5c-.77.833.192 2.5 1.732 2.5z" />
-                </svg>
-              </div>
-              <h3 className="text-xl font-bold text-gray-800 mb-2">No hay lecciones disponibles</h3>
-              <p className="text-gray-600 mb-4">
-                No hay lecciones para el nivel {selectedJLPTLevel === 'all' ? 'seleccionado' : selectedJLPTLevel} en este momento.
-              </p>
-              <button
-                onClick={() => setSelectedJLPTLevel('all')}
-                className="bg-blue-500 hover:bg-blue-600 text-white px-6 py-3 rounded-xl font-semibold transition-colors duration-200"
-              >
-                Ver Todas las Lecciones
-              </button>
-            </div>
-          </div>
-        )}
-
-        {/* Bottom Spacing for Navigation */}
-        <div className="h-8"></div>
       </div>
     </div>
   );
