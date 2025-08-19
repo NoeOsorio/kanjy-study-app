@@ -1,8 +1,9 @@
 import { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import type { Kanji, KanjiExample } from '../types';
+import { motion, AnimatePresence } from 'framer-motion';
 import { getLessonKanji, getKanjiExamples } from '../services/kanjiService';
 import KanjiCard from '../components/KanjiCard';
+import type { Kanji, KanjiExample } from '../types';
 
 export default function LessonDetailPage() {
   const navigate = useNavigate();
@@ -442,16 +443,31 @@ export default function LessonDetailPage() {
       )}
 
              {/* Study Mode Modal */}
-       {isStudyModeActive && (
-         <div 
-           className="fixed inset-0 bg-gray-900/50 backdrop-blur-sm flex items-center justify-center p-2 sm:p-4 z-50"
-           onClick={() => setIsStudyModeActive(false)}
-         >
-           <div 
-             data-study-modal
-             className="bg-white rounded-2xl sm:rounded-3xl w-full max-w-lg sm:max-w-2xl mx-4 max-h-[95vh] overflow-hidden shadow-2xl border border-white/20"
-             onClick={(e) => e.stopPropagation()}
+       <AnimatePresence>
+         {isStudyModeActive && (
+           <motion.div 
+             className="fixed inset-0 bg-gray-900/50 backdrop-blur-sm flex items-center justify-center p-2 sm:p-4 z-50"
+             onClick={() => setIsStudyModeActive(false)}
+             initial={{ opacity: 0 }}
+             animate={{ opacity: 1 }}
+             exit={{ opacity: 0 }}
+             transition={{ duration: 0.2 }}
            >
+             <motion.div 
+               data-study-modal
+               className="bg-white rounded-2xl sm:rounded-3xl w-full max-w-lg sm:max-w-2xl mx-4 max-h-[95vh] overflow-hidden shadow-2xl border border-white/20"
+               onClick={(e) => e.stopPropagation()}
+               initial={{ opacity: 0, scale: 0.9, y: 20 }}
+               animate={{ opacity: 1, scale: 1, y: 0 }}
+               exit={{ opacity: 0, scale: 0.9, y: 20 }}
+               transition={{ 
+                 duration: 0.3, 
+                 ease: [0.4, 0.0, 0.2, 1],
+                 type: "spring",
+                 stiffness: 300,
+                 damping: 25
+               }}
+             >
              {/* Modal Header */}
              <div className="p-4 sm:p-6 border-b border-gray-100 bg-gradient-to-r from-purple-50 to-blue-50">
                <div className="flex items-center justify-between">
@@ -510,17 +526,28 @@ export default function LessonDetailPage() {
                          </button>
                        )}
 
-                       <KanjiCard
-                         kanji={kanjiList[currentKanjiIndex]}
-                       />
+                       <AnimatePresence mode="wait">
+                         <motion.div
+                           key={currentKanjiIndex}
+                           initial={{ opacity: 0, x: 100 }}
+                           animate={{ opacity: 1, x: 0 }}
+                           exit={{ opacity: 0, x: -100 }}
+                           transition={{ duration: 0.3, ease: "easeInOut" }}
+                         >
+                           <KanjiCard
+                             kanji={kanjiList[currentKanjiIndex]}
+                           />
+                         </motion.div>
+                       </AnimatePresence>
                      </div>
                    </div>
                  </div>
                )}
              </div>
-           </div>
-         </div>
+           </motion.div>
+         </motion.div>
        )}
+     </AnimatePresence>
       
     </div>
   );

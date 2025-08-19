@@ -1,1 +1,12 @@
 @import "tailwindcss";
+
+/* Remove focus outline for better visual experience */
+*:focus {
+  outline: none !important;
+}
+
+/* Custom focus styles for accessibility (optional) */
+*:focus-visible {
+  outline: 2px solid #3b82f6 !important;
+  outline-offset: 2px !important;
+}

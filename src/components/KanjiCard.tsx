@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { motion } from 'framer-motion';
 import type { Kanji } from '../types';
 
 interface KanjiCardProps {
@@ -13,18 +14,30 @@ export default function KanjiCard({ kanji }: KanjiCardProps) {
   };
 
   return (
-    <div 
+    <motion.div 
       className="w-full max-w-sm sm:max-w-md mx-auto"
       style={{ perspective: '1000px', height: '400px', minHeight: '400px' }}
+      initial={{ opacity: 0, scale: 0.8 }}
+      animate={{ opacity: 1, scale: 1 }}
+      exit={{ opacity: 0, scale: 0.8 }}
+      transition={{ duration: 0.3, ease: "easeOut" }}
     >
-      <div 
-        className={`relative w-full h-full transition-transform duration-500 cursor-pointer`}
-        style={{ 
-          transformStyle: 'preserve-3d',
-          transform: isFlipped ? 'rotateY(180deg)' : ''
-        }}
-        onClick={handleFlip}
-      >
+                        <motion.div 
+                    className="relative w-full h-full cursor-pointer focus:outline-none"
+                    style={{ transformStyle: 'preserve-3d' }}
+                    animate={{ rotateY: isFlipped ? 180 : 0 }}
+                    transition={{ 
+                      duration: 0.6, 
+                      ease: [0.4, 0.0, 0.2, 1],
+                      type: "spring",
+                      stiffness: 100,
+                      damping: 15
+                    }}
+                    onClick={handleFlip}
+                    whileHover={{ scale: 1.02 }}
+                    whileTap={{ scale: 0.98 }}
+                    tabIndex={0}
+                  >
         {/* Front of card */}
         <div 
           className="absolute w-full h-full bg-gradient-to-br from-white to-gray-50 rounded-3xl shadow-lg border border-gray-100 p-6"
@@ -76,8 +89,8 @@ export default function KanjiCard({ kanji }: KanjiCardProps) {
 
 
           </div>
-        </div>
-      </div>
-    </div>
+                            </div>
+                  </motion.div>
+                </motion.div>
   );
 }
