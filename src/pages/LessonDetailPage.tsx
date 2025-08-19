@@ -15,7 +15,6 @@ export default function LessonDetailPage() {
   const [currentKanjiIndex, setCurrentKanjiIndex] = useState(0);
 
   useEffect(() => {
-    // Simular carga de datos del backend
     const loadLessonData = () => {
       const kanji = getLessonKanji(lessonId || '1');
       setKanjiList(kanji);
@@ -23,6 +22,108 @@ export default function LessonDetailPage() {
 
     loadLessonData();
   }, [lessonId]);
+
+  // Keyboard navigation for study mode
+  useEffect(() => {
+    if (!isStudyModeActive) return;
+
+    const handleKeyDown = (event: KeyboardEvent) => {
+      switch (event.key) {
+        case 'ArrowLeft':
+          event.preventDefault();
+          handlePreviousKanji();
+          break;
+        case 'ArrowRight':
+          event.preventDefault();
+          handleNextKanji();
+          break;
+        case 'Escape':
+          event.preventDefault();
+          setIsStudyModeActive(false);
+          break;
+        case ' ': {
+          event.preventDefault();
+          // Trigger card flip by simulating a click on the card
+          const card = document.querySelector('[data-study-modal] .cursor-pointer');
+          if (card) {
+            (card as HTMLElement).click();
+          }
+          break;
+        }
+      }
+    };
+
+    document.addEventListener('keydown', handleKeyDown);
+    return () => document.removeEventListener('keydown', handleKeyDown);
+  }, [isStudyModeActive, currentKanjiIndex, kanjiList.length]);
+
+  // Touch/swipe navigation for study mode
+  useEffect(() => {
+    if (!isStudyModeActive) return;
+
+    let startX = 0;
+    let startY = 0;
+    let isSwiping = false;
+
+    const handleTouchStart = (event: TouchEvent) => {
+      startX = event.touches[0].clientX;
+      startY = event.touches[0].clientY;
+      isSwiping = false;
+    };
+
+    const handleTouchMove = (event: TouchEvent) => {
+      if (!isSwiping) {
+        const deltaX = Math.abs(event.touches[0].clientX - startX);
+        const deltaY = Math.abs(event.touches[0].clientY - startY);
+        
+        // Only start swiping if horizontal movement is greater than vertical
+        if (deltaX > deltaY && deltaX > 10) {
+          isSwiping = true;
+        }
+      }
+    };
+
+    const handleTouchEnd = (event: TouchEvent) => {
+      if (!isSwiping) return;
+
+      const endX = event.changedTouches[0].clientX;
+      const deltaX = endX - startX;
+      const minSwipeDistance = 50;
+
+      if (Math.abs(deltaX) > minSwipeDistance) {
+        if (deltaX > 0) {
+          // Swipe right - go to previous
+          handlePreviousKanji();
+        } else {
+          // Swipe left - go to next
+          handleNextKanji();
+        }
+      }
+    };
+
+    // Prevent background scrolling and gestures
+    document.body.style.overflow = 'hidden';
+    document.body.style.touchAction = 'none';
+
+    // Add touch event listeners to the modal
+    const modal = document.querySelector('[data-study-modal]');
+    if (modal) {
+      modal.addEventListener('touchstart', handleTouchStart as EventListener, { passive: false });
+      modal.addEventListener('touchmove', handleTouchMove as EventListener, { passive: false });
+      modal.addEventListener('touchend', handleTouchEnd as EventListener, { passive: false });
+    }
+
+    return () => {
+      document.body.style.overflow = '';
+      document.body.style.touchAction = '';
+      
+      if (modal) {
+        modal.removeEventListener('touchstart', handleTouchStart as EventListener);
+        modal.removeEventListener('touchmove', handleTouchMove as EventListener);
+        modal.removeEventListener('touchend', handleTouchEnd as EventListener);
+      }
+    };
+  }, [isStudyModeActive, currentKanjiIndex, kanjiList.length]);
 
   const handleKanjiClick = (kanji: Kanji) => {
     const examples = getKanjiExamples(kanji.character);
@@ -90,34 +191,21 @@ export default function LessonDetailPage() {
       {/* Header */}
       <div className="bg-white shadow-sm px-6 py-4">
         <div className="flex items-center justify-between">
-          <div className="flex items-center space-x-4">
-            <button
-              onClick={() => navigate('/?tab=lessons')}
-              className="p-2 text-gray-600 hover:text-gray-800 hover:bg-gray-100 rounded-lg transition-colors"
-            >
-              <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
-              </svg>
-            </button>
-            <div>
-              <h1 className="text-2xl font-bold text-gray-800">Lección: Fundamentos Básicos</h1>
-              <p className="text-sm text-gray-600">5 kanji • Nivel N5 • 15 minutos estimados</p>
-            </div>
-          </div>
-                     <div className="flex items-center space-x-2">
-             <div className="bg-blue-100 px-3 py-1 rounded-full">
-               <span className="text-blue-600 text-sm font-semibold">📚 {kanjiList.length}</span>
-             </div>
+                     <div className="flex items-center space-x-4">
              <button
-               onClick={toggleStudyMode}
-               className={`px-4 py-2 rounded-lg transition-colors ${
-                 isStudyModeActive
-                   ? 'bg-purple-600 text-white hover:bg-purple-700'
-                   : 'bg-blue-600 text-white hover:bg-blue-700'
-               }`}
+               onClick={() => navigate('/lessons')}
+               className="p-2 text-gray-600 hover:text-gray-800 hover:bg-gray-100 rounded-lg transition-colors"
              >
-               {isStudyModeActive ? 'Volver a la Lección' : 'Modo Estudio'}
+               <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
+               </svg>
              </button>
+             <div className="text-center">
+               <h1 className="text-3xl font-bold bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
+                 Fundamentos Básicos
+               </h1>
+               <p className="text-sm text-gray-600 mt-1">Nivel N5 • {kanjiList.length} kanji</p>
+             </div>
            </div>
         </div>
       </div>
@@ -151,79 +239,58 @@ export default function LessonDetailPage() {
         </div>
       </div>
 
-             {/* Kanji Grid or Study Mode */}
-       {isStudyModeActive ? (
-         // Modo Estudio con Tarjetas
-         <div className="px-6 py-4">
-           {kanjiList.length > 0 && (
-             <>
-               <div className="text-center mb-4">
-                 <p className="text-gray-600">
-                   Kanji {currentKanjiIndex + 1} de {kanjiList.length}
-                 </p>
+             {/* Kanji Grid */}
+       <div className="px-6 py-4">
+         <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4">
+           {kanjiList.map((kanji) => (
+             <div
+               key={kanji.id}
+               className="bg-gradient-to-br from-white to-gray-50 rounded-3xl p-6 shadow-lg hover:shadow-xl transition-all duration-300 cursor-pointer text-center border border-gray-100 hover:border-blue-200 hover:scale-105"
+               onClick={() => handleKanjiClick(kanji)}
+             >
+               {/* Kanji Character */}
+               <div className="w-24 h-24 bg-gradient-to-br from-blue-50 to-indigo-100 rounded-2xl flex items-center justify-center mx-auto mb-4 border-2 border-blue-200 shadow-inner">
+                 <span className="text-5xl font-bold text-gray-800">{kanji.character}</span>
                </div>
-               <KanjiCard
-                 kanji={kanjiList[currentKanjiIndex]}
-                 onNext={currentKanjiIndex < kanjiList.length - 1 ? handleNextKanji : undefined}
-                 onPrevious={currentKanjiIndex > 0 ? handlePreviousKanji : undefined}
-               />
-             </>
-           )}
-         </div>
-       ) : (
-         // Vista Normal de la Lección
-         <div className="px-6 py-4">
-           <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4">
-             {kanjiList.map((kanji) => (
-               <div
-                 key={kanji.id}
-                 className="bg-gradient-to-br from-white to-gray-50 rounded-3xl p-6 shadow-lg hover:shadow-xl transition-all duration-300 cursor-pointer text-center border border-gray-100 hover:border-blue-200 hover:scale-105"
-                 onClick={() => handleKanjiClick(kanji)}
-               >
-                 {/* Kanji Character */}
-                 <div className="w-24 h-24 bg-gradient-to-br from-blue-50 to-indigo-100 rounded-2xl flex items-center justify-center mx-auto mb-4 border-2 border-blue-200 shadow-inner">
-                   <span className="text-5xl font-bold text-gray-800">{kanji.character}</span>
-                 </div>
 
-                 {/* Kanji Meaning */}
-                 <h3 className="text-lg font-bold text-gray-800 mb-3">{kanji.meaning}</h3>
-                 
-                 {/* Main Reading - Onyomi */}
-                 <div className="mb-3">
-                   <p className="text-xs text-gray-500 mb-2">Lectura principal</p>
-                   <div className="bg-blue-100 rounded-xl p-2">
-                     <span className="font-mono text-lg font-bold text-blue-700">
-                       {kanji.readings.onyomi[0]}
+               {/* Kanji Meaning */}
+               <h3 className="text-lg font-bold text-gray-800 mb-3">{kanji.meaning}</h3>
+               
+               {/* Main Reading - Onyomi */}
+               <div className="mb-3">
+                 <p className="text-xs text-gray-500 mb-2">Lectura principal</p>
+                 <div className="bg-blue-100 rounded-xl p-2">
+                   <span className="font-mono text-lg font-bold text-blue-700">
+                     {kanji.readings.onyomi[0]}
+                   </span>
+                 </div>
+               </div>
+
+               {/* Alternative Readings */}
+               <div className="mb-3">
+                 <p className="text-xs text-gray-500 mb-2">Otras lecturas</p>
+                 <div className="flex flex-wrap gap-1 justify-center">
+                   {kanji.readings.onyomi.slice(1).map((reading, idx) => (
+                     <span key={idx} className="text-xs bg-gray-100 px-2 py-1 rounded-lg text-gray-600 font-mono">
+                       {reading}
                      </span>
-                   </div>
-                 </div>
-
-                 {/* Alternative Readings */}
-                 <div className="mb-3">
-                   <p className="text-xs text-gray-500 mb-2">Otras lecturas</p>
-                   <div className="flex flex-wrap gap-1 justify-center">
-                     {kanji.readings.onyomi.slice(1).map((reading, idx) => (
-                       <span key={idx} className="text-xs bg-gray-100 px-2 py-1 rounded-lg text-gray-600 font-mono">
-                         {reading}
-                       </span>
-                     ))}
-                     {kanji.readings.kunyomi.slice(0, 2).map((reading, idx) => (
-                       <span key={idx} className="text-xs bg-green-100 px-2 py-1 rounded-lg text-green-600 font-mono">
-                         {reading}
-                       </span>
-                     ))}
-                   </div>
-                 </div>
-
-                 {/* Stroke Count Badge */}
-                 <div className="inline-block bg-gradient-to-r from-purple-100 to-pink-100 px-3 py-1 rounded-full border border-purple-200">
-                   <span className="text-sm font-medium text-purple-700">{kanji.strokeCount} trazos</span>
+                   ))}
+                   {kanji.readings.kunyomi.slice(0, 2).map((reading, idx) => (
+                     <span key={idx} className="text-xs bg-green-100 px-2 py-1 rounded-lg text-green-600 font-mono">
+                       {reading}
+                     </span>
+                   ))}
                  </div>
                </div>
-             ))}
-           </div>
+
+               {/* Stroke Count Badge */}
+               <div className="inline-block bg-gradient-to-r from-purple-100 to-pink-100 px-3 py-1 rounded-full border border-purple-200">
+                 <span className="text-sm font-medium text-purple-700">{kanji.strokeCount} trazos</span>
+               </div>
+             </div>
+           ))}
          </div>
-       )}
+       </div>
 
       {/* Modal for Kanji Details */}
       {isModalOpen && selectedKanji && (
@@ -374,6 +441,86 @@ export default function LessonDetailPage() {
         </div>
       )}
 
+             {/* Study Mode Modal */}
+       {isStudyModeActive && (
+         <div 
+           className="fixed inset-0 bg-gray-900/50 backdrop-blur-sm flex items-center justify-center p-2 sm:p-4 z-50"
+           onClick={() => setIsStudyModeActive(false)}
+         >
+           <div 
+             data-study-modal
+             className="bg-white rounded-2xl sm:rounded-3xl w-full max-w-lg sm:max-w-2xl mx-4 max-h-[95vh] overflow-hidden shadow-2xl border border-white/20"
+             onClick={(e) => e.stopPropagation()}
+           >
+             {/* Modal Header */}
+             <div className="p-4 sm:p-6 border-b border-gray-100 bg-gradient-to-r from-purple-50 to-blue-50">
+               <div className="flex items-center justify-between">
+                 <div className="text-center flex-1">
+                   <h2 className="text-xl sm:text-2xl font-bold text-gray-800 mb-1 sm:mb-2">Modo Estudio con Tarjetas</h2>
+                   <p className="text-sm sm:text-base text-gray-600">
+                     Kanji {currentKanjiIndex + 1} de {kanjiList.length}
+                   </p>
+                 </div>
+                 <button
+                   onClick={() => setIsStudyModeActive(false)}
+                   className="w-8 h-8 sm:w-10 sm:h-10 bg-white/80 hover:bg-white rounded-full flex items-center justify-center text-gray-500 hover:text-gray-700 transition-all duration-200 shadow-lg hover:shadow-xl"
+                 >
+                   <svg className="w-4 h-4 sm:w-5 sm:h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                   </svg>
+                 </button>
+               </div>
+             </div>
+
+             {/* Modal Content */}
+             <div className="p-4 sm:p-6">
+               {kanjiList.length > 0 && (
+                 <div className="flex justify-center">
+                   <div className="w-full">
+                     <div className="text-center mb-4 sm:mb-6">
+                       <p className="text-xs sm:text-sm text-gray-500 mb-2">
+                         Usa las flechas del teclado o haz clic en los lados para navegar
+                       </p>
+                       <p className="text-xs sm:text-sm text-gray-400">
+                         Espacio para voltear la tarjeta
+                       </p>
+                     </div>
+                     <div className="relative">
+                       {/* Left click area for previous - only show if there's a previous kanji */}
+                       {currentKanjiIndex > 0 && (
+                         <button
+                           onClick={handlePreviousKanji}
+                           className="absolute left-0 top-1/2 transform -translate-y-1/2 w-12 h-12 sm:w-16 sm:h-16 flex items-center justify-center rounded-full transition-all duration-200 z-10 opacity-0 hover:opacity-100 bg-white/80 hover:bg-white shadow-lg"
+                         >
+                           <svg className="w-6 h-6 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
+                           </svg>
+                         </button>
+                       )}
+
+                       {/* Right click area for next - only show if there's a next kanji */}
+                       {currentKanjiIndex < kanjiList.length - 1 && (
+                         <button
+                           onClick={handleNextKanji}
+                           className="absolute right-0 top-1/2 transform -translate-y-1/2 w-12 h-12 sm:w-16 sm:h-16 flex items-center justify-center rounded-full transition-all duration-200 z-10 opacity-0 hover:opacity-100 bg-white/80 hover:bg-white shadow-lg"
+                         >
+                           <svg className="w-6 h-6 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+                           </svg>
+                         </button>
+                       )}
+
+                       <KanjiCard
+                         kanji={kanjiList[currentKanjiIndex]}
+                       />
+                     </div>
+                   </div>
+                 </div>
+               )}
+             </div>
+           </div>
+         </div>
+       )}
       
     </div>
   );
