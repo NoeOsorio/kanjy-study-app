@@ -1,13 +1,17 @@
 import { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
+import PageHeader from '../components/PageHeader';
 import { getKanjiById, getKanjiExamples } from '../services/kanjiService';
 import type { Kanji, KanjiExample } from '../types';
+import { FiArrowLeft, FiCopy, FiVolume2, FiPlay, FiBookmark } from 'react-icons/fi';
+import KanjiCanvas from '../components/KanjiCanvas';
 
 export default function KanjiDetailPage() {
   const navigate = useNavigate();
   const { kanjiId } = useParams<{ kanjiId: string }>();
   const [kanji, setKanji] = useState<Kanji | null>(null);
   const [examples, setExamples] = useState<KanjiExample[]>([]);
+  const [activeReadingTab, setActiveReadingTab] = useState<'onyomi' | 'kunyomi'>('onyomi');
 
   useEffect(() => {
     if (kanjiId) {
@@ -72,134 +76,132 @@ export default function KanjiDetailPage() {
 
   return (
     <div className="min-h-screen bg-slate-100">
-      {/* Header con botón de back */}
-      <div className="bg-white shadow-sm border-b border-gray-100">
-        <div className="max-w-4xl mx-auto px-4 py-4">
-          <div className="flex items-center">
-            <button
-              onClick={() => navigate(-1)}
-              className="w-10 h-10 bg-gray-100 hover:bg-gray-200 rounded-full flex items-center justify-center text-gray-600 hover:text-gray-800 transition-colors mr-4"
-            >
-              <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
-              </svg>
-            </button>
-            <h1 className="text-xl font-bold text-gray-800">Detalles del Kanji</h1>
-          </div>
-        </div>
-      </div>
+      <PageHeader
+        title="Detalle del Kanji"
+        description={kanji.meaning}
+        leftContent={
+          <button onClick={() => navigate(-1)} className="p-2 rounded-lg text-slate-600 hover:text-slate-900 hover:bg-slate-100">
+            <FiArrowLeft className="w-5 h-5" />
+          </button>
+        }
+      />
 
       {/* Contenido principal */}
-      <div className="max-w-4xl mx-auto px-4 py-6">
-        {/* Header del Kanji */}
-        <div className="bg-white rounded-3xl p-6 mb-6 shadow-sm border border-gray-100">
-          <div className="flex flex-col sm:flex-row items-center sm:items-start space-y-4 sm:space-y-0 sm:space-x-6">
-            <div className="w-24 h-24 sm:w-32 sm:h-32 bg-gradient-to-br from-blue-100 to-indigo-200 rounded-3xl flex items-center justify-center border-2 border-blue-300 shadow-lg">
-              <span className="text-5xl sm:text-6xl lg:text-7xl font-bold text-blue-700">{kanji.character}</span>
-            </div>
-            <div className="text-center sm:text-left">
-              <h2 className="text-2xl sm:text-3xl lg:text-4xl font-bold text-gray-800 mb-3">{kanji.meaning}</h2>
-              <div className="flex flex-wrap justify-center sm:justify-start gap-2">
-                <span className={`px-3 py-1 rounded-full text-sm font-medium border ${getDifficultyColor(kanji.difficulty)}`}>
-                  {kanji.difficulty === 'beginner' ? 'Principiante' : kanji.difficulty === 'intermediate' ? 'Intermedio' : 'Avanzado'}
-                </span>
-                <span className={`px-3 py-1 rounded-full text-sm font-medium border ${getJLPTLevelColor(kanji.jlptLevel)}`}>
-                  {kanji.jlptLevel}
-                </span>
+      <div className="max-w-5xl mx-auto px-4 py-6">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6 items-start">
+          {/* Columna izquierda: Kanji + Canvas + Lecturas */}
+          <div className="space-y-6">
+            {/* Kanji hero */}
+            <div className="bg-white rounded-3xl p-6 shadow-lg border border-gray-100">
+              <div className="flex items-start gap-4">
+                <div className="w-28 h-28 md:w-32 md:h-32 bg-slate-50 rounded-2xl border border-slate-200 flex items-center justify-center">
+                  <span className="text-6xl md:text-7xl font-semibold text-slate-900">{kanji.character}</span>
+                </div>
+                <div className="flex-1">
+                  <h2 className="text-2xl md:text-3xl font-semibold text-slate-900">{kanji.meaning}</h2>
+                  <div className="mt-2 flex flex-wrap gap-2">
+                    <span className={`px-3 py-1 rounded-full text-xs font-medium border ${getDifficultyColor(kanji.difficulty)}`}>
+                      {kanji.difficulty === 'beginner' ? 'Principiante' : kanji.difficulty === 'intermediate' ? 'Intermedio' : 'Avanzado'}
+                    </span>
+                    <span className={`px-3 py-1 rounded-full text-xs font-medium border ${getJLPTLevelColor(kanji.jlptLevel)}`}>
+                      JLPT {kanji.jlptLevel}
+                    </span>
+                  </div>
+                </div>
               </div>
             </div>
-          </div>
-        </div>
 
-        {/* Lecturas */}
-        <div className="bg-white rounded-3xl p-6 mb-6 shadow-sm border border-gray-100">
-          <h3 className="text-xl font-bold text-gray-800 mb-4 flex items-center">
-            <span className="w-8 h-8 bg-blue-100 rounded-full flex items-center justify-center mr-3">
-              <svg className="w-4 h-4 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 11a7 7 0 01-7 7m0 0a7 7 0 01-7-7m7 7v4m0 0H8m4 0h4m-4-8a3 3 0 01-3-3V5a3 3 0 116 0v6a3 3 0 01-3 3z" />
-              </svg>
-            </span>
-            Lecturas
-          </h3>
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
-            <div className="bg-gradient-to-br from-blue-50 to-blue-100 rounded-2xl p-4 border border-blue-200">
-              <h4 className="font-bold text-blue-800 mb-3 flex items-center">
-                <span className="mr-2">音</span>
-                Onyomi
-              </h4>
-              <div className="space-y-3">
-                {kanji.readings.onyomi.map((reading, idx) => (
-                  <div key={idx} className="bg-white/80 px-4 py-3 rounded-xl border border-blue-200 shadow-sm">
-                    <span className="font-mono text-xl font-bold text-blue-700">{reading}</span>
-                  </div>
+            {/* Canvas de práctica de trazos */}
+            <div className="bg-white rounded-3xl p-6 shadow-lg border border-gray-100">
+              <h3 className="text-sm font-semibold text-slate-900 mb-3">Practica el trazo</h3>
+              <KanjiCanvas character={kanji.character} size={320} />
+            </div>
+
+            {/* Lecturas con tabs */}
+            <div className="bg-white rounded-3xl p-6 shadow-lg border border-gray-100">
+              <div className="flex items-center border-b border-slate-200 mb-4">
+                {(['onyomi','kunyomi'] as const).map(tab => (
+                  <button
+                    key={tab}
+                    onClick={() => setActiveReadingTab(tab)}
+                    className={`px-3 py-2 text-sm font-medium -mb-px border-b-2 ${
+                      activeReadingTab === tab ? 'border-teal-600 text-slate-900' : 'border-transparent text-slate-500'
+                    }`}
+                  >
+                    {tab === 'onyomi' ? 'Onyomi' : 'Kunyomi'}
+                  </button>
                 ))}
               </div>
-            </div>
-            <div className="bg-gradient-to-br from-green-50 to-green-100 rounded-2xl p-4 border border-green-200">
-              <h4 className="font-bold text-green-800 mb-3 flex items-center">
-                <span className="mr-2">訓</span>
-                Kunyomi
-              </h4>
-              <div className="space-y-3">
-                {kanji.readings.kunyomi.map((reading, idx) => (
-                  <div key={idx} className="bg-white/80 px-4 py-3 rounded-xl border border-green-200 shadow-sm">
-                    <span className="font-mono text-xl font-bold text-green-700">{reading}</span>
-                  </div>
+              <div className="flex flex-wrap gap-2">
+                {(activeReadingTab === 'onyomi' ? kanji.readings.onyomi : kanji.readings.kunyomi).map((r, idx) => (
+                  <span key={idx} className={`px-3 py-1 rounded-xl font-mono text-sm ${activeReadingTab === 'onyomi' ? 'bg-teal-50 text-teal-700 border border-teal-200' : 'bg-slate-100 text-slate-700 border border-slate-200'}`}>
+                    {r}
+                  </span>
                 ))}
               </div>
             </div>
           </div>
-        </div>
 
-        {/* Ejemplos */}
-        <div className="bg-white rounded-3xl p-6 mb-6 shadow-sm border border-gray-100">
-          <h3 className="text-xl font-bold text-gray-800 mb-4 flex items-center">
-            <span className="w-8 h-8 bg-green-100 rounded-full flex items-center justify-center mr-3">
-              <svg className="w-4 h-4 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
-              </svg>
-            </span>
-            Ejemplos de Uso
-          </h3>
-          <div className="space-y-4">
-            {examples.map((example, idx) => (
-              <div key={idx} className="bg-gradient-to-r from-gray-50 to-gray-100 rounded-2xl p-5 border border-gray-200 shadow-sm">
-                <div className="text-xl font-bold text-gray-800 mb-3 text-center">{example.japanese}</div>
-                <div className="bg-white/80 rounded-xl p-3 mb-2">
-                  <div className="text-sm text-gray-500 mb-1">Romaji:</div>
-                  <div className="font-mono text-lg text-gray-700">{example.romaji}</div>
+          {/* Columna derecha: Ejemplos + Info + Acciones */}
+          <div className="space-y-6">
+            {/* Ejemplos */}
+            <div className="bg-white rounded-3xl p-6 shadow-lg border border-gray-100">
+              <h3 className="text-xl font-semibold text-slate-900 mb-4">Ejemplos</h3>
+              <div className="space-y-3">
+                {examples.map((ex, idx) => {
+                  const parts = ex.japanese.split(kanji.character);
+                  return (
+                    <div key={idx} className="p-4 rounded-2xl border border-slate-200 bg-white">
+                      <div className="text-lg font-semibold text-slate-900 mb-1 text-center">
+                        {parts.map((p, i) => (
+                          <span key={i}>
+                            {p}
+                            {i < parts.length - 1 && (<span className="bg-amber-50 px-1 rounded">{kanji.character}</span>)}
+                          </span>
+                        ))}
+                      </div>
+                      <div className="text-xs text-slate-500 text-center font-mono">{ex.romaji}</div>
+                      <div className="text-sm text-slate-700 text-center mt-1">{ex.english}</div>
+                    </div>
+                  );
+                })}
+              </div>
+            </div>
+
+            {/* Información Adicional */}
+            <div className="bg-white rounded-3xl p-6 shadow-lg border border-gray-100">
+              <h3 className="text-xl font-bold text-gray-800 mb-4 flex items-center">
+                <span className="w-8 h-8 bg-purple-100 rounded-full flex items-center justify-center mr-3">
+                  <svg className="w-4 h-4 text-purple-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                  </svg>
+                </span>
+                Información Adicional
+              </h3>
+              <div className="grid grid-cols-3 gap-4">
+                <div className="bg-gradient-to-br from-blue-50 to-blue-100 rounded-2xl p-4 text-center border border-blue-200">
+                  <div className="text-3xl font-bold text-blue-700 mb-1">{kanji.strokeCount}</div>
+                  <div className="text-sm text-blue-600 font-medium">Trazos</div>
                 </div>
-                <div className="bg-white/80 rounded-xl p-3">
-                  <div className="text-sm text-gray-500 mb-1">English:</div>
-                  <div className="text-lg text-gray-800">{example.english}</div>
+                <div className="bg-gradient-to-br from-green-50 to-green-100 rounded-2xl p-4 text-center border border-green-200">
+                  <div className="text-3xl font-bold text-green-700 mb-1">{kanji.frequency}</div>
+                  <div className="text-sm text-green-600 font-medium">Frecuencia</div>
+                </div>
+                <div className="bg-gradient-to-br from-purple-50 to-purple-100 rounded-2xl p-4 text-center border border-purple-200">
+                  <div className="text-3xl font-bold text-purple-700 mb-1">{kanji.grade}</div>
+                  <div className="text-sm text-purple-600 font-medium">Grado</div>
                 </div>
               </div>
-            ))}
-          </div>
-        </div>
+            </div>
 
-        {/* Información Adicional */}
-        <div className="bg-white rounded-3xl p-6 mb-6 shadow-sm border border-gray-100">
-          <h3 className="text-xl font-bold text-gray-800 mb-4 flex items-center">
-            <span className="w-8 h-8 bg-purple-100 rounded-full flex items-center justify-center mr-3">
-              <svg className="w-4 h-4 text-purple-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
-              </svg>
-            </span>
-            Información Adicional
-          </h3>
-          <div className="grid grid-cols-3 gap-4">
-            <div className="bg-gradient-to-br from-blue-50 to-blue-100 rounded-2xl p-4 text-center border border-blue-200">
-              <div className="text-3xl font-bold text-blue-700 mb-1">{kanji.strokeCount}</div>
-              <div className="text-sm text-blue-600 font-medium">Trazos</div>
-            </div>
-            <div className="bg-gradient-to-br from-green-50 to-green-100 rounded-2xl p-4 text-center border border-green-200">
-              <div className="text-3xl font-bold text-green-700 mb-1">{kanji.frequency}</div>
-              <div className="text-sm text-green-600 font-medium">Frecuencia</div>
-            </div>
-            <div className="bg-gradient-to-br from-purple-50 to-purple-100 rounded-2xl p-4 text-center border border-purple-200">
-              <div className="text-3xl font-bold text-purple-700 mb-1">{kanji.grade}</div>
-              <div className="text-sm text-purple-600 font-medium">Grado</div>
+            {/* Acciones de práctica */}
+            <div className="flex gap-3">
+              <button className="flex-1 bg-slate-700 hover:bg-slate-800 text-white py-3 rounded-2xl font-semibold flex items-center justify-center gap-2">
+                <FiPlay /> Practicar este kanji
+              </button>
+              <button className="flex-1 bg-white hover:bg-slate-50 text-slate-800 py-3 rounded-2xl font-semibold border border-slate-200 flex items-center justify-center gap-2">
+                <FiBookmark /> Añadir a repaso
+              </button>
             </div>
           </div>
         </div>
