@@ -1,121 +1,182 @@
 import { useState } from 'react';
 import PageHeader from '../components/PageHeader';
+import MascotCharacter from '../components/MascotCharacter';
+import { FiTarget, FiTrendingUp, FiBookOpen, FiActivity, FiRefreshCw, FiZap, FiStar, FiAward } from 'react-icons/fi';
 
 export default function HomePage() {
   const [dailyGoal] = useState(50);
   const [currentXP] = useState(35);
+  const [streak] = useState(7);
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-50 via-indigo-50 to-purple-50 pb-20">
+    <div className="min-h-screen bg-slate-100 pb-20">
       {/* Header */}
       <PageHeader
         title="¡Hola, Estudiante!"
-        description="¡Mantén tu racha!"
+        description="¡Mantén tu racha y sigue aprendiendo!"
         leftContent={
-          <div className="w-10 h-10 bg-gradient-to-r from-orange-400 to-red-500 rounded-full flex items-center justify-center">
-            <span className="text-white text-xl font-bold">漢</span>
+          <div className="w-12 h-12 bg-gradient-to-br from-teal-600 to-teal-700 rounded-2xl flex items-center justify-center shadow-lg">
+            <span className="font-semibold tracking-wider text-white text-2xl">漢</span>
           </div>
         }
       />
 
       {/* Main Content */}
       <div className="px-6 py-6 space-y-6">
-        {/* Daily Goal Card */}
-        <div className="bg-white rounded-2xl p-6 shadow-sm border border-gray-100">
-          <div className="flex items-center justify-between mb-4">
-            <h2 className="text-lg font-bold text-gray-800">Meta Diaria</h2>
-            <span className="text-sm text-gray-500">{currentXP}/{dailyGoal} XP</span>
+        {/* Welcome Section with Mascot */}
+        <div className="bg-white rounded-3xl p-6 shadow-lg border border-gray-100 relative overflow-hidden">
+          {/* Fondo decorativo */}
+          <div className="absolute top-0 right-0 w-32 h-32 bg-gradient-to-br from-green-100 to-blue-100 rounded-full -mr-16 -mt-16 opacity-60"></div>
+          
+          <div className="relative z-10 flex items-center justify-between">
+            <div className="flex-1">
+              <h2 className="text-2xl font-bold text-gray-800 mb-2">¡Bienvenido de vuelta!</h2>
+              <p className="text-gray-600 mb-4">Tu amigo Kanji está emocionado de verte hoy</p>
+              
+              {/* Stats rápidos */}
+              <div className="flex space-x-4">
+                <div className="text-center">
+                  <div className="text-lg font-bold text-green-600">{streak}</div>
+                  <div className="text-xs text-gray-500">Días</div>
+                </div>
+                <div className="text-center">
+                  <div className="text-lg font-bold text-blue-600">{currentXP}</div>
+                  <div className="text-xs text-gray-500">XP Hoy</div>
+                </div>
+                <div className="text-center">
+                  <div className="text-lg font-bold text-purple-600">85%</div>
+                  <div className="text-xs text-gray-500">Precisión</div>
+                </div>
+              </div>
+            </div>
+            
+            {/* Personaje mascota */}
+            <div className="ml-4">
+              <MascotCharacter variant="excited" size="lg" />
+            </div>
           </div>
-          <div className="w-full bg-gray-200 rounded-full h-3 mb-3">
-            <div 
-              className="bg-gradient-to-r from-green-400 to-blue-500 h-3 rounded-full transition-all duration-500"
-              style={{ width: `${Math.min((currentXP / dailyGoal) * 100, 100)}%` }}
-            ></div>
-          </div>
-          <p className="text-sm text-gray-600">
-            ¡Solo {dailyGoal - currentXP} XP más para completar tu meta diaria!
-          </p>
         </div>
 
-        {/* Quick Actions */}
+        {/* Daily Goal Card - Estilo Gamificado */}
+        <div className="bg-white rounded-3xl p-6 shadow-lg border border-gray-100 relative overflow-hidden">
+          {/* Fondo decorativo */}
+          <div className="absolute top-0 right-0 w-24 h-24 bg-gradient-to-br from-green-100 to-blue-100 rounded-full -mr-12 -mt-12 opacity-60"></div>
+          
+          <div className="relative z-10">
+            <div className="flex items-center justify-between mb-4">
+              <h2 className="text-xl font-semibold text-slate-900 flex items-center gap-2">
+                <FiTarget className="text-slate-600" />
+                Meta diaria
+              </h2>
+              <span className="text-lg font-semibold text-teal-700">{currentXP}/{dailyGoal} XP</span>
+            </div>
+            
+            {/* Barra de progreso mejorada */}
+            <div className="w-full bg-gray-200 rounded-full h-4 mb-4 relative overflow-hidden">
+              <div className="absolute inset-0 bg-gradient-to-r from-teal-500 to-teal-600 rounded-full transition-all duration-1000 ease-out"
+                   style={{ width: `${Math.min((currentXP / dailyGoal) * 100, 100)}%` }}>
+              </div>
+              {/* Efecto de brillo */}
+              <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white to-transparent opacity-30 animate-pulse"></div>
+            </div>
+            
+            <p className="text-slate-600 font-medium">
+              ¡Solo <span className="text-teal-700 font-semibold">{dailyGoal - currentXP} XP</span> más para completar tu meta diaria!
+            </p>
+          </div>
+        </div>
+
+        {/* Streak Card - Nueva funcionalidad */}
+        <div className="bg-white rounded-3xl p-6 shadow-lg border border-gray-100 relative overflow-hidden">
+          {/* Fondo decorativo */}
+          <div className="absolute top-0 right-0 w-24 h-24 bg-gradient-to-br from-orange-100 to-red-100 rounded-full -mr-12 -mt-12 opacity-60"></div>
+          
+          <div className="relative z-10">
+            <div className="flex items-center justify-between mb-4">
+              <h2 className="text-xl font-semibold text-slate-900 flex items-center gap-2">
+                <FiTrendingUp className="text-amber-500" />
+                Racha actual
+              </h2>
+              <span className="text-2xl font-semibold text-amber-600">{streak}</span>
+            </div>
+            
+            <div className="flex space-x-2 mb-4">
+              {Array.from({ length: 7 }, (_, i) => (
+                <div key={i} className={`w-3 h-3 rounded-full transition-all duration-200 ${
+                  i < streak ? 'bg-amber-500' : 'bg-gray-200'
+                }`}></div>
+              ))}
+            </div>
+            
+            <p className="text-gray-600 font-medium">
+              ¡Excelente! Has estudiado <span className="text-orange-600 font-bold">{streak} días</span> seguidos
+            </p>
+          </div>
+        </div>
+
+        {/* Quick Actions - Mejoradas */}
         <div className="grid grid-cols-2 gap-4">
-          <button className="bg-gradient-to-r from-blue-500 to-blue-600 text-white p-6 rounded-2xl shadow-lg hover:shadow-md transition-shadow duration-200">
-            <div className="text-center">
-              <div className="w-12 h-12 bg-white bg-opacity-20 rounded-full flex items-center justify-center mx-auto mb-3">
-                <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.746 0 3.332.477 4.5 1.253v13C19.832 18.477 18.246 18 16.5 18c-1.746 0-3.332.477 4.5 1.253" />
-                </svg>
-              </div>
-              <h3 className="font-bold text-lg">Nueva Lección</h3>
-              <p className="text-sm opacity-90">Aprende 5 kanji</p>
-            </div>
-          </button>
+          {/* Lección Rápida */}
+          <div className="bg-gradient-to-br from-slate-600 to-slate-700 rounded-3xl p-6 text-white shadow-lg cursor-pointer">
+            <FiBookOpen className="w-8 h-8 mb-3 text-white" />
+            <h3 className="text-lg font-semibold mb-1">Lección rápida</h3>
+            <p className="text-slate-200 text-sm">Aprende 5 kanji nuevos</p>
+          </div>
 
-          <button className="bg-gradient-to-r from-green-500 to-green-600 text-white p-6 rounded-2xl shadow-lg hover:shadow-md transition-shadow duration-200">
-            <div className="text-center">
-              <div className="w-12 h-12 bg-white bg-opacity-20 rounded-full flex items-center justify-center mx-auto mb-3">
-                <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z" />
-                </svg>
-              </div>
-              <h3 className="font-bold text-lg">Práctica</h3>
-              <p className="text-sm opacity-90">Repasa kanji</p>
-            </div>
-          </button>
-        </div>
+          {/* Práctica */}
+          <div className="bg-gradient-to-br from-teal-600 to-teal-700 rounded-3xl p-6 text-white shadow-lg cursor-pointer">
+            <FiActivity className="w-8 h-8 mb-3 text-white" />
+            <h3 className="text-lg font-semibold mb-1">Práctica</h3>
+            <p className="text-teal-100 text-sm">Refuerza lo aprendido</p>
+          </div>
 
-        {/* Recent Progress */}
-        <div className="bg-white rounded-2xl p-6 shadow-sm border border-gray-100">
-          <h2 className="text-lg font-bold text-gray-800 mb-4">Progreso Reciente</h2>
-          <div className="space-y-4">
-            <div className="flex items-center space-x-3">
-              <div className="w-10 h-10 bg-yellow-100 rounded-full flex items-center justify-center">
-                <span className="text-yellow-600 text-lg font-bold">日</span>
-              </div>
-              <div className="flex-1">
-                <p className="font-medium text-gray-800">Kanji "日" (sol)</p>
-                <p className="text-sm text-gray-600">Nivel de maestría: 3/5</p>
-              </div>
-              <div className="w-16 bg-gray-200 rounded-full h-2">
-                <div className="bg-yellow-400 h-2 rounded-full" style={{ width: '60%' }}></div>
-              </div>
-            </div>
+          {/* Repaso */}
+          <div className="bg-gradient-to-br from-slate-600 to-slate-700 rounded-3xl p-6 text-white shadow-lg cursor-pointer">
+            <FiRefreshCw className="w-8 h-8 mb-3 text-white" />
+            <h3 className="text-lg font-semibold mb-1">Repaso</h3>
+            <p className="text-slate-200 text-sm">Mantén tu memoria fresca</p>
+          </div>
 
-            <div className="flex items-center space-x-3">
-              <div className="w-10 h-10 bg-blue-100 rounded-full flex items-center justify-center">
-                <span className="text-blue-600 text-lg font-bold">水</span>
-              </div>
-              <div className="flex-1">
-                <p className="font-medium text-gray-800">Kanji "水" (agua)</p>
-                <p className="text-sm text-gray-600">Nivel de maestría: 4/5</p>
-              </div>
-              <div className="w-16 bg-gray-200 rounded-full h-2">
-                <div className="bg-blue-400 h-2 rounded-full" style={{ width: '80%' }}></div>
-              </div>
-            </div>
-
-            <div className="flex items-center space-x-3">
-              <div className="w-10 h-10 bg-green-100 rounded-full flex items-center justify-center">
-                <span className="text-green-600 text-lg font-bold">火</span>
-              </div>
-              <div className="flex-1">
-                <p className="font-medium text-gray-800">Kanji "火" (fuego)</p>
-                <p className="text-sm text-gray-600">Nivel de maestría: 2/5</p>
-              </div>
-              <div className="w-16 bg-gray-200 rounded-full h-2">
-                <div className="bg-green-400 h-2 rounded-full" style={{ width: '40%' }}></div>
-              </div>
-            </div>
+          {/* Desafío */}
+          <div className="bg-gradient-to-br from-amber-500 to-amber-600 rounded-3xl p-6 text-white shadow-lg cursor-pointer">
+            <FiZap className="w-8 h-8 mb-3 text-white" />
+            <h3 className="text-lg font-semibold mb-1">Desafío</h3>
+            <p className="text-amber-100 text-sm">Pon a prueba tus habilidades</p>
           </div>
         </div>
 
-        {/* Study Tips */}
-        <div className="bg-gradient-to-r from-purple-50 to-pink-50 rounded-2xl p-6 border border-purple-200">
-          <h2 className="text-lg font-bold text-gray-800 mb-3">💡 Consejos de Estudio</h2>
-          <div className="space-y-2 text-sm text-gray-700">
-            <p>• Practica al menos 15 minutos al día para mantener tu racha</p>
-            <p>• Repasa los kanji que aprendiste en días anteriores</p>
-            <p>• Usa el modo de práctica para reforzar tu memoria</p>
+        {/* Stats Cards */}
+        <div className="grid grid-cols-3 gap-4">
+          <div className="bg-white rounded-2xl p-4 shadow-lg text-center">
+            <FiBookOpen className="w-6 h-6 mx-auto mb-2 text-slate-600" />
+            <div className="text-2xl font-semibold text-slate-800">12</div>
+            <div className="text-sm text-slate-600">Lecciones</div>
+          </div>
+          
+          <div className="bg-white rounded-2xl p-4 shadow-lg text-center">
+            <FiTarget className="w-6 h-6 mx-auto mb-2 text-slate-600" />
+            <div className="text-2xl font-semibold text-teal-700">85%</div>
+            <div className="text-sm text-slate-600">Precisión</div>
+          </div>
+          
+          <div className="bg-white rounded-2xl p-4 shadow-lg text-center">
+            <FiStar className="w-6 h-6 mx-auto mb-2 text-slate-600" />
+            <div className="text-2xl font-semibold text-amber-600">156</div>
+            <div className="text-sm text-slate-600">XP total</div>
+          </div>
+        </div>
+
+        {/* Motivational Message */}
+        <div className="bg-white rounded-3xl p-6 text-center border border-slate-200 relative overflow-hidden">
+          <div className="relative z-10">
+            <FiAward className="w-8 h-8 mx-auto mb-3 text-amber-500" />
+            <h3 className="text-lg font-semibold text-slate-900 mb-2">¡Sigue así!</h3>
+            <p className="text-slate-600">
+              Cada día que estudias te acerca más a dominar el japonés. Mantén la constancia.
+            </p>
+            <div className="mt-4 flex justify-center">
+              <MascotCharacter variant="celebrating" size="sm" />
+            </div>
           </div>
         </div>
       </div>

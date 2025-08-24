@@ -22,14 +22,16 @@ export default function KanjiDetailPage() {
 
   if (!kanji) {
     return (
-      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
+      <div className="min-h-screen bg-slate-100 flex items-center justify-center">
         <div className="text-center">
-          <div className="text-6xl mb-4">😕</div>
-          <h1 className="text-2xl font-bold text-gray-800 mb-2">Kanji no encontrado</h1>
-          <p className="text-gray-600 mb-6">El kanji que buscas no existe</p>
+          <svg className="w-10 h-10 mx-auto mb-4 text-slate-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+          </svg>
+          <h1 className="text-2xl font-semibold text-slate-900 mb-2">Kanji no encontrado</h1>
+          <p className="text-slate-600 mb-6">El kanji que buscas no existe</p>
           <button
             onClick={() => navigate(-1)}
-            className="bg-blue-500 hover:bg-blue-600 text-white px-6 py-3 rounded-xl font-medium transition-colors"
+            className="bg-teal-600 hover:bg-teal-700 text-white px-6 py-3 rounded-xl font-medium transition-colors"
           >
             Volver
           </button>
@@ -69,7 +71,7 @@ export default function KanjiDetailPage() {
   };
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen bg-slate-100">
       {/* Header con botón de back */}
       <div className="bg-white shadow-sm border-b border-gray-100">
         <div className="max-w-4xl mx-auto px-4 py-4">

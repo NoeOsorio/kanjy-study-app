@@ -51,7 +51,9 @@ export default function QuizModeSelector({ onModeSelect, onClose }: QuizModeSele
       case 'mixed':
         return (
           <div className="w-12 h-12 bg-gradient-to-br from-purple-100 to-pink-200 rounded-xl flex items-center justify-center border-2 border-purple-300">
-            <span className="text-2xl font-bold text-purple-700">🎯</span>
+            <svg className="w-6 h-6 text-purple-700" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+            </svg>
           </div>
         );
       default:
@@ -94,8 +96,8 @@ export default function QuizModeSelector({ onModeSelect, onClose }: QuizModeSele
             onClick={() => onModeSelect(mode)}
             className={`
               bg-white rounded-2xl p-6 border-2 border-gray-100 
-              hover:scale-105 transition-all duration-300 cursor-pointer
-              shadow-sm hover:shadow-md ${getModeColor(mode)}
+              transition-colors cursor-pointer
+              shadow-sm ${getModeColor(mode)}
             `}
           >
             <div className="flex flex-col items-center text-center space-y-4">

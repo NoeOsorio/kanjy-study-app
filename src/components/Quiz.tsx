@@ -16,16 +16,23 @@ export default function Quiz({ questions, mode, onComplete, onClose }: QuizProps
   const [results, setResults] = useState<QuizResult[]>([]);
   const [startTime, setStartTime] = useState<number>(Date.now());
 
+  // Keep hooks before any early returns
+  useEffect(() => {
+    setStartTime(Date.now());
+  }, [currentQuestionIndex]);
+
   // Validación de seguridad
   if (!questions || questions.length === 0) {
     return (
       <div className="bg-white rounded-3xl p-8 shadow-lg border border-gray-100 text-center">
-        <div className="text-6xl mb-4">😕</div>
-        <h2 className="text-2xl font-bold text-gray-800 mb-2">No hay preguntas disponibles</h2>
-        <p className="text-gray-600 mb-6">No se pudieron generar preguntas para este modo de quiz.</p>
+        <svg className="w-10 h-10 mx-auto mb-4 text-slate-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+        </svg>
+        <h2 className="text-2xl font-semibold text-slate-900 mb-2">No hay preguntas disponibles</h2>
+        <p className="text-slate-600 mb-6">No se pudieron generar preguntas para este modo de quiz.</p>
         <button
           onClick={onClose}
-          className="bg-gradient-to-r from-blue-500 to-purple-600 hover:from-blue-600 hover:to-purple-700 text-white px-6 py-3 rounded-xl font-medium transition-all duration-200 shadow-lg hover:shadow-xl"
+          className="bg-teal-600 hover:bg-teal-700 text-white px-6 py-3 rounded-xl font-medium transition-colors"
         >
           Cerrar
         </button>
@@ -40,22 +47,20 @@ export default function Quiz({ questions, mode, onComplete, onClose }: QuizProps
   if (!currentQuestion) {
     return (
       <div className="bg-white rounded-3xl p-8 shadow-lg border border-gray-100 text-center">
-        <div className="text-6xl mb-4">😕</div>
-        <h2 className="text-2xl font-bold text-gray-800 mb-2">Error en la pregunta</h2>
-        <p className="text-gray-600 mb-6">No se pudo cargar la pregunta actual.</p>
+        <svg className="w-10 h-10 mx-auto mb-4 text-slate-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+        </svg>
+        <h2 className="text-2xl font-semibold text-slate-900 mb-2">Error en la pregunta</h2>
+        <p className="text-slate-600 mb-6">No se pudo cargar la pregunta actual.</p>
         <button
           onClick={onClose}
-          className="bg-gradient-to-r from-blue-500 to-purple-600 hover:from-blue-600 hover:to-purple-700 text-white px-6 py-3 rounded-xl font-medium transition-all duration-200 shadow-lg hover:shadow-xl"
+          className="bg-teal-600 hover:bg-teal-700 text-white px-6 py-3 rounded-xl font-medium transition-colors"
         >
           Cerrar
         </button>
       </div>
     );
   }
-
-  useEffect(() => {
-    setStartTime(Date.now());
-  }, [currentQuestionIndex]);
 
   const handleAnswerSelect = (answer: string) => {
     if (isAnswered || !currentQuestion) return;
@@ -148,7 +153,7 @@ export default function Quiz({ questions, mode, onComplete, onClose }: QuizProps
           <div className="flex items-center justify-between mb-3 sm:mb-4">
             <div>
               <h2 className="text-lg sm:text-2xl font-bold text-gray-800">
-                {mode === 'mixed' ? '🎯 Quiz Mixto' : getQuizModeTitle(mode)}
+                {mode === 'mixed' ? 'Quiz Mixto' : getQuizModeTitle(mode)}
               </h2>
               <p className="text-xs sm:text-sm text-gray-600">
                 Pregunta {currentQuestionIndex + 1} de {questions.length}
@@ -168,7 +173,7 @@ export default function Quiz({ questions, mode, onComplete, onClose }: QuizProps
             </div>
             <button
               onClick={onClose}
-              className="bg-gradient-to-r from-red-500 to-red-600 hover:from-red-600 hover:to-red-700 text-white px-4 py-2 rounded-xl font-medium transition-all duration-200 shadow-lg hover:shadow-xl"
+              className="bg-red-600 hover:bg-red-700 text-white px-4 py-2 rounded-xl font-medium transition-colors"
             >
               Salir del Quiz
             </button>
@@ -177,7 +182,7 @@ export default function Quiz({ questions, mode, onComplete, onClose }: QuizProps
           {/* Progress Bar */}
           <div className="w-full bg-gray-200 rounded-full h-2 sm:h-3">
             <div 
-              className="bg-gradient-to-r from-green-400 to-blue-500 h-2 sm:h-3 rounded-full transition-all duration-500"
+              className="bg-teal-600 h-2 sm:h-3 rounded-full transition-all duration-500"
               style={{ width: `${getProgressPercentage()}%` }}
             ></div>
           </div>
@@ -195,8 +200,8 @@ export default function Quiz({ questions, mode, onComplete, onClose }: QuizProps
                   key={index}
                   onClick={() => handleAnswerSelect(option)}
                   disabled={isAnswered}
-                  className={`w-full p-3 sm:p-4 rounded-2xl border-2 text-left font-medium transition-all duration-200 ${getOptionStyle(option)} ${
-                    !isAnswered ? 'hover:shadow-md cursor-pointer' : 'cursor-default'
+                  className={`w-full p-3 sm:p-4 rounded-2xl border-2 text-left font-medium transition-colors ${getOptionStyle(option)} ${
+                    !isAnswered ? 'cursor-pointer' : 'cursor-default'
                   }`}
                 >
                   <div className="flex items-center">
@@ -249,11 +254,11 @@ export default function Quiz({ questions, mode, onComplete, onClose }: QuizProps
         </div>
 
         {/* Footer */}
-        <div className="p-4 sm:p-6 border-t border-gray-100 bg-gradient-to-r from-gray-50 to-blue-50 flex-shrink-0">
+        <div className="p-4 sm:p-6 border-t border-gray-100 bg-gray-50 flex-shrink-0">
           {isAnswered && (
             <button
               onClick={handleNextQuestion}
-              className="w-full bg-gradient-to-r from-blue-500 to-blue-600 hover:from-blue-600 hover:to-blue-700 text-white py-3 sm:py-4 px-6 rounded-2xl font-bold text-base sm:text-lg transition-all duration-200 shadow-lg hover:shadow-xl transform hover:scale-105"
+              className="w-full bg-slate-700 hover:bg-slate-800 text-white py-3 sm:py-4 px-6 rounded-2xl font-semibold text-base sm:text-lg transition-colors"
             >
               {isLastQuestion ? 'Ver Resultados' : 'Siguiente Pregunta'}
             </button>

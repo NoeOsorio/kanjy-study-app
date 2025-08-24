@@ -26,10 +26,26 @@ export default function QuizResults({ results, onClose, onRetry }: QuizResultsPr
     return 'Necesitas más práctica';
   };
 
-  const getAccuracyEmoji = () => {
-    if (accuracy >= 80) return '🎉';
-    if (accuracy >= 60) return '👍';
-    return '💪';
+  const getAccuracyIcon = () => {
+    if (accuracy >= 80) {
+      return (
+        <svg className="w-10 h-10 mx-auto mb-4 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+        </svg>
+      );
+    }
+    if (accuracy >= 60) {
+      return (
+        <svg className="w-10 h-10 mx-auto mb-4 text-amber-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+        </svg>
+      );
+    }
+    return (
+      <svg className="w-10 h-10 mx-auto mb-4 text-red-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+      </svg>
+    );
   };
 
   return (
@@ -38,13 +54,13 @@ export default function QuizResults({ results, onClose, onRetry }: QuizResultsPr
         {/* Header */}
         <div className="p-6 border-b border-gray-100 bg-gradient-to-r from-green-50 to-blue-50 rounded-t-3xl">
           <div className="text-center">
-            <div className="text-6xl mb-4">{getAccuracyEmoji()}</div>
+            {getAccuracyIcon()}
             <h2 className="text-3xl font-bold text-gray-800 mb-2">¡Quiz Completado!</h2>
             <p className="text-gray-600">{getAccuracyMessage()}</p>
             {results.length > 10 && (
               <div className="mt-3">
                 <span className="inline-block bg-purple-100 text-purple-700 text-sm px-3 py-1 rounded-full font-medium">
-                  🎯 Quiz Mixto Extendido • {results.length} preguntas
+                  Quiz Mixto Extendido • {results.length} preguntas
                 </span>
               </div>
             )}

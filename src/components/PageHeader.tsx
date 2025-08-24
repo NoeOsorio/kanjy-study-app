@@ -1,10 +1,8 @@
-import type { ReactNode } from 'react';
-
 interface PageHeaderProps {
   title: string;
   description?: string;
-  leftContent?: ReactNode;
-  rightContent?: ReactNode;
+  leftContent?: React.ReactNode;
+  rightContent?: React.ReactNode;
   variant?: 'default' | 'centered' | 'minimal';
 }
 
@@ -20,7 +18,7 @@ export default function PageHeader({
       case 'centered':
         return 'text-center';
       case 'minimal':
-        return 'py-3';
+        return 'py-4';
       default:
         return '';
     }
@@ -29,18 +27,18 @@ export default function PageHeader({
   const getTitleClasses = () => {
     switch (variant) {
       case 'centered':
-        return 'text-3xl font-bold bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent';
+        return 'text-3xl font-bold bg-gradient-to-r from-green-500 via-blue-500 to-purple-600 bg-clip-text text-transparent';
       case 'minimal':
         return 'text-xl font-bold text-gray-800';
       default:
-        return 'text-2xl font-bold text-gray-800';
+        return 'text-2xl font-bold bg-gradient-to-r from-gray-800 to-gray-600 bg-clip-text text-transparent';
     }
   };
 
   const getDescriptionClasses = () => {
     switch (variant) {
       case 'centered':
-        return 'text-gray-600 mt-2';
+        return 'text-gray-600 mt-2 text-lg';
       case 'minimal':
         return 'text-sm text-gray-500';
       default:
@@ -49,14 +47,28 @@ export default function PageHeader({
   };
 
   return (
-    <div className={`bg-white shadow-sm px-6 ${variant === 'minimal' ? 'py-3' : 'py-6'} border-b border-gray-100`}>
-      <div className={`flex items-center justify-between ${getHeaderClasses()}`}>
+    <div className={`bg-white shadow-lg px-6 ${variant === 'minimal' ? 'py-4' : 'py-6'} border-b border-gray-100 relative overflow-hidden`}>
+      {/* Fondo decorativo sutil */}
+      <div className="absolute inset-0 bg-gradient-to-r from-green-50 via-blue-50 to-purple-50 opacity-30"></div>
+      
+      {/* Línea decorativa superior */}
+      <div className="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-green-400 via-blue-400 to-purple-400"></div>
+      
+      <div className={`flex items-center justify-between relative z-10 ${getHeaderClasses()}`}>
         <div className="flex items-center space-x-4">
-          {leftContent}
+          {leftContent && (
+            <div className="flex-shrink-0">
+              {leftContent}
+            </div>
+          )}
           <div>
-            <h1 className={getTitleClasses()}>{title}</h1>
+            <h1 className={`${getTitleClasses()} transition-all duration-200`}>
+              {title}
+            </h1>
             {description && (
-              <p className={getDescriptionClasses()}>{description}</p>
+              <p className={`${getDescriptionClasses()} transition-all duration-200`}>
+                {description}
+              </p>
             )}
           </div>
         </div>
@@ -66,6 +78,11 @@ export default function PageHeader({
           </div>
         )}
       </div>
+      
+      {/* Indicador de progreso sutil en la parte inferior */}
+      {variant !== 'minimal' && (
+        <div className="absolute bottom-0 left-0 right-0 h-0.5 bg-gradient-to-r from-green-200 via-blue-200 to-purple-200"></div>
+      )}
     </div>
   );
 }

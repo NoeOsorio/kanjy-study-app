@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { FiAlertCircle } from 'react-icons/fi';
 import QuizModeSelector from '../components/QuizModeSelector';
 import Quiz from '../components/Quiz';
 import QuizResults from '../components/QuizResults';
@@ -45,7 +46,7 @@ export default function PracticePage() {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-50 via-indigo-50 to-purple-50 pb-20">
+    <div className="min-h-screen bg-slate-100 pb-20">
       {/* Header */}
       <PageHeader
         title="Práctica"
@@ -74,13 +75,13 @@ export default function PracticePage() {
         )}
 
         {selectedMode && !showResults && questions.length === 0 && (
-          <div className="bg-white rounded-2xl p-8 shadow-sm border border-gray-100 text-center">
-            <div className="text-6xl mb-4">😕</div>
-            <h2 className="text-2xl font-bold text-gray-800 mb-2">No se pudieron generar preguntas</h2>
-            <p className="text-gray-600 mb-6">Hubo un problema al generar las preguntas del quiz.</p>
+          <div className="bg-white rounded-2xl p-8 shadow-lg border border-gray-100 text-center">
+            <FiAlertCircle className="w-10 h-10 mx-auto mb-4 text-slate-600" />
+            <h2 className="text-2xl font-semibold text-slate-900 mb-2">No se pudieron generar preguntas</h2>
+            <p className="text-slate-600 mb-6">Hubo un problema al generar las preguntas del quiz.</p>
             <button
               onClick={handleCloseQuiz}
-              className="bg-gradient-to-r from-blue-500 to-purple-600 hover:from-blue-600 hover:to-purple-700 text-white px-6 py-3 rounded-xl font-medium transition-all duration-200 shadow-lg hover:shadow-xl"
+              className="bg-teal-600 hover:bg-teal-700 text-white px-6 py-3 rounded-xl font-medium transition-colors"
             >
               Volver
             </button>

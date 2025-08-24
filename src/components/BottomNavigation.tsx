@@ -1,4 +1,5 @@
 import type { NavigationTab } from '../types';
+import { FiHome, FiBookOpen, FiActivity, FiUser } from 'react-icons/fi';
 
 interface BottomNavigationProps {
   activeTab: NavigationTab;
@@ -10,61 +11,70 @@ export default function BottomNavigation({ activeTab, onTabChange }: BottomNavig
     {
       id: 'home' as NavigationTab,
       label: 'Inicio',
-      icon: (
-        <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6" />
-        </svg>
-      ),
+      icon: <FiHome className="w-6 h-6" />,
+      color: 'from-green-400 to-green-600',
+      activeColor: 'from-green-500 to-green-700',
     },
     {
       id: 'lessons' as NavigationTab,
       label: 'Lecciones',
-      icon: (
-        <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.746 0 3.332.477 4.5 1.253v13C19.832 18.477 18.246 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" />
-        </svg>
-      ),
+      icon: <FiBookOpen className="w-6 h-6" />,
+      color: 'from-blue-400 to-blue-600',
+      activeColor: 'from-blue-500 to-blue-700',
     },
     {
       id: 'practice' as NavigationTab,
       label: 'Práctica',
-      icon: (
-        <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z" />
-        </svg>
-      ),
+      icon: <FiActivity className="w-6 h-6" />,
+      color: 'from-purple-400 to-purple-600',
+      activeColor: 'from-purple-500 to-purple-700',
     },
     {
       id: 'profile' as NavigationTab,
       label: 'Perfil',
-      icon: (
-        <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
-        </svg>
-      ),
+      icon: <FiUser className="w-6 h-6" />,
+      color: 'from-orange-400 to-orange-600',
+      activeColor: 'from-orange-500 to-orange-700',
     },
   ];
 
   return (
-    <nav className="fixed bottom-0 left-0 right-0 bg-white border-t border-gray-200 shadow-lg z-50">
-      <div className="flex justify-around items-center py-2">
-        {tabs.map((tab) => (
-          <button
-            key={tab.id}
-            onClick={() => onTabChange(tab.id)}
-            className={`flex flex-col items-center py-2 px-3 rounded-lg transition-colors duration-200 ${
-              activeTab === tab.id
-                ? 'text-blue-600 bg-blue-50'
-                : 'text-gray-500 hover:text-gray-700 hover:bg-gray-50'
-            }`}
-          >
-            <div className={`${activeTab === tab.id ? 'scale-105' : 'scale-100'} transition-transform duration-200`}>
-              {tab.icon}
-            </div>
-            <span className="text-xs mt-1 font-medium">{tab.label}</span>
-          </button>
-        ))}
+    <div className="fixed bottom-0 left-0 right-0 z-50 bg-white border-t-2 border-gray-100 shadow-lg">
+      <div className="flex items-center justify-around px-2 py-3">
+        {tabs.map((tab) => {
+          const isActive = activeTab === tab.id;
+          return (
+            <button
+              key={tab.id}
+              onClick={() => onTabChange(tab.id)}
+              className={`flex flex-col items-center justify-center w-16 h-16 rounded-2xl transition-all duration-150 ease-out ${
+                isActive
+                  ? `bg-gradient-to-br ${tab.activeColor} text-white shadow-xl scale-110`
+                  : `text-gray-500 hover:text-gray-700 hover:bg-gray-50 hover:scale-105`
+              }`}
+            >
+              <div className={`mb-1 transition-all duration-150 ${
+                isActive ? 'text-white' : 'text-current'
+              }`}>
+                {tab.icon}
+              </div>
+              <span className={`text-xs font-medium transition-all duration-150 ${
+                isActive ? 'text-white' : 'text-current'
+              }`}>
+                {tab.label}
+              </span>
+              
+              {/* Indicador de actividad */}
+              {isActive && (
+                <div className="absolute -top-1 w-2 h-2 bg-white rounded-full shadow-sm"></div>
+              )}
+            </button>
+          );
+        })}
       </div>
-    </nav>
+      
+      {/* Indicador de progreso sutil */}
+      <div className="h-1 bg-gradient-to-r from-green-400 via-blue-400 to-purple-400 opacity-60"></div>
+    </div>
   );
 }
