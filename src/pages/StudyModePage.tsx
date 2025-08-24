@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef, useCallback } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import { getLessonKanji } from '../services/kanjiService';
@@ -10,6 +10,7 @@ export default function StudyModePage() {
   const { lessonId } = useParams<{ lessonId: string }>();
   const [kanjiList, setKanjiList] = useState<Kanji[]>([]);
   const [currentKanjiIndex, setCurrentKanjiIndex] = useState(0);
+  const prevIndexRef = useRef(0);
 
   useEffect(() => {
     if (lessonId) {
@@ -17,6 +18,14 @@ export default function StudyModePage() {
       setKanjiList(kanji);
     }
   }, [lessonId]);
+
+  const handleNextKanji = useCallback(() => {
+    setCurrentKanjiIndex((idx) => (idx < kanjiList.length - 1 ? idx + 1 : idx));
+  }, [kanjiList.length]);
+
+  const handlePreviousKanji = useCallback(() => {
+    setCurrentKanjiIndex((idx) => (idx > 0 ? idx - 1 : idx));
+  }, []);
 
   useEffect(() => {
     // Keyboard navigation
@@ -48,7 +57,7 @@ export default function StudyModePage() {
 
     document.addEventListener('keydown', handleKeyDown);
     return () => document.removeEventListener('keydown', handleKeyDown);
-  }, [currentKanjiIndex, kanjiList.length, navigate]);
+  }, [currentKanjiIndex, kanjiList.length, navigate, handleNextKanji, handlePreviousKanji]);
 
   // Touch/swipe navigation
   useEffect(() => {
@@ -101,18 +110,19 @@ export default function StudyModePage() {
       document.removeEventListener('touchmove', handleTouchMove as EventListener);
       document.removeEventListener('touchend', handleTouchEnd as EventListener);
     };
-  }, [currentKanjiIndex, kanjiList.length]);
+  }, [currentKanjiIndex, kanjiList.length, handleNextKanji, handlePreviousKanji]);
 
-  const handleNextKanji = () => {
-    if (currentKanjiIndex < kanjiList.length - 1) {
-      setCurrentKanjiIndex(currentKanjiIndex + 1);
-    }
-  };
+  // Compute direction based on index change (captured per render)
+  const direction: 1 | -1 = currentKanjiIndex >= prevIndexRef.current ? 1 : -1;
+  useEffect(() => {
+    prevIndexRef.current = currentKanjiIndex;
+  }, [currentKanjiIndex]);
 
-  const handlePreviousKanji = () => {
-    if (currentKanjiIndex > 0) {
-      setCurrentKanjiIndex(currentKanjiIndex - 1);
-    }
+  // Variants with direction
+  const slideVariants = {
+    enter: (dir: 1 | -1) => ({ opacity: 0, x: 100 * dir, scale: 0.8 }),
+    center: { opacity: 1, x: 0, scale: 1 },
+    exit: (dir: 1 | -1) => ({ opacity: 0, x: -100 * dir, scale: 0.8 })
   };
 
   if (kanjiList.length === 0) {
@@ -241,9 +251,11 @@ export default function StudyModePage() {
               <AnimatePresence mode="wait">
                 <motion.div
                   key={currentKanjiIndex}
-                  initial={{ opacity: 0, x: 100, scale: 0.8 }}
-                  animate={{ opacity: 1, x: 0, scale: 1 }}
-                  exit={{ opacity: 0, x: -100, scale: 0.8 }}
+                  variants={slideVariants}
+                  initial="enter"
+                  animate="center"
+                  exit="exit"
+                  custom={direction}
                   transition={{ duration: 0.4, ease: "easeInOut" }}
                   className="w-full flex justify-center"
                 >
