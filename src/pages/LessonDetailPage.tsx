@@ -3,6 +3,7 @@ import { useParams, useNavigate } from 'react-router-dom';
 import PageHeader from '../components/PageHeader';
 import { getLessonKanji } from '../services/kanjiService';
 import type { Kanji } from '../types';
+import { FiArrowLeft, FiBookOpen } from 'react-icons/fi';
 
 export default function LessonDetailPage() {
   const navigate = useNavigate();
@@ -27,19 +28,17 @@ export default function LessonDetailPage() {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-50 via-indigo-50 to-purple-50 pb-20">
+    <div className="min-h-screen bg-slate-100 pb-20">
       {/* Header */}
       <PageHeader
         title="Fundamentos Básicos"
         description={`Nivel N5 • ${kanjiList.length} kanji`}
         leftContent={
           <button
-            onClick={() => navigate('/lessons')}
-            className="p-2 text-gray-600 hover:text-gray-800 hover:bg-gray-100 rounded-lg transition-colors"
+            onClick={() => navigate(-1)}
+            className="p-2 text-slate-600 hover:text-slate-900 hover:bg-slate-100 rounded-lg transition-colors"
           >
-            <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
-            </svg>
+            <FiArrowLeft className="w-5 h-5" />
           </button>
         }
       />
@@ -47,28 +46,26 @@ export default function LessonDetailPage() {
       {/* Main Content */}
       <div className="px-6 py-6 space-y-6">
         {/* Progress Bar */}
-        <div className="bg-white rounded-2xl p-6 shadow-sm border border-gray-100">
+        <div className="bg-white rounded-2xl p-6 shadow-lg border border-gray-100">
           <div className="flex items-center justify-between mb-4">
-            <h2 className="text-lg font-bold text-gray-800">Progreso de la Lección</h2>
-            <span className="text-sm text-gray-500">0/{kanjiList.length} completados</span>
+            <h2 className="text-lg font-semibold text-slate-900">Progreso de la lección</h2>
+            <span className="text-sm text-slate-600">0/{kanjiList.length} completados</span>
           </div>
           <div className="w-full bg-gray-200 rounded-full h-3">
-            <div className="bg-gradient-to-r from-green-400 to-blue-500 h-3 rounded-full transition-all duration-500" style={{ width: '0%' }}></div>
+            <div className="bg-teal-600 h-3 rounded-full transition-all duration-500" style={{ width: '0%' }}></div>
           </div>
-          <p className="text-sm text-gray-600 mt-3 mb-4">
-            Haz clic en cada kanji para aprender más detalles
+          <p className="text-sm text-slate-600 mt-3 mb-4">
+            Toca un kanji para ver detalles y practicar sus lecturas
           </p>
           
           {/* Study Mode Button */}
           <button
             onClick={openStudyMode}
-            className="w-full bg-gradient-to-r from-purple-500 to-purple-600 text-white py-4 px-6 rounded-2xl font-bold text-lg transition-colors duration-200 shadow-lg"
+            className="w-full bg-slate-700 hover:bg-slate-800 text-white py-4 px-6 rounded-2xl font-semibold text-lg transition-colors"
           >
-            <div className="flex items-center justify-center space-x-3">
-              <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.746 0 3.332.477 4.5 1.253v13C19.832 18.477 18.246 18 16.5 18c-1.746 0-3.332.477 4.5 1.253" />
-              </svg>
-              <span>Modo Estudio con Tarjetas</span>
+            <div className="flex items-center justify-center gap-3">
+              <FiBookOpen className="w-5 h-5" />
+              <span>Modo estudio con tarjetas</span>
             </div>
           </button>
         </div>
@@ -78,22 +75,22 @@ export default function LessonDetailPage() {
           {kanjiList.map((kanji) => (
             <div
               key={kanji.id}
-              className="bg-gradient-to-br from-white to-gray-50 rounded-3xl p-6 shadow-lg hover:shadow-xl transition-all duration-300 cursor-pointer text-center border border-gray-100 hover:border-blue-200 hover:scale-105"
+              className="bg-white rounded-3xl p-6 shadow-lg hover:shadow-xl transition-colors cursor-pointer text-center border border-gray-100 hover:border-slate-300"
               onClick={() => handleKanjiClick(kanji)}
             >
               {/* Kanji Character */}
-              <div className="w-24 h-24 bg-gradient-to-br from-blue-50 to-indigo-100 rounded-2xl flex items-center justify-center mx-auto mb-4 border-2 border-blue-200 shadow-inner">
-                <span className="text-5xl font-bold text-gray-800">{kanji.character}</span>
+              <div className="w-24 h-24 bg-slate-50 rounded-2xl flex items-center justify-center mx-auto mb-4 border border-slate-200">
+                <span className="text-5xl font-semibold text-slate-900">{kanji.character}</span>
               </div>
 
               {/* Kanji Meaning */}
-              <h3 className="text-lg font-bold text-gray-800 mb-3">{kanji.meaning}</h3>
+              <h3 className="text-lg font-semibold text-slate-900 mb-3">{kanji.meaning}</h3>
               
               {/* Main Reading - Onyomi */}
               <div className="mb-3">
-                <p className="text-xs text-gray-500 mb-2">Lectura principal</p>
-                <div className="bg-blue-100 rounded-xl p-2">
-                  <span className="font-mono text-lg font-bold text-blue-700">
+                <p className="text-xs text-slate-500 mb-2">Lectura principal</p>
+                <div className="bg-teal-50 rounded-xl p-2 border border-teal-200">
+                  <span className="font-mono text-lg font-semibold text-teal-700">
                     {kanji.readings.onyomi[0]}
                   </span>
                 </div>
@@ -101,15 +98,15 @@ export default function LessonDetailPage() {
 
               {/* Alternative Readings */}
               <div className="mb-3">
-                <p className="text-xs text-gray-500 mb-2">Otras lecturas</p>
+                <p className="text-xs text-slate-500 mb-2">Otras lecturas</p>
                 <div className="flex flex-wrap gap-1 justify-center">
                   {kanji.readings.onyomi.slice(1).map((reading, idx) => (
-                    <span key={idx} className="text-xs bg-gray-100 px-2 py-1 rounded-lg text-gray-600 font-mono">
+                    <span key={idx} className="text-xs bg-slate-100 px-2 py-1 rounded-lg text-slate-700 font-mono">
                       {reading}
                     </span>
                   ))}
                   {kanji.readings.kunyomi.slice(0, 2).map((reading, idx) => (
-                    <span key={idx} className="text-xs bg-green-100 px-2 py-1 rounded-lg text-green-600 font-mono">
+                    <span key={idx} className="text-xs bg-slate-100 px-2 py-1 rounded-lg text-slate-700 font-mono">
                       {reading}
                     </span>
                   ))}
@@ -117,8 +114,8 @@ export default function LessonDetailPage() {
               </div>
 
               {/* Stroke Count Badge */}
-              <div className="inline-block bg-gradient-to-r from-purple-100 to-pink-100 px-3 py-1 rounded-full border border-purple-200">
-                <span className="text-sm font-medium text-purple-700">{kanji.strokeCount} trazos</span>
+              <div className="inline-block bg-amber-50 px-3 py-1 rounded-full border border-amber-200">
+                <span className="text-sm font-medium text-amber-700">{kanji.strokeCount} trazos</span>
               </div>
             </div>
           ))}
