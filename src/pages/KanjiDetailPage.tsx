@@ -3,7 +3,7 @@ import { useParams, useNavigate } from 'react-router-dom';
 import PageHeader from '../components/PageHeader';
 import { getKanjiById, getKanjiExamples } from '../services/kanjiService';
 import type { Kanji, KanjiExample } from '../types';
-import { FiArrowLeft, FiCopy, FiVolume2, FiPlay, FiBookmark } from 'react-icons/fi';
+import { FiArrowLeft, FiPlay, FiBookmark } from 'react-icons/fi';
 import KanjiCanvas from '../components/KanjiCanvas';
 
 export default function KanjiDetailPage() {

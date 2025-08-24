@@ -57,8 +57,7 @@ export default function PracticePage() {
       <div className="px-6 py-6 space-y-6">
         {!selectedMode && !showResults && (
           <QuizModeSelector 
-            onModeSelect={handleModeSelect} 
-            onClose={() => {}} // No necesitamos cerrar desde aquí
+            onModeSelect={handleModeSelect}
           />
         )}
 

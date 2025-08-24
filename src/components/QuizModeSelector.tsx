@@ -3,10 +3,9 @@ import { getQuizModeTitle, getQuizModeDescription } from '../services/quizServic
 
 interface QuizModeSelectorProps {
   onModeSelect: (mode: QuizMode) => void;
-  onClose?: () => void; // Ahora es opcional
 }
 
-export default function QuizModeSelector({ onModeSelect, onClose }: QuizModeSelectorProps) {
+export default function QuizModeSelector({ onModeSelect }: QuizModeSelectorProps) {
   const quizModes: QuizMode[] = [
     'kanji-to-meaning',
     'kanji-to-onyomi',
