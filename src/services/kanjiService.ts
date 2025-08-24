@@ -202,5 +202,6 @@ export const getKanjiExamples = (character: string): KanjiExample[] => {
 export const getLessonKanji = (_lessonId: string): Kanji[] => {
   // Por ahora retornamos los primeros 5 kanji como ejemplo
   // En el backend esto vendría de la base de datos
+  console.log('getLessonKanji', _lessonId);
   return mockKanjiData;
 };
