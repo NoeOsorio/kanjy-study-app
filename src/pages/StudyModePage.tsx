@@ -4,7 +4,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { getLessonKanji } from '../services/kanjiService';
 import KanjiCard from '../components/KanjiCard';
 import type { Kanji } from '../types';
-import { FiArrowLeft, FiAlertCircle, FiChevronLeft, FiChevronRight } from 'react-icons/fi';
+import { FiArrowLeft, FiAlertCircle } from 'react-icons/fi';
 
 export default function StudyModePage() {
   const navigate = useNavigate();
@@ -126,8 +126,6 @@ export default function StudyModePage() {
     exit: (dir: 1 | -1) => ({ opacity: 0, x: -100 * dir, scale: 0.96 })
   };
 
-  const percent = Math.round(((currentKanjiIndex + 1) / kanjiList.length) * 100);
-
   if (kanjiList.length === 0) {
     return (
       <div className="min-h-screen bg-slate-100 flex items-center justify-center">
@@ -146,106 +144,104 @@ export default function StudyModePage() {
     );
   }
 
+  const percent = Math.round(((currentKanjiIndex + 1) / kanjiList.length) * 100);
+
   return (
     <div className="min-h-screen bg-slate-100">
-      {/* Header */}
-      <div className="bg-white shadow-sm border-b border-gray-100">
-        <div className="max-w-4xl mx-auto px-4 py-4">
-          <div className="flex items-center justify-between gap-2">
-            <div className="flex items-center min-w-0 gap-3">
-              <button
-                onClick={() => navigate(-1)}
-                className="w-10 h-10 bg-slate-700 hover:bg-slate-800 rounded-full flex items-center justify-center text-white transition-colors flex-shrink-0"
-                aria-label="Volver"
-              >
-                <FiArrowLeft className="w-5 h-5" />
-              </button>
-              <div className="min-w-0">
-                <h1 className="text-base sm:text-xl font-bold text-slate-900 truncate">
-                  Modo Estudio con Tarjetas
-                </h1>
-                <p className="text-xs sm:text-sm text-slate-600">
-                  Kanji {currentKanjiIndex + 1} de {kanjiList.length}
-                </p>
-              </div>
-            </div>
-            {/* Progress group */}
-            <div className="flex items-center gap-2">
-              {/* Mobile: combined chip */}
-              <div className="sm:hidden bg-slate-50 rounded-2xl px-3 py-2 border border-gray-100 text-slate-700 text-xs font-medium">
-                {currentKanjiIndex + 1}/{kanjiList.length} • {percent}%
-              </div>
-              {/* Desktop: separate chips */}
-              <div className="hidden sm:flex items-center gap-2">
-                <div className="bg-slate-50 rounded-2xl px-3 py-2 border border-gray-100 text-slate-700 text-sm font-medium">
-                  {currentKanjiIndex + 1} / {kanjiList.length}
+      {/* Header con degradado y patrón */}
+      <div className="relative bg-slate-800 shadow-lg">
+        {/* Patrón de fondo */}
+        <div className="absolute inset-0 overflow-hidden">
+          <div className="absolute inset-0 opacity-[0.03]" style={{ 
+            backgroundImage: `url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='1'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E")` 
+          }}></div>
+        </div>
+
+        {/* Contenido del header */}
+        <div className="relative">
+          {/* Navegación superior */}
+          <div className="border-b border-white/10">
+            <div className="max-w-7xl mx-auto px-4">
+              <div className="flex items-center justify-between py-4">
+                <div className="flex items-center gap-3">
+                  <button
+                    onClick={() => navigate(-1)}
+                    className="w-10 h-10 bg-white/10 hover:bg-white/20 rounded-xl flex items-center justify-center text-white transition-colors"
+                  >
+                    <FiArrowLeft className="w-5 h-5" />
+                  </button>
+                  <h1 className="text-lg sm:text-xl font-bold text-white">
+                    Modo Estudio
+                  </h1>
                 </div>
-                <div className="bg-slate-50 rounded-2xl px-3 py-2 border border-gray-100 text-slate-700 text-sm font-medium">
-                  {percent}%
+                <div className="flex items-center gap-3">
+                  <div className="text-sm font-medium text-white/80">
+                    {currentKanjiIndex + 1} / {kanjiList.length}
+                  </div>
+                  <div className="w-px h-4 bg-white/20"></div>
+                  <div className="text-sm font-medium text-white/80">
+                    {percent}%
+                  </div>
                 </div>
               </div>
             </div>
           </div>
-          {/* Progress bar (desktop only) */}
-          <div className="hidden sm:block mt-3 w-full h-2 bg-gray-200 rounded-full">
-            <div
-              className="h-2 bg-teal-600 rounded-full transition-all"
+
+          {/* Barra de progreso full-width */}
+          <div className="h-1 w-full bg-white/10">
+            <div 
+              className="h-1 bg-teal-500 transition-all duration-300 ease-out"
               style={{ width: `${percent}%` }}
-            />
+            ></div>
           </div>
         </div>
       </div>
 
-      {/* Content */}
-      <div className="max-w-4xl mx-auto px-4 py-6">
-        <div className="relative flex items-center justify-center min-h-[460px]">
-          {/* Left nav */}
-          {currentKanjiIndex > 0 && (
-            <button
-              onClick={handlePreviousKanji}
-              className="absolute left-0 top-1/2 -translate-y-1/2 w-10 h-10 sm:w-12 sm:h-12 flex items-center justify-center rounded-full z-10 bg-slate-700 hover:bg-slate-800 text-white shadow"
-              aria-label="Anterior"
-            >
-              <FiChevronLeft className="w-5 h-5" />
-            </button>
-          )}
+      {/* Área principal */}
+      <div className="relative">
+        {/* Fondo con patrón sutil */}
+        <div className="absolute inset-0 bg-[radial-gradient(#e5e7eb_1px,transparent_1px)] [background-size:16px_16px] opacity-50"></div>
 
-          {/* Right nav */}
-          {currentKanjiIndex < kanjiList.length - 1 && (
-            <button
-              onClick={handleNextKanji}
-              className="absolute right-0 top-1/2 -translate-y-1/2 w-10 h-10 sm:w-12 sm:h-12 flex items-center justify-center rounded-full z-10 bg-slate-700 hover:bg-slate-800 text-white shadow"
-              aria-label="Siguiente"
-            >
-              <FiChevronRight className="w-5 h-5" />
-            </button>
-          )}
+        {/* Contenido */}
+        <div className="relative max-w-4xl mx-auto px-4 py-6">
+          <div className="relative flex items-center justify-center min-h-[460px]">
 
-          <AnimatePresence mode="wait">
-            <motion.div
-              key={currentKanjiIndex}
-              variants={slideVariants}
-              initial="enter"
-              animate="center"
-              exit="exit"
-              custom={direction}
-              transition={{ duration: 0.25, ease: 'easeInOut' }}
-              className="w-full flex justify-center"
-            >
-              <KanjiCard
-                kanji={kanjiList[currentKanjiIndex]}
-              />
-            </motion.div>
-          </AnimatePresence>
-        </div>
+            {/* Tarjeta */}
+            <AnimatePresence mode="wait">
+              <motion.div
+                key={currentKanjiIndex}
+                variants={slideVariants}
+                initial="enter"
+                animate="center"
+                exit="exit"
+                custom={direction}
+                transition={{ duration: 0.25, ease: 'easeInOut' }}
+                className="w-full flex justify-center"
+              >
+                <KanjiCard
+                  kanji={kanjiList[currentKanjiIndex]}
+                />
+              </motion.div>
+            </AnimatePresence>
+          </div>
 
-        {/* Bottom hints */}
-        <div className="text-center mt-8">
-          <div className="bg-white rounded-2xl p-4 shadow border border-gray-100 inline-block">
-            <div className="flex items-center justify-center gap-6 text-xs sm:text-sm text-slate-600">
-              <span>← Anterior</span>
-              <span>Siguiente →</span>
-              <span>Espacio = Voltear</span>
+          {/* Controles inferiores */}
+          <div className="mt-6 flex justify-center">
+            <div className="bg-white/80 backdrop-blur rounded-2xl shadow-sm border border-gray-100">
+              <div className="px-4 py-3 flex items-center gap-6 text-xs sm:text-sm text-slate-600">
+                <div className="flex items-center gap-2">
+                  <kbd className="px-2 py-1 bg-slate-100 rounded-lg text-slate-700 font-mono text-xs">←</kbd>
+                  <span>Anterior</span>
+                </div>
+                <div className="flex items-center gap-2">
+                  <kbd className="px-2 py-1 bg-slate-100 rounded-lg text-slate-700 font-mono text-xs">→</kbd>
+                  <span>Siguiente</span>
+                </div>
+                <div className="flex items-center gap-2">
+                  <kbd className="px-2 py-1 bg-slate-100 rounded-lg text-slate-700 font-mono text-xs">espacio</kbd>
+                  <span>Voltear</span>
+                </div>
+              </div>
             </div>
           </div>
         </div>
