@@ -1,37 +1,46 @@
-import { useLocation, Outlet, useNavigate } from 'react-router-dom';
-import BottomNavigation from './BottomNavigation';
+import { useLocation, useNavigate } from 'react-router-dom';
 import type { NavigationTab } from '../types';
+import BottomNavigation from './BottomNavigation';
 
-export default function AppLayout() {
+interface AppLayoutProps {
+  children: React.ReactNode;
+}
+
+export default function AppLayout({ children }: AppLayoutProps) {
   const location = useLocation();
   const navigate = useNavigate();
+  
+  // No mostrar BottomNavigation en rutas específicas
+  const hideNavigation = location.pathname.startsWith('/quiz');
 
-  const getCurrentTab = (): NavigationTab => {
-    const path = location.pathname.split('/')[1];
-    if (['home', 'lessons', 'practice', 'profile'].includes(path)) {
-      return path as NavigationTab;
-    }
+  const handleTabChange = (tab: NavigationTab) => {
+    const routes: Record<NavigationTab, string> = {
+      home: '/',
+      lessons: '/lessons',
+      practice: '/practice',
+      profile: '/profile'
+    };
+    navigate(routes[tab]);
+  };
+
+  // Determinar la tab activa basada en la ruta actual
+  const getActiveTab = (): NavigationTab => {
+    const path = location.pathname;
+    if (path === '/') return 'home';
+    if (path.startsWith('/lessons')) return 'lessons';
+    if (path.startsWith('/practice')) return 'practice';
+    if (path.startsWith('/profile')) return 'profile';
     return 'home';
   };
 
-  const shouldShowNavbar = (): boolean => {
-    const path = location.pathname;
-    // Ocultar navbar en páginas de detalles y modo de estudio
-    if (path.includes('/kanji/') || path.includes('/study')) {
-      return false;
-    }
-    return true;
-  };
-
-  const handleTabChange = (tab: NavigationTab) => {
-    navigate(`/${tab}`);
-  };
-
   return (
-    <div className="relative">
-      <Outlet />
-      {shouldShowNavbar() && (
-        <BottomNavigation activeTab={getCurrentTab()} onTabChange={handleTabChange} />
+    <div className="min-h-screen bg-slate-100">
+      {children}
+      {!hideNavigation && (
+        <BottomNavigation
+          activeTab={getActiveTab()}
+          onTabChange={handleTabChange}
+        />
       )}
     </div>
   );

@@ -1,4 +1,4 @@
-import { Routes, Route, Navigate } from 'react-router-dom';
+import { Routes, Route, Navigate, Outlet } from 'react-router-dom';
 import AppLayout from './components/AppLayout';
 import HomePage from './pages/HomePage';
 import LessonsPage from './pages/LessonsPage';
@@ -7,11 +7,21 @@ import KanjiDetailPage from './pages/KanjiDetailPage';
 import StudyModePage from './pages/StudyModePage';
 import PracticePage from './pages/PracticePage';
 import ProfilePage from './pages/ProfilePage';
+import QuizPage from './pages/QuizPage';
+import QuizResultsPage from './pages/QuizResultsPage';
+
+// Wrapper para AppLayout que usa Outlet
+const AppLayoutWrapper = () => (
+  <AppLayout>
+    <Outlet />
+  </AppLayout>
+);
 
 function App() {
   return (
     <Routes>
-      <Route element={<AppLayout />}>
+      {/* Rutas con navegación */}
+      <Route element={<AppLayoutWrapper />}>
         <Route path="/" element={<Navigate to="/home" replace />} />
         <Route path="/home" element={<HomePage />} />
         <Route path="/lessons" element={<LessonsPage />} />
@@ -21,6 +31,10 @@ function App() {
         <Route path="/practice" element={<PracticePage />} />
         <Route path="/profile" element={<ProfilePage />} />
       </Route>
+
+      {/* Rutas sin navegación */}
+      <Route path="/quiz/:mode" element={<QuizPage />} />
+      <Route path="/quiz/results" element={<QuizResultsPage />} />
     </Routes>
   );
 }
