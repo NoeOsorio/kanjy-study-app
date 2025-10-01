@@ -1,4 +1,36 @@
-import type { Kanji, KanjiExample } from '../types';
+import type { Kanji, KanjiExample, Lesson } from '../types';
+
+// Cargar todas las lecciones JSON desde src/data/lessons usando Vite import.meta.glob
+// Estructura esperada del JSON: { id, title, description, ... , kanji: Kanji[], examples: Record<string, KanjiExample[]> }
+const lessonsModules = import.meta.glob('../data/lessons/*.json', { eager: true, import: 'default' }) as Record<string, unknown>;
+
+type LoadedLesson = {
+  id: string;
+  title: string;
+  description: string;
+  difficulty: Lesson['difficulty'];
+  jlptLevel: Lesson['jlptLevel'];
+  estimatedTime: number;
+  isCompleted: boolean;
+  progress: number;
+  kanji: Kanji[];
+  examples?: Record<string, KanjiExample[]>;
+};
+
+function isLoadedLesson(value: unknown): value is LoadedLesson {
+  if (!value || typeof value !== 'object') return false;
+  const obj = value as Record<string, unknown>;
+  return typeof obj.id === 'string' && Array.isArray(obj.kanji);
+}
+
+const loadedLessons: LoadedLesson[] = Object.values(lessonsModules).filter(isLoadedLesson);
+
+const lessonIdToLesson: Record<string, LoadedLesson> = loadedLessons.reduce((acc, lesson) => {
+  if (lesson && typeof lesson.id === 'string') {
+    acc[lesson.id] = lesson as LoadedLesson;
+  }
+  return acc;
+}, {} as Record<string, LoadedLesson>);
 
 // Mock data para los kanji de la primera lección
 export const mockKanjiData: Kanji[] = [
@@ -188,20 +220,59 @@ export const mockKanjiExamples: Record<string, KanjiExample[]> = {
   ]
 };
 
-// Función para obtener kanji por ID
+// Helpers basados en datos JSON (con fallback a mocks)
+
+// Obtener lista de lecciones disponibles (solo metadatos básicos)
+export const getAvailableLessons = (): Array<Pick<Lesson, 'id' | 'title' | 'description' | 'difficulty' | 'jlptLevel' | 'estimatedTime' | 'isCompleted' | 'progress'>> => {
+  return loadedLessons.map(lesson => ({
+    id: lesson.id,
+    title: lesson.title,
+    description: lesson.description,
+    difficulty: lesson.difficulty,
+    jlptLevel: lesson.jlptLevel,
+    estimatedTime: lesson.estimatedTime,
+    isCompleted: lesson.isCompleted,
+    progress: lesson.progress
+  }));
+};
+
+// Obtener kanji por ID (busca primero en lecciones cargadas, luego en mock)
 export const getKanjiById = (id: string): Kanji | undefined => {
+  // IDs compuestos: <lessonId>:<kanjiId>
+  if (id.includes(':')) {
+    const [lessonId, innerId] = id.split(':');
+    const lesson = lessonIdToLesson[lessonId];
+    if (lesson) {
+      return lesson.kanji.find(k => k.id === innerId);
+    }
+  }
+  // Compatibilidad: buscar por id simple en lecciones cargadas
+  for (const lesson of loadedLessons) {
+    const found = lesson.kanji.find(k => k.id === id);
+    if (found) return found;
+  }
+  // Fallback: mocks
   return mockKanjiData.find(kanji => kanji.id === id);
 };
 
 // Función para obtener ejemplos de un kanji
 export const getKanjiExamples = (character: string): KanjiExample[] => {
+  for (const lesson of loadedLessons) {
+    const ex = lesson.examples?.[character];
+    if (ex && ex.length) return ex;
+  }
   return mockKanjiExamples[character] || [];
 };
 
 // Función para obtener todos los kanji de una lección
-export const getLessonKanji = (_lessonId: string): Kanji[] => {
-  // Por ahora retornamos los primeros 5 kanji como ejemplo
-  // En el backend esto vendría de la base de datos
-  console.log('getLessonKanji', _lessonId);
+export const getLessonKanji = (lessonId: string): Kanji[] => {
+  const lesson = lessonIdToLesson[lessonId];
+  if (lesson) {
+    // Devolver IDs compuestos para evitar colisiones entre lecciones
+    return lesson.kanji.map(k => ({ ...k, id: `${lessonId}:${k.id}` }));
+  }
+  // Fallback mocks (IDs simples)
   return mockKanjiData;
 };
+
+export const hasJsonLessons = (): boolean => loadedLessons.length > 0;

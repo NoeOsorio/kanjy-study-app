@@ -1,10 +1,9 @@
 import type { QuizQuestion, QuizMode, Kanji } from '../types';
-import { mockKanjiData } from './kanjiService';
+import { getLessonKanji } from './kanjiService';
 
 // Generar preguntas del quiz para una lección específica
-export const generateQuizQuestions = (_lessonId: string, mode: QuizMode): QuizQuestion[] => {
-  // Por ahora usamos todos los kanji, pero en el futuro filtraremos por lessonId
-  const lessonKanji = mockKanjiData;
+export const generateQuizQuestions = (lessonId: string, mode: QuizMode): QuizQuestion[] => {
+  const lessonKanji = getLessonKanji(lessonId);
   const questions: QuizQuestion[] = [];
 
   if (mode === 'mixed') {
@@ -99,7 +98,7 @@ const createQuestion = (kanji: Kanji, mode: QuizMode): QuizQuestion | null => {
 
 // Generar opciones para preguntas de significado
 const generateMeaningOptions = (correctMeaning: string): string[] => {
-  const allMeanings = mockKanjiData.map(k => k.meaning);
+  const allMeanings = cachedAllKanji().map(k => k.meaning);
   const incorrectMeanings = allMeanings.filter(m => m !== correctMeaning);
   
   // Seleccionar 3 significados incorrectos aleatorios
@@ -111,7 +110,7 @@ const generateMeaningOptions = (correctMeaning: string): string[] => {
 
 // Generar opciones para preguntas de onyomi
 const generateOnyomiOptions = (correctOnyomi: string): string[] => {
-  const allOnyomi = mockKanjiData.flatMap(k => k.readings.onyomi);
+  const allOnyomi = cachedAllKanji().flatMap(k => k.readings.onyomi);
   const incorrectOnyomi = allOnyomi.filter(o => o !== correctOnyomi);
   
   // Seleccionar 3 onyomi incorrectos aleatorios
@@ -123,7 +122,7 @@ const generateOnyomiOptions = (correctOnyomi: string): string[] => {
 
 // Generar opciones para preguntas de kanji
 const generateKanjiOptions = (correctKanji: string): string[] => {
-  const allKanji = mockKanjiData.map(k => k.character);
+  const allKanji = cachedAllKanji().map(k => k.character);
   const incorrectKanji = allKanji.filter(k => k !== correctKanji);
   
   // Seleccionar 3 kanji incorrectos aleatorios
@@ -141,6 +140,25 @@ const shuffleArray = <T>(array: T[]): T[] => {
     [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
   }
   return shuffled;
+};
+
+// Cache simple para obtener todos los kanji disponibles de la primera lección encontrada
+let _allKanjiCache: Kanji[] | null = null;
+const cachedAllKanji = (): Kanji[] => {
+  if (_allKanjiCache) return _allKanjiCache;
+  // Intentar obtener desde una lección conocida; si no, usar la que tenga datos
+  const fallbackLessonIds = ['n5-basics-1', '1'];
+  for (const id of fallbackLessonIds) {
+    const list = getLessonKanji(id);
+    if (Array.isArray(list) && list.length) {
+      _allKanjiCache = list;
+      return list;
+    }
+  }
+  // Si no hay lecciones JSON, getLessonKanji devolverá los mocks
+  const list = getLessonKanji('any');
+  _allKanjiCache = list;
+  return list;
 };
 
 // Obtener el título del modo de quiz

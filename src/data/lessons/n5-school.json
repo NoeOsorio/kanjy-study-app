@@ -1,0 +1,182 @@
+{
+    "id": "n5-gakkou-lesson-01",
+    "title": "Kanji básicos de escuela",
+    "description": "Kanji N5 relacionados con escuela, estudio y vida académica.",
+    "difficulty": "beginner",
+    "jlptLevel": "N5",
+    "estimatedTime": 15,
+    "isCompleted": false,
+    "progress": 0,
+    "kanji": [
+      {
+        "id": "1",
+        "character": "学",
+        "meaning": "aprender, estudio",
+        "readings": { "onyomi": ["ガク"], "kunyomi": ["まなぶ"] },
+        "strokeCount": 8,
+        "difficulty": "beginner",
+        "jlptLevel": "N5",
+        "examples": ["にゅう学", "けん学", "しん学", "学ぶ", "だい学", "学校", "学んで", "にゅう学しき"],
+        "radicals": ["宀", "子"],
+        "frequency": 0,
+        "grade": 1
+      },
+      {
+        "id": "2",
+        "character": "校",
+        "meaning": "escuela",
+        "readings": { "onyomi": ["コウ"], "kunyomi": [] },
+        "strokeCount": 10,
+        "difficulty": "beginner",
+        "jlptLevel": "N5",
+        "examples": ["学校", "校ちょう", "きゅう校", "てん校", "校ちょう先生"],
+        "radicals": ["木", "交"],
+        "frequency": 0,
+        "grade": 1
+      },
+      {
+        "id": "3",
+        "character": "先",
+        "meaning": "antes, previo",
+        "readings": { "onyomi": ["セン"], "kunyomi": ["さき"] },
+        "strokeCount": 6,
+        "difficulty": "beginner",
+        "jlptLevel": "N5",
+        "examples": ["先", "先しゅう", "先げつ", "先じつ", "先生"],
+        "radicals": ["儿"],
+        "frequency": 0,
+        "grade": 1
+      },
+      {
+        "id": "4",
+        "character": "生",
+        "meaning": "vida, nacer, vivir",
+        "readings": { "onyomi": ["セイ", "ショウ"], "kunyomi": ["いきる", "うまれる"] },
+        "strokeCount": 5,
+        "difficulty": "beginner",
+        "jlptLevel": "N5",
+        "examples": ["生きる", "生まれました", "生かつ", "じん生", "いっ生", "たん生び", "学生", "生ビール"],
+        "radicals": ["生"],
+        "frequency": 0,
+        "grade": 1
+      },
+      {
+        "id": "5",
+        "character": "名",
+        "meaning": "nombre, reputación",
+        "readings": { "onyomi": ["メイ", "ミョウ"], "kunyomi": ["な"] },
+        "strokeCount": 6,
+        "difficulty": "beginner",
+        "jlptLevel": "N5",
+        "examples": ["名まえ", "名字", "名しょ", "ち名", "ゆう名"],
+        "radicals": ["口", "夕"],
+        "frequency": 0,
+        "grade": 1
+      },
+      {
+        "id": "6",
+        "character": "字",
+        "meaning": "letra, carácter",
+        "readings": { "onyomi": ["ジ"], "kunyomi": [] },
+        "strokeCount": 6,
+        "difficulty": "beginner",
+        "jlptLevel": "N5",
+        "examples": ["字", "も字", "かん字", "しゅう字"],
+        "radicals": ["宀", "子"],
+        "frequency": 0,
+        "grade": 1
+      },
+      {
+        "id": "7",
+        "character": "本",
+        "meaning": "origen, libro",
+        "readings": { "onyomi": ["ホン"], "kunyomi": ["もと"] },
+        "strokeCount": 5,
+        "difficulty": "beginner",
+        "jlptLevel": "N5",
+        "examples": ["本", "いっ本", "に本", "さん本", "ご本", "に本", "に本じん", "やま本"],
+        "radicals": ["木"],
+        "frequency": 0,
+        "grade": 1
+      },
+      {
+        "id": "8",
+        "character": "体",
+        "meaning": "cuerpo",
+        "readings": { "onyomi": ["タイ", "テイ"], "kunyomi": ["からだ"] },
+        "strokeCount": 7,
+        "difficulty": "beginner",
+        "jlptLevel": "N5",
+        "examples": ["体", "体いく", "体いくかん", "体りょく", "体じゅう"],
+        "radicals": ["亻", "本"],
+        "frequency": 0,
+        "grade": 1
+      }
+    ],
+    "examples": {
+      "学": [
+        { "japanese": "にゅう学", "romaji": "nyuugaku", "english": "school admission; enrollment", "spanish": "inscripción / ingreso", "difficulty": "beginner" },
+        { "japanese": "けん学", "romaji": "kengaku", "english": "study visit; observation", "spanish": "visita / observación", "difficulty": "beginner" },
+        { "japanese": "しん学", "romaji": "shingaku", "english": "advancing to higher education", "spanish": "ingreso a escuela superior", "difficulty": "beginner" },
+        { "japanese": "学ぶ", "romaji": "manabu", "english": "to learn; to study", "spanish": "aprender; estudiar", "difficulty": "beginner" },
+        { "japanese": "だい学", "romaji": "daigaku", "english": "university", "spanish": "universidad", "difficulty": "beginner" },
+        { "japanese": "学校", "romaji": "gakkou", "english": "school", "spanish": "escuela", "difficulty": "beginner" },
+        { "japanese": "学んで", "romaji": "manande", "english": "learn (by oneself)", "spanish": "aprender (solo)", "difficulty": "beginner" },
+        { "japanese": "にゅう学しき", "romaji": "nyuugakushiki", "english": "entrance ceremony", "spanish": "ceremonia de ingreso", "difficulty": "beginner" }
+      ],
+      "校": [
+        { "japanese": "学校", "romaji": "gakkou", "english": "school", "spanish": "escuela", "difficulty": "beginner" },
+        { "japanese": "校ちょう", "romaji": "kouchou", "english": "principal; headmaster", "spanish": "director", "difficulty": "beginner" },
+        { "japanese": "きゅう校", "romaji": "kyuukou", "english": "no classes; school closed", "spanish": "no hay clases / descanso escolar", "difficulty": "beginner" },
+        { "japanese": "てん校", "romaji": "tenkou", "english": "school transfer", "spanish": "cambio de escuela", "difficulty": "beginner" },
+        { "japanese": "校ちょう先生", "romaji": "kouchou sensei", "english": "principal (honorific)", "spanish": "director (tratamiento)", "difficulty": "beginner" }
+      ],
+      "先": [
+        { "japanese": "先", "romaji": "saki", "english": "ahead; previous", "spanish": "adelante; previo", "difficulty": "beginner" },
+        { "japanese": "先しゅう", "romaji": "senshuu", "english": "last week", "spanish": "la semana pasada", "difficulty": "beginner" },
+        { "japanese": "先げつ", "romaji": "sengetsu", "english": "last month", "spanish": "mes pasado", "difficulty": "beginner" },
+        { "japanese": "先じつ", "romaji": "senjitsu", "english": "the other day", "spanish": "el otro día / fecha anterior", "difficulty": "beginner" },
+        { "japanese": "先生", "romaji": "sensei", "english": "teacher", "spanish": "maestro", "difficulty": "beginner" }
+      ],
+      "生": [
+        { "japanese": "生きる", "romaji": "ikiru", "english": "to live", "spanish": "vivir", "difficulty": "beginner" },
+        { "japanese": "生まれました", "romaji": "umaremashita", "english": "was born", "spanish": "nació", "difficulty": "beginner" },
+        { "japanese": "生かつ", "romaji": "seikatsu", "english": "daily life", "spanish": "vida diaria", "difficulty": "beginner" },
+        { "japanese": "じん生", "romaji": "jinsei", "english": "human life", "spanish": "vida de una persona", "difficulty": "beginner" },
+        { "japanese": "いっ生", "romaji": "isshou", "english": "one's whole life", "spanish": "toda la vida", "difficulty": "beginner" },
+        { "japanese": "たん生び", "romaji": "tanjoubi", "english": "birthday", "spanish": "cumpleaños", "difficulty": "beginner" },
+        { "japanese": "学生", "romaji": "gakusei", "english": "student", "spanish": "estudiante", "difficulty": "beginner" },
+        { "japanese": "生ビール", "romaji": "namabiiru", "english": "draft beer", "spanish": "cerveza de barril", "difficulty": "beginner" }
+      ],
+      "名": [
+        { "japanese": "名まえ", "romaji": "namae", "english": "name", "spanish": "nombre", "difficulty": "beginner" },
+        { "japanese": "名字", "romaji": "myouji", "english": "surname", "spanish": "apellido", "difficulty": "beginner" },
+        { "japanese": "名しょ", "romaji": "meisho", "english": "famous place", "spanish": "lugar famoso / célebre", "difficulty": "beginner" },
+        { "japanese": "ち名", "romaji": "chimei", "english": "place name", "spanish": "nombre de lugar", "difficulty": "beginner" },
+        { "japanese": "ゆう名", "romaji": "yuumei", "english": "famous", "spanish": "famoso", "difficulty": "beginner" }
+      ],
+      "字": [
+        { "japanese": "字", "romaji": "ji", "english": "character; letter", "spanish": "letra; carácter", "difficulty": "beginner" },
+        { "japanese": "も字", "romaji": "moji", "english": "character; letter", "spanish": "letra; carácter", "difficulty": "beginner" },
+        { "japanese": "かん字", "romaji": "kanji", "english": "kanji (Chinese character)", "spanish": "kanji (carácter chino)", "difficulty": "beginner" },
+        { "japanese": "しゅう字", "romaji": "shuuji", "english": "Japanese calligraphy", "spanish": "caligrafía japonesa", "difficulty": "beginner" }
+      ],
+      "本": [
+        { "japanese": "本", "romaji": "hon", "english": "book", "spanish": "libro", "difficulty": "beginner" },
+        { "japanese": "いっ本", "romaji": "ippon", "english": "one (long object)", "spanish": "uno (contador de objetos largos)", "difficulty": "beginner" },
+        { "japanese": "に本", "romaji": "nihon", "english": "two (long objects)", "spanish": "dos (contador de objetos largos)", "difficulty": "beginner" },
+        { "japanese": "さん本", "romaji": "sanbon", "english": "three (long objects)", "spanish": "tres (contador de objetos largos)", "difficulty": "beginner" },
+        { "japanese": "ご本", "romaji": "gohon", "english": "five (long objects)", "spanish": "cinco (contador de objetos largos)", "difficulty": "beginner" },
+        { "japanese": "に本", "romaji": "nihon", "english": "Japan", "spanish": "Japón", "difficulty": "beginner" },
+        { "japanese": "に本じん", "romaji": "nihonjin", "english": "Japanese person", "spanish": "japonés (persona)", "difficulty": "beginner" },
+        { "japanese": "やま本", "romaji": "Yamamoto", "english": "Yamamoto (surname)", "spanish": "Yamamoto (apellido)", "difficulty": "beginner" }
+      ],
+      "体": [
+        { "japanese": "体", "romaji": "karada", "english": "body", "spanish": "cuerpo", "difficulty": "beginner" },
+        { "japanese": "体いく", "romaji": "taiiku", "english": "physical education", "spanish": "educación física", "difficulty": "beginner" },
+        { "japanese": "体いくかん", "romaji": "taiikukan", "english": "gymnasium; sports hall", "spanish": "gimnasio / pabellón deportivo", "difficulty": "beginner" },
+        { "japanese": "体りょく", "romaji": "tairyoku", "english": "physical strength; stamina", "spanish": "fuerza física; resistencia", "difficulty": "beginner" },
+        { "japanese": "体じゅう", "romaji": "taijuu", "english": "body weight", "spanish": "peso corporal", "difficulty": "beginner" }
+      ]
+    }
+  }

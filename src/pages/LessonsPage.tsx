@@ -1,6 +1,7 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import PageHeader from '../components/PageHeader';
+import { getAvailableLessons, getLessonKanji } from '../services/kanjiService';
 import type { Lesson } from '../types';
 import { FiClock, FiGrid, FiArrowRight, FiFilter, FiBook } from 'react-icons/fi';
 
@@ -9,22 +10,45 @@ type JLPTLevel = 'N5' | 'N4' | 'N3' | 'N2' | 'N1' | 'all';
 export default function LessonsPage() {
   const navigate = useNavigate();
   const [selectedJLPTLevel, setSelectedJLPTLevel] = useState<JLPTLevel>('all');
-  
-  // Mock data for lessons - esto se reemplazará con datos del backend
-  const [lessons] = useState<Lesson[]>([
-    {
-      id: '1',
-      title: 'Fundamentos Básicos N5',
-      description: 'Aprende los kanji más esenciales del japonés - Nivel N5',
-      kanjiList: ['日', '月', '火', '水', '木'],
-      difficulty: 'beginner',
-      jlptLevel: 'N5',
-      estimatedTime: 15,
-      isCompleted: false,
-      progress: 0,
-    },
-    // ... (mantener todos los otros lessons sin cambios)
-  ]);
+  const [lessons, setLessons] = useState<Lesson[]>([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const loadLessons = () => {
+      try {
+        const availableLessons = getAvailableLessons();
+        // Convertir las lecciones JSON a formato Lesson con kanjiList
+        const formattedLessons: Lesson[] = availableLessons.map(lesson => {
+          const kanjiData = getLessonKanji(lesson.id);
+          return {
+            ...lesson,
+            kanjiList: kanjiData.map(kanji => kanji.character)
+          };
+        });
+        setLessons(formattedLessons);
+      } catch (error) {
+        console.error('Error loading lessons:', error);
+        // Fallback a datos mock si hay error
+        setLessons([
+          {
+            id: '1',
+            title: 'Fundamentos Básicos N5',
+            description: 'Aprende los kanji más esenciales del japonés - Nivel N5',
+            kanjiList: ['日', '月', '火', '水', '木'],
+            difficulty: 'beginner',
+            jlptLevel: 'N5',
+            estimatedTime: 15,
+            isCompleted: false,
+            progress: 0,
+          }
+        ]);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    loadLessons();
+  }, []);
 
   const getDifficultyColor = (difficulty: Lesson['difficulty']) => {
     switch (difficulty) {
@@ -73,6 +97,20 @@ export default function LessonsPage() {
   const filteredLessons = lessons.filter(lesson => 
     selectedJLPTLevel === 'all' || lesson.jlptLevel === selectedJLPTLevel
   );
+
+  if (loading) {
+    return (
+      <div className="min-h-screen bg-slate-100 flex items-center justify-center">
+        <div className="text-center">
+          <div className="w-12 h-12 bg-gradient-to-br from-slate-700 to-slate-800 rounded-2xl flex items-center justify-center shadow-lg mx-auto mb-4">
+            <FiBook className="w-6 h-6 text-white animate-pulse" />
+          </div>
+          <h2 className="text-xl font-semibold text-slate-900 mb-2">Cargando lecciones...</h2>
+          <p className="text-slate-600">Preparando tu contenido de estudio</p>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="min-h-screen bg-slate-100">

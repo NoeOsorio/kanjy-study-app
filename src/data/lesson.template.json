@@ -1,0 +1,31 @@
+{
+  "id": "<unique-lesson-id>",
+  "title": "<lesson title>",
+  "description": "<short description>",
+  "difficulty": "beginner",
+  "jlptLevel": "N5",
+  "estimatedTime": 15,
+  "isCompleted": false,
+  "progress": 0,
+  "kanji": [
+    {
+      "id": "<string id>",
+      "character": "<kanji>",
+      "meaning": "<meaning in spanish>",
+      "readings": { "onyomi": ["..."], "kunyomi": ["..."] },
+      "strokeCount": 0,
+      "difficulty": "beginner",
+      "jlptLevel": "N5",
+      "examples": ["..."],
+      "radicals": ["..."],
+      "frequency": 0,
+      "grade": 1
+    }
+  ],
+  "examples": {
+    "<kanji>": [
+      { "japanese": "<例文>", "romaji": "<romaji>", "english": "<english>", "difficulty": "beginner" }
+    ]
+  }
+}
+
