@@ -35,7 +35,7 @@ export default function QuizPage() {
             onClick={() => navigate('/practice')}
             className="bg-teal-600 hover:bg-teal-700 text-white px-5 py-2.5 rounded-xl font-medium transition-colors"
           >
-            Volver a Práctica
+            Volver a práctica
           </button>
         </div>
       </div>
@@ -96,7 +96,8 @@ export default function QuizPage() {
           </div>
           <button
             onClick={() => navigate('/practice')}
-            className="w-10 h-10 bg-slate-800 rounded-xl flex items-center justify-center text-white"
+            className="w-10 h-10 bg-slate-800 rounded-xl flex items-center justify-center text-white hover:bg-slate-700 transition-colors"
+            title="Volver a práctica"
           >
             <FiX className="w-5 h-5" />
           </button>

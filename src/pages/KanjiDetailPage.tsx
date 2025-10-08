@@ -31,10 +31,10 @@ export default function KanjiDetailPage() {
           <h1 className="text-2xl font-semibold text-slate-900 mb-2">Kanji no encontrado</h1>
           <p className="text-slate-600 mb-6">El kanji que buscas no existe</p>
           <button
-            onClick={() => navigate(-1)}
+            onClick={() => navigate('/lessons')}
             className="bg-slate-700 hover:bg-slate-800 text-white px-6 py-3 rounded-xl font-medium transition-colors"
           >
-            Volver
+            Volver a lecciones
           </button>
         </div>
       </div>
@@ -74,6 +74,7 @@ export default function KanjiDetailPage() {
                 <button
                   onClick={() => navigate(-1)}
                   className="w-12 h-12 bg-white/10 hover:bg-white/20 rounded-xl flex items-center justify-center text-white transition-colors"
+                  title="Volver a la lección"
                 >
                   <FiArrowLeft className="w-6 h-6" />
                 </button>

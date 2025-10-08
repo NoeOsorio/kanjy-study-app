@@ -134,10 +134,10 @@ export default function StudyModePage() {
           <h1 className="text-2xl font-bold text-slate-900 mb-2">Lección no encontrada</h1>
           <p className="text-slate-600 mb-6">La lección que buscas no existe</p>
           <button
-            onClick={() => navigate(-1)}
+            onClick={() => navigate('/lessons')}
             className="bg-slate-700 hover:bg-slate-800 text-white px-6 py-3 rounded-xl font-medium transition-colors"
           >
-            Volver
+            Volver a lecciones
           </button>
         </div>
       </div>
@@ -167,6 +167,7 @@ export default function StudyModePage() {
                   <button
                     onClick={() => navigate(-1)}
                     className="w-10 h-10 bg-white/10 hover:bg-white/20 rounded-xl flex items-center justify-center text-white transition-colors"
+                    title="Volver a la lección"
                   >
                     <FiArrowLeft className="w-5 h-5" />
                   </button>

@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import PageHeader from '../components/PageHeader';
 import { getAvailableLessons, getLessonKanji } from '../services/kanjiService';
 import type { Lesson } from '../types';
-import { FiClock, FiGrid, FiArrowRight, FiFilter, FiBook } from 'react-icons/fi';
+import { FiClock, FiGrid, FiArrowRight, FiFilter, FiBook, FiArrowLeft } from 'react-icons/fi';
 
 type JLPTLevel = 'N5' | 'N4' | 'N3' | 'N2' | 'N1' | 'all';
 
@@ -122,8 +122,9 @@ export default function LessonsPage() {
           <button
             onClick={() => navigate('/')}
             className="w-12 h-12 bg-gradient-to-br from-slate-700 to-slate-800 rounded-2xl flex items-center justify-center shadow-lg hover:from-slate-800 hover:to-slate-900 transition-colors"
+            title="Volver al inicio"
           >
-            <FiBook className="w-6 h-6 text-white" />
+            <FiArrowLeft className="w-6 h-6 text-white" />
           </button>
         }
       />
