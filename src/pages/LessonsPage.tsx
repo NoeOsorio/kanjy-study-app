@@ -119,9 +119,12 @@ export default function LessonsPage() {
         title="Lecciones"
         description="Elige tu próxima aventura de aprendizaje"
         leftContent={
-          <div className="w-12 h-12 bg-gradient-to-br from-slate-700 to-slate-800 rounded-2xl flex items-center justify-center shadow-lg">
+          <button
+            onClick={() => navigate('/')}
+            className="w-12 h-12 bg-gradient-to-br from-slate-700 to-slate-800 rounded-2xl flex items-center justify-center shadow-lg hover:from-slate-800 hover:to-slate-900 transition-colors"
+          >
             <FiBook className="w-6 h-6 text-white" />
-          </div>
+          </button>
         }
       />
 
