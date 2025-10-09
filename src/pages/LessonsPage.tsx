@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import PageHeader from '../components/PageHeader';
 import { getAvailableLessons, getLessonKanji } from '../services/kanjiService';
 import type { Lesson } from '../types';
-import { FiClock, FiGrid, FiArrowRight, FiFilter, FiBook, FiArrowLeft } from 'react-icons/fi';
+import { FiClock, FiGrid, FiArrowRight, FiFilter, FiBook, FiArrowLeft, FiChevronDown, FiChevronUp } from 'react-icons/fi';
 
 type JLPTLevel = 'N5' | 'N4' | 'N3' | 'N2' | 'N1' | 'all';
 
@@ -12,6 +12,7 @@ export default function LessonsPage() {
   const [selectedJLPTLevel, setSelectedJLPTLevel] = useState<JLPTLevel>('all');
   const [lessons, setLessons] = useState<Lesson[]>([]);
   const [loading, setLoading] = useState(true);
+  const [isFilterExpanded, setIsFilterExpanded] = useState(false);
 
   useEffect(() => {
     const loadLessons = () => {
@@ -129,33 +130,55 @@ export default function LessonsPage() {
         }
       />
 
-      {/* Filtro JLPT */}
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 py-6">
-        <div className="bg-white rounded-3xl p-6 shadow-lg border border-gray-100">
-          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-6">
-            <div className="flex items-center gap-3">
-              <FiFilter className="w-5 h-5 text-slate-600" />
-              <h2 className="text-lg font-bold text-slate-900">Filtrar por nivel JLPT</h2>
+      {/* Filtro JLPT Colapsable */}
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 py-4 sm:py-6">
+        <div className="bg-white rounded-2xl sm:rounded-3xl shadow-lg border border-gray-100 overflow-hidden">
+          {/* Header del filtro - siempre visible */}
+          <button
+            onClick={() => setIsFilterExpanded(!isFilterExpanded)}
+            className="w-full p-4 sm:p-6 flex items-center justify-between hover:bg-slate-50 transition-colors"
+          >
+            <div className="flex items-center gap-2 sm:gap-3">
+              <FiFilter className="w-4 h-4 sm:w-5 sm:h-5 text-slate-600" />
+              <h2 className="text-base sm:text-lg font-bold text-slate-900">Filtrar por nivel JLPT</h2>
             </div>
-            <p className="text-sm text-slate-600">
-              Mostrando <span className="font-semibold text-slate-900">{filteredLessons.length}</span> de <span className="font-semibold text-slate-900">{lessons.length}</span> lecciones
-            </p>
-          </div>
-          <div className="flex flex-wrap gap-2">
-            {(['all', 'N5', 'N4', 'N3', 'N2', 'N1'] as JLPTLevel[]).map((level) => (
-              <button
-                key={level}
-                onClick={() => setSelectedJLPTLevel(level)}
-                className={`px-4 py-2 rounded-xl font-medium text-sm transition-colors ${
-                  selectedJLPTLevel === level
-                    ? 'bg-slate-800 text-white'
-                    : 'bg-slate-100 text-slate-700 hover:bg-slate-200'
-                }`}
-              >
-                {level === 'all' ? 'Todos los niveles' : `JLPT ${level}`}
-              </button>
-            ))}
-          </div>
+            <div className="flex items-center gap-2 sm:gap-4">
+              <p className="text-xs sm:text-sm text-slate-600 hidden sm:block">
+                Mostrando <span className="font-semibold text-slate-900">{filteredLessons.length}</span> de <span className="font-semibold text-slate-900">{lessons.length}</span> lecciones
+              </p>
+              <p className="text-xs text-slate-600 sm:hidden">
+                {filteredLessons.length}/{lessons.length}
+              </p>
+              {isFilterExpanded ? (
+                <FiChevronUp className="w-4 h-4 sm:w-5 sm:h-5 text-slate-600 flex-shrink-0" />
+              ) : (
+                <FiChevronDown className="w-4 h-4 sm:w-5 sm:h-5 text-slate-600 flex-shrink-0" />
+              )}
+            </div>
+          </button>
+
+          {/* Contenido del filtro - colapsable */}
+          {isFilterExpanded && (
+            <div className="px-4 sm:px-6 pb-4 sm:pb-6 border-t border-gray-100">
+              <div className="pt-3 sm:pt-4">
+                <div className="grid grid-cols-2 sm:flex sm:flex-wrap gap-2">
+                  {(['all', 'N5', 'N4', 'N3', 'N2', 'N1'] as JLPTLevel[]).map((level) => (
+                    <button
+                      key={level}
+                      onClick={() => setSelectedJLPTLevel(level)}
+                      className={`px-3 sm:px-4 py-2 rounded-lg sm:rounded-xl font-medium text-xs sm:text-sm transition-colors ${
+                        selectedJLPTLevel === level
+                          ? 'bg-slate-800 text-white'
+                          : 'bg-slate-100 text-slate-700 hover:bg-slate-200'
+                      }`}
+                    >
+                      {level === 'all' ? 'Todos' : level}
+                    </button>
+                  ))}
+                </div>
+              </div>
+            </div>
+          )}
         </div>
       </div>
 
