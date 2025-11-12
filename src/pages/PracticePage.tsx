@@ -2,7 +2,7 @@ import { useNavigate } from 'react-router-dom';
 import QuizModeSelector from '../components/QuizModeSelector';
 import PageHeader from '../components/PageHeader';
 import type { QuizMode } from '../types';
-import { FiActivity, FiArrowLeft } from 'react-icons/fi';
+import {  FiArrowLeft } from 'react-icons/fi';
 
 export default function PracticePage() {
   const navigate = useNavigate();
