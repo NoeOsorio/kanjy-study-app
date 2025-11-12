@@ -1,0 +1,163 @@
+{
+    "id": "n5-family-animals-lesson-01",
+    "title": "Kanji básicos: familia y animales",
+    "description": "Kanji N5 relacionados con la familia, niños, género y animales.",
+    "difficulty": "beginner",
+    "jlptLevel": "N5",
+    "estimatedTime": 15,
+    "isCompleted": false,
+    "progress": 0,
+    "kanji": [
+      {
+        "id": "1",
+        "character": "父",
+        "meaning": "padre",
+        "readings": { "onyomi": ["フ"], "kunyomi": ["ちち"] },
+        "strokeCount": 4,
+        "difficulty": "beginner",
+        "jlptLevel": "N5",
+        "examples": ["父", "父の日", "そ父", "父母", "お父さん", "そ父母"],
+        "radicals": ["父"],
+        "frequency": 0,
+        "grade": 1
+      },
+      {
+        "id": "2",
+        "character": "母",
+        "meaning": "madre",
+        "readings": { "onyomi": ["ボ"], "kunyomi": ["はは"] },
+        "strokeCount": 5,
+        "difficulty": "beginner",
+        "jlptLevel": "N5",
+        "examples": ["母", "母の日", "そ母", "母ご", "母校", "父母", "お母さん", "そ父母"],
+        "radicals": ["母"],
+        "frequency": 0,
+        "grade": 1
+      },
+      {
+        "id": "3",
+        "character": "子",
+        "meaning": "niño, hijo",
+        "readings": { "onyomi": ["シ"], "kunyomi": ["こ"] },
+        "strokeCount": 3,
+        "difficulty": "beginner",
+        "jlptLevel": "N5",
+        "examples": ["子ども", "お子さん", "母子てちょう", "男の子", "男子", "男子学生"],
+        "radicals": ["子"],
+        "frequency": 0,
+        "grade": 1
+      },
+      {
+        "id": "4",
+        "character": "男",
+        "meaning": "hombre, varón",
+        "readings": { "onyomi": ["ダン"], "kunyomi": ["おとこ"] },
+        "strokeCount": 7,
+        "difficulty": "beginner",
+        "jlptLevel": "N5",
+        "examples": ["男", "男の子", "男の人", "男の先生", "男子", "男せい", "男子学生", "ちょう男"],
+        "radicals": ["田", "力"],
+        "frequency": 0,
+        "grade": 1
+      },
+      {
+        "id": "5",
+        "character": "女",
+        "meaning": "mujer, femenino",
+        "readings": { "onyomi": ["ジョ"], "kunyomi": ["おんな"] },
+        "strokeCount": 3,
+        "difficulty": "beginner",
+        "jlptLevel": "N5",
+        "examples": ["女", "女の人", "女子学生", "女の子", "女子", "女せい", "かの女", "女ゆう", "男女"],
+        "radicals": ["女"],
+        "frequency": 0,
+        "grade": 1
+      },
+      {
+        "id": "6",
+        "character": "犬",
+        "meaning": "perro",
+        "readings": { "onyomi": ["ケン"], "kunyomi": ["いぬ"] },
+        "strokeCount": 4,
+        "difficulty": "beginner",
+        "jlptLevel": "N5",
+        "examples": ["犬", "子犬", "子がた犬", "もうどう犬"],
+        "radicals": ["犬"],
+        "frequency": 0,
+        "grade": 1
+      },
+      {
+        "id": "7",
+        "character": "鳥",
+        "meaning": "pájaro, ave",
+        "readings": { "onyomi": ["チョウ"], "kunyomi": ["とり"] },
+        "strokeCount": 11,
+        "difficulty": "beginner",
+        "jlptLevel": "N5",
+        "examples": ["鳥", "小鳥", "や鳥"],
+        "radicals": ["鳥"],
+        "frequency": 0,
+        "grade": 1
+      }
+    ],
+    "examples": {
+      "父": [
+        { "japanese": "父", "romaji": "chichi", "english": "father", "spanish": "padre", "difficulty": "beginner" },
+        { "japanese": "父の日", "romaji": "chichi no hi", "english": "Father's Day", "spanish": "Día del padre", "difficulty": "beginner" },
+        { "japanese": "そ父", "romaji": "sofu", "english": "grandfather", "spanish": "abuelo", "difficulty": "beginner" },
+        { "japanese": "父母", "romaji": "fubo", "english": "parents", "spanish": "padres (papá y mamá)", "difficulty": "beginner" },
+        { "japanese": "お父さん", "romaji": "otousan", "english": "father (formal)", "spanish": "padre (formal)", "difficulty": "beginner" },
+        { "japanese": "そ父母", "romaji": "sofubo", "english": "grandparents", "spanish": "abuelos (abuelo y abuela)", "difficulty": "beginner" }
+      ],
+      "母": [
+        { "japanese": "母", "romaji": "haha", "english": "mother", "spanish": "madre", "difficulty": "beginner" },
+        { "japanese": "母の日", "romaji": "haha no hi", "english": "Mother's Day", "spanish": "Día de la madre", "difficulty": "beginner" },
+        { "japanese": "そ母", "romaji": "sobo", "english": "grandmother", "spanish": "abuela", "difficulty": "beginner" },
+        { "japanese": "母ご", "romaji": "bogo", "english": "mother tongue", "spanish": "lengua materna", "difficulty": "beginner" },
+        { "japanese": "母校", "romaji": "bokou", "english": "alma mater", "spanish": "última escuela / alma máter", "difficulty": "beginner" },
+        { "japanese": "父母", "romaji": "fubo", "english": "parents", "spanish": "padres", "difficulty": "beginner" },
+        { "japanese": "お母さん", "romaji": "okaasan", "english": "mother (formal)", "spanish": "madre (formal)", "difficulty": "beginner" },
+        { "japanese": "そ父母", "romaji": "sofubo", "english": "grandparents", "spanish": "abuelos", "difficulty": "beginner" }
+      ],
+      "子": [
+        { "japanese": "子ども", "romaji": "kodomo", "english": "child", "spanish": "niño / niños", "difficulty": "beginner" },
+        { "japanese": "お子さん", "romaji": "okosan", "english": "someone's child", "spanish": "hijo/hija (de otra persona)", "difficulty": "beginner" },
+        { "japanese": "母子てちょう", "romaji": "boshitechou", "english": "maternal and child handbook", "spanish": "cuadernillo de maternidad", "difficulty": "beginner" },
+        { "japanese": "男の子", "romaji": "otoko no ko", "english": "boy", "spanish": "niño (varón)", "difficulty": "beginner" },
+        { "japanese": "男子", "romaji": "danshi", "english": "young man", "spanish": "hombre joven (16-20 años)", "difficulty": "beginner" },
+        { "japanese": "男子学生", "romaji": "danshigakusei", "english": "male student", "spanish": "estudiante varón", "difficulty": "beginner" }
+      ],
+      "男": [
+        { "japanese": "男", "romaji": "otoko", "english": "man", "spanish": "hombre", "difficulty": "beginner" },
+        { "japanese": "男の子", "romaji": "otoko no ko", "english": "boy", "spanish": "niño varón", "difficulty": "beginner" },
+        { "japanese": "男の人", "romaji": "otoko no hito", "english": "man (person)", "spanish": "hombre / persona masculina", "difficulty": "beginner" },
+        { "japanese": "男の先生", "romaji": "otoko no sensei", "english": "male teacher", "spanish": "maestro de hombres / maestro masculino", "difficulty": "beginner" },
+        { "japanese": "男子", "romaji": "danshi", "english": "young man", "spanish": "hombre joven", "difficulty": "beginner" },
+        { "japanese": "男せい", "romaji": "dansei", "english": "man (formal); male gender", "spanish": "hombre (formal) / género masculino", "difficulty": "beginner" },
+        { "japanese": "男子学生", "romaji": "danshigakusei", "english": "male student", "spanish": "estudiante masculino", "difficulty": "beginner" },
+        { "japanese": "ちょう男", "romaji": "chounan", "english": "eldest son", "spanish": "hijo mayor / primogénito", "difficulty": "beginner" }
+      ],
+      "女": [
+        { "japanese": "女", "romaji": "onna", "english": "woman", "spanish": "mujer", "difficulty": "beginner" },
+        { "japanese": "女の人", "romaji": "onna no hito", "english": "woman (person)", "spanish": "mujer / persona femenina", "difficulty": "beginner" },
+        { "japanese": "女子学生", "romaji": "joshigakusei", "english": "female student", "spanish": "estudiante mujer", "difficulty": "beginner" },
+        { "japanese": "女の子", "romaji": "onna no ko", "english": "girl", "spanish": "niña", "difficulty": "beginner" },
+        { "japanese": "女子", "romaji": "joshi", "english": "young woman", "spanish": "mujer joven", "difficulty": "beginner" },
+        { "japanese": "女せい", "romaji": "josei", "english": "female", "spanish": "femenino", "difficulty": "beginner" },
+        { "japanese": "かの女", "romaji": "kanojo", "english": "girlfriend", "spanish": "novia", "difficulty": "beginner" },
+        { "japanese": "女ゆう", "romaji": "joyuu", "english": "actress", "spanish": "actriz", "difficulty": "beginner" },
+        { "japanese": "男女", "romaji": "danjo", "english": "men and women", "spanish": "hombres y mujeres", "difficulty": "beginner" }
+      ],
+      "犬": [
+        { "japanese": "犬", "romaji": "inu", "english": "dog", "spanish": "perro", "difficulty": "beginner" },
+        { "japanese": "子犬", "romaji": "koinu", "english": "puppy", "spanish": "cachorro", "difficulty": "beginner" },
+        { "japanese": "子がた犬", "romaji": "kogataken", "english": "small-breed dog", "spanish": "perro de raza pequeña", "difficulty": "beginner" },
+        { "japanese": "もうどう犬", "romaji": "moudouken", "english": "guide dog", "spanish": "perro guía / lazarillo", "difficulty": "beginner" }
+      ],
+      "鳥": [
+        { "japanese": "鳥", "romaji": "tori", "english": "bird", "spanish": "pájaro / ave", "difficulty": "beginner" },
+        { "japanese": "小鳥", "romaji": "kotori", "english": "small bird", "spanish": "pajarito / ave pequeña", "difficulty": "beginner" },
+        { "japanese": "や鳥", "romaji": "yachou", "english": "wild bird", "spanish": "ave silvestre", "difficulty": "beginner" }
+      ]
+    }
+  }

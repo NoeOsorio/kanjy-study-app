@@ -259,7 +259,7 @@ export default function KanjiDetailPage() {
                         </div>
                         <div className="text-center space-y-2">
                           <div className="text-sm font-mono text-slate-600">{ex.romaji}</div>
-                          <div className="text-sm text-slate-700 font-medium">{ex.english}</div>
+                          <div className="text-sm text-slate-700 font-medium">{ex.spanish}</div>
                         </div>
                         <div className="mt-3 flex justify-center">
                           <span className={`text-xs px-3 py-1 rounded-full border ${getDifficultyColor(ex.difficulty)}`}>
