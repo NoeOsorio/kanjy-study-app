@@ -4,6 +4,7 @@ import HomePage from './pages/HomePage';
 import LessonsPage from './pages/LessonsPage';
 import LessonDetailPage from './pages/LessonDetailPage';
 import KanjiDetailPage from './pages/KanjiDetailPage';
+import KanjiPracticePage from './pages/KanjiPracticePage';
 import StudyModePage from './pages/StudyModePage';
 import PracticePage from './pages/PracticePage';
 import QuizPage from './pages/QuizPage';
@@ -32,6 +33,7 @@ function App() {
       {/* Rutas sin navegación */}
       <Route path="/quiz/:mode" element={<QuizPage />} />
       <Route path="/quiz/results" element={<QuizResultsPage />} />
+      <Route path="/kanji/:kanjiId/practice" element={<KanjiPracticePage />} />
     </Routes>
   );
 }

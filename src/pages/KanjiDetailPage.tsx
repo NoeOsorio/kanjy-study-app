@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { getKanjiById, getKanjiExamples } from '../services/kanjiService';
 import type { Kanji, KanjiExample } from '../types';
-import { FiArrowLeft, FiPlay, FiBookmark, FiGrid, FiActivity, FiAward, FiEdit3, FiBook } from 'react-icons/fi';
+import { FiArrowLeft, FiPlay, FiGrid, FiActivity, FiAward, FiEdit3, FiBook } from 'react-icons/fi';
 import KanjiCanvas from '../components/KanjiCanvas';
 
 export default function KanjiDetailPage() {
@@ -103,13 +103,12 @@ export default function KanjiDetailPage() {
                 {kanji.meaning}
               </h1>
               <div className="flex gap-4">
-                <button className="bg-teal-600 hover:bg-teal-700 text-white px-8 py-3 rounded-xl font-medium text-lg flex items-center gap-2 transition-colors">
+                <button 
+                  onClick={() => navigate(`/kanji/${kanjiId}/practice`)}
+                  className="bg-teal-600 hover:bg-teal-700 text-white px-8 py-3 rounded-xl font-medium text-lg flex items-center gap-2 transition-colors"
+                >
                   <FiPlay className="w-5 h-5" />
                   <span>Practicar</span>
-                </button>
-                <button className="bg-white/10 hover:bg-white/20 text-white px-8 py-3 rounded-xl font-medium text-lg flex items-center gap-2 transition-colors">
-                  <FiBookmark className="w-5 h-5" />
-                  <span>Guardar</span>
                 </button>
               </div>
             </div>
