@@ -30,6 +30,7 @@ export interface KanjiExample {
   japanese: string;
   romaji: string;
   english: string;
+  spanish?: string;
   difficulty: 'beginner' | 'intermediate' | 'advanced';
 }
 

@@ -2,6 +2,7 @@ import { useNavigate } from 'react-router-dom';
 import QuizModeSelector from '../components/QuizModeSelector';
 import PageHeader from '../components/PageHeader';
 import type { QuizMode } from '../types';
+import { FiActivity, FiArrowLeft } from 'react-icons/fi';
 
 export default function PracticePage() {
   const navigate = useNavigate();
@@ -16,6 +17,15 @@ export default function PracticePage() {
       <PageHeader
         title="Práctica"
         description="Mejora tus habilidades con diferentes tipos de ejercicios"
+        leftContent={
+          <button
+            onClick={() => navigate('/')}
+            className="w-12 h-12 bg-gradient-to-br from-teal-600 to-teal-700 rounded-2xl flex items-center justify-center shadow-lg hover:from-teal-700 hover:to-teal-800 transition-colors"
+            title="Volver al inicio"
+          >
+            <FiArrowLeft className="w-6 h-6 text-white" />
+          </button>
+        }
       />
 
       {/* Main Content */}

@@ -1,0 +1,151 @@
+{
+    "id": "n5-gakkou-lesson-02",
+    "title": "Kanji básicos: amistad, puertas y tamaños",
+    "description": "Kanji N5 centrados en conceptos de amistad, entrada/salida, escuela y tamaños.",
+    "difficulty": "beginner",
+    "jlptLevel": "N5",
+    "estimatedTime": 15,
+    "isCompleted": false,
+    "progress": 0,
+    "kanji": [
+      {
+        "id": "1",
+        "character": "友",
+        "meaning": "amigo, amistad",
+        "readings": { "onyomi": ["ユウ"], "kunyomi": ["とも"] },
+        "strokeCount": 4,
+        "difficulty": "beginner",
+        "jlptLevel": "N5",
+        "examples": ["友だち", "しん友"],
+        "radicals": ["又"],
+        "frequency": 0,
+        "grade": 1
+      },
+      {
+        "id": "2",
+        "character": "門",
+        "meaning": "puerta, entrada",
+        "readings": { "onyomi": ["モン"], "kunyomi": [] },
+        "strokeCount": 8,
+        "difficulty": "beginner",
+        "jlptLevel": "N5",
+        "examples": ["門", "校門", "正門", "専門", "入門"],
+        "radicals": ["門"],
+        "frequency": 0,
+        "grade": 1
+      },
+      {
+        "id": "3",
+        "character": "出",
+        "meaning": "salir, sacar, aparecer",
+        "readings": { "onyomi": ["シュツ"], "kunyomi": ["でる", "だす"] },
+        "strokeCount": 5,
+        "difficulty": "beginner",
+        "jlptLevel": "N5",
+        "examples": ["出る", "出す", "出して", "出口", "出かけました", "出せき", "外出"],
+        "radicals": ["凵"],
+        "frequency": 0,
+        "grade": 1
+      },
+      {
+        "id": "4",
+        "character": "入",
+        "meaning": "entrar, introducir",
+        "readings": { "onyomi": ["ニュウ"], "kunyomi": ["いれる", "はいる"] },
+        "strokeCount": 2,
+        "difficulty": "beginner",
+        "jlptLevel": "N5",
+        "examples": ["入れる", "入る", "入って", "入口", "入学"],
+        "radicals": ["入"],
+        "frequency": 0,
+        "grade": 1
+      },
+      {
+        "id": "5",
+        "character": "高",
+        "meaning": "alto, caro",
+        "readings": { "onyomi": ["コウ"], "kunyomi": ["たかい"] },
+        "strokeCount": 10,
+        "difficulty": "beginner",
+        "jlptLevel": "N5",
+        "examples": ["高い", "高校生", "高校"],
+        "radicals": ["高"],
+        "frequency": 0,
+        "grade": 1
+      },
+      {
+        "id": "6",
+        "character": "大",
+        "meaning": "grande, importante",
+        "readings": { "onyomi": ["ダイ", "タイ"], "kunyomi": ["おおきい"] },
+        "strokeCount": 3,
+        "difficulty": "beginner",
+        "jlptLevel": "N5",
+        "examples": ["大きい", "大好き", "大せつ", "大学", "大きらい", "大人"],
+        "radicals": ["大"],
+        "frequency": 0,
+        "grade": 1
+      },
+      {
+        "id": "7",
+        "character": "小",
+        "meaning": "pequeño",
+        "readings": { "onyomi": ["ショウ"], "kunyomi": ["ちいさい", "こ"] },
+        "strokeCount": 3,
+        "difficulty": "beginner",
+        "jlptLevel": "N5",
+        "examples": ["小さい", "小学生", "小学校", "小ぜに"],
+        "radicals": ["小"],
+        "frequency": 0,
+        "grade": 1
+      }
+    ],
+    "examples": {
+      "友": [
+        { "japanese": "友だち", "romaji": "tomodachi", "english": "friend", "spanish": "amigo", "difficulty": "beginner" },
+        { "japanese": "しん友", "romaji": "shinyuu", "english": "close friend; best friend", "spanish": "amigo íntimo; mejor amigo", "difficulty": "beginner" }
+      ],
+      "門": [
+        { "japanese": "門", "romaji": "mon", "english": "gate; door", "spanish": "puerta", "difficulty": "beginner" },
+        { "japanese": "校門", "romaji": "koumon", "english": "school gate", "spanish": "puerta de la escuela", "difficulty": "beginner" },
+        { "japanese": "正門", "romaji": "seimon", "english": "main gate", "spanish": "puerta principal", "difficulty": "beginner" },
+        { "japanese": "専門", "romaji": "senmon", "english": "specialty; field of study", "spanish": "especialidad; área de conocimiento", "difficulty": "beginner" },
+        { "japanese": "入門", "romaji": "nyuumon", "english": "introduction; beginner’s guide", "spanish": "introducción; manual de iniciación", "difficulty": "beginner" }
+      ],
+      "出": [
+        { "japanese": "出る", "romaji": "deru", "english": "to go out; to appear", "spanish": "salir; aparecer", "difficulty": "beginner" },
+        { "japanese": "出す", "romaji": "dasu", "english": "to take out; to send", "spanish": "sacar; enviar", "difficulty": "beginner" },
+        { "japanese": "出して", "romaji": "dashite", "english": "to take out (te-form)", "spanish": "saca / envía (forma て)", "difficulty": "beginner" },
+        { "japanese": "出口", "romaji": "deguchi", "english": "exit", "spanish": "salida", "difficulty": "beginner" },
+        { "japanese": "出かけました", "romaji": "dekakemashita", "english": "went out", "spanish": "salió (a un lugar específico)", "difficulty": "beginner" },
+        { "japanese": "出せき", "romaji": "shusseki", "english": "attendance", "spanish": "asistencia", "difficulty": "beginner" },
+        { "japanese": "外出", "romaji": "gaishutsu", "english": "going out; outing", "spanish": "salida; excursión", "difficulty": "beginner" }
+      ],
+      "入": [
+        { "japanese": "入れる", "romaji": "ireru", "english": "to put in; to insert", "spanish": "poner adentro; meter", "difficulty": "beginner" },
+        { "japanese": "入る", "romaji": "hairu", "english": "to enter; to join", "spanish": "entrar; unirse", "difficulty": "beginner" },
+        { "japanese": "入って", "romaji": "haitte", "english": "enter (te-form)", "spanish": "entra; ingresar (forma て)", "difficulty": "beginner" },
+        { "japanese": "入口", "romaji": "iriguchi", "english": "entrance", "spanish": "entrada", "difficulty": "beginner" },
+        { "japanese": "入学", "romaji": "nyuugaku", "english": "school admission", "spanish": "ingreso a escuela; inscripción", "difficulty": "beginner" }
+      ],
+      "高": [
+        { "japanese": "高い", "romaji": "takai", "english": "tall; expensive", "spanish": "alto; caro", "difficulty": "beginner" },
+        { "japanese": "高校生", "romaji": "koukousei", "english": "high school student", "spanish": "estudiante de secundaria/preparatoria", "difficulty": "beginner" },
+        { "japanese": "高校", "romaji": "koukou", "english": "high school", "spanish": "escuela secundaria superior", "difficulty": "beginner" }
+      ],
+      "大": [
+        { "japanese": "大きい", "romaji": "ookii", "english": "big; large", "spanish": "grande", "difficulty": "beginner" },
+        { "japanese": "大好き", "romaji": "daisuki", "english": "to love; to like very much", "spanish": "me gusta mucho; me encanta", "difficulty": "beginner" },
+        { "japanese": "大せつ", "romaji": "taisetsu", "english": "important; valuable", "spanish": "importante; valioso", "difficulty": "beginner" },
+        { "japanese": "大学", "romaji": "daigaku", "english": "university", "spanish": "universidad", "difficulty": "beginner" },
+        { "japanese": "大きらい", "romaji": "daikirai", "english": "to hate; to dislike", "spanish": "odiar; no gustar", "difficulty": "beginner" },
+        { "japanese": "大人", "romaji": "otona", "english": "adult", "spanish": "adulto", "difficulty": "beginner" }
+      ],
+      "小": [
+        { "japanese": "小さい", "romaji": "chiisai", "english": "small; little", "spanish": "pequeño", "difficulty": "beginner" },
+        { "japanese": "小学生", "romaji": "shougakusei", "english": "elementary school student", "spanish": "estudiante de primaria", "difficulty": "beginner" },
+        { "japanese": "小学校", "romaji": "shougakkou", "english": "elementary school", "spanish": "escuela primaria", "difficulty": "beginner" },
+        { "japanese": "小ぜに", "romaji": "kozeni", "english": "small change; coins", "spanish": "monedas; cambio pequeño; suelto", "difficulty": "beginner" }
+      ]
+    }
+  }
