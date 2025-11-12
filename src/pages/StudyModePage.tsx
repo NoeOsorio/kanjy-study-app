@@ -1,31 +1,49 @@
 import { useState, useEffect, useRef, useCallback } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
-import { getLessonKanji } from '../services/kanjiService';
-import KanjiCard from '../components/KanjiCard';
-import type { Kanji } from '../types';
+import { getLessonKanji, getKanjiExamples } from '../services/kanjiService';
+import ExampleCard from '../components/ExampleCard';
+import type { KanjiExample } from '../types';
 import { FiArrowLeft, FiAlertCircle } from 'react-icons/fi';
+
+interface ExampleWithContext extends KanjiExample {
+  kanjiCharacter: string;
+  kanjiMeaning: string;
+}
 
 export default function StudyModePage() {
   const navigate = useNavigate();
   const { lessonId } = useParams<{ lessonId: string }>();
-  const [kanjiList, setKanjiList] = useState<Kanji[]>([]);
-  const [currentKanjiIndex, setCurrentKanjiIndex] = useState(0);
+  const [examplesList, setExamplesList] = useState<ExampleWithContext[]>([]);
+  const [currentExampleIndex, setCurrentExampleIndex] = useState(0);
   const prevIndexRef = useRef(0);
 
   useEffect(() => {
     if (lessonId) {
       const kanji = getLessonKanji(lessonId);
-      setKanjiList(kanji);
+      
+      // Agregar todos los ejemplos de todos los kanji
+      const allExamples: ExampleWithContext[] = [];
+      kanji.forEach(kanjiItem => {
+        const examples = getKanjiExamples(kanjiItem.character);
+        examples.forEach(example => {
+          allExamples.push({
+            ...example,
+            kanjiCharacter: kanjiItem.character,
+            kanjiMeaning: kanjiItem.meaning
+          });
+        });
+      });
+      setExamplesList(allExamples);
     }
   }, [lessonId]);
 
-  const handleNextKanji = useCallback(() => {
-    setCurrentKanjiIndex((idx) => (idx < kanjiList.length - 1 ? idx + 1 : idx));
-  }, [kanjiList.length]);
+  const handleNextExample = useCallback(() => {
+    setCurrentExampleIndex((idx) => (idx < examplesList.length - 1 ? idx + 1 : idx));
+  }, [examplesList.length]);
 
-  const handlePreviousKanji = useCallback(() => {
-    setCurrentKanjiIndex((idx) => (idx > 0 ? idx - 1 : idx));
+  const handlePreviousExample = useCallback(() => {
+    setCurrentExampleIndex((idx) => (idx > 0 ? idx - 1 : idx));
   }, []);
 
   useEffect(() => {
@@ -34,11 +52,11 @@ export default function StudyModePage() {
       switch (event.key) {
         case 'ArrowLeft':
           event.preventDefault();
-          handlePreviousKanji();
+          handlePreviousExample();
           break;
         case 'ArrowRight':
           event.preventDefault();
-          handleNextKanji();
+          handleNextExample();
           break;
         case 'Escape':
           event.preventDefault();
@@ -58,7 +76,7 @@ export default function StudyModePage() {
 
     document.addEventListener('keydown', handleKeyDown);
     return () => document.removeEventListener('keydown', handleKeyDown);
-  }, [currentKanjiIndex, kanjiList.length, navigate, handleNextKanji, handlePreviousKanji]);
+  }, [currentExampleIndex, examplesList.length, navigate, handleNextExample, handlePreviousExample]);
 
   // Touch/swipe navigation
   useEffect(() => {
@@ -94,10 +112,10 @@ export default function StudyModePage() {
       if (Math.abs(deltaX) > minSwipeDistance) {
         if (deltaX > 0) {
           // Swipe right - go to previous
-          handlePreviousKanji();
+          handlePreviousExample();
         } else {
           // Swipe left - go to next
-          handleNextKanji();
+          handleNextExample();
         }
       }
     };
@@ -111,13 +129,13 @@ export default function StudyModePage() {
       document.removeEventListener('touchmove', handleTouchMove as EventListener);
       document.removeEventListener('touchend', handleTouchEnd as EventListener);
     };
-  }, [currentKanjiIndex, kanjiList.length, handleNextKanji, handlePreviousKanji]);
+  }, [currentExampleIndex, examplesList.length, handleNextExample, handlePreviousExample]);
 
   // Compute direction based on index change (captured per render)
-  const direction: 1 | -1 = currentKanjiIndex >= prevIndexRef.current ? 1 : -1;
+  const direction: 1 | -1 = currentExampleIndex >= prevIndexRef.current ? 1 : -1;
   useEffect(() => {
-    prevIndexRef.current = currentKanjiIndex;
-  }, [currentKanjiIndex]);
+    prevIndexRef.current = currentExampleIndex;
+  }, [currentExampleIndex]);
 
   // Variants with direction
   const slideVariants = {
@@ -126,13 +144,13 @@ export default function StudyModePage() {
     exit: (dir: 1 | -1) => ({ opacity: 0, x: -100 * dir, scale: 0.96 })
   };
 
-  if (kanjiList.length === 0) {
+  if (examplesList.length === 0) {
     return (
       <div className="min-h-screen bg-slate-100 flex items-center justify-center">
         <div className="bg-white rounded-3xl p-8 shadow-lg border border-gray-100 text-center">
           <FiAlertCircle className="w-10 h-10 mx-auto mb-4 text-slate-600" />
-          <h1 className="text-2xl font-bold text-slate-900 mb-2">Lección no encontrada</h1>
-          <p className="text-slate-600 mb-6">La lección que buscas no existe</p>
+          <h1 className="text-2xl font-bold text-slate-900 mb-2">No hay ejemplos disponibles</h1>
+          <p className="text-slate-600 mb-6">Esta lección no tiene ejemplos para estudiar</p>
           <button
             onClick={() => navigate('/lessons')}
             className="bg-slate-700 hover:bg-slate-800 text-white px-6 py-3 rounded-xl font-medium transition-colors"
@@ -144,7 +162,7 @@ export default function StudyModePage() {
     );
   }
 
-  const percent = Math.round(((currentKanjiIndex + 1) / kanjiList.length) * 100);
+  const percent = Math.round(((currentExampleIndex + 1) / examplesList.length) * 100);
 
   return (
     <div className="min-h-screen bg-slate-100">
@@ -172,12 +190,12 @@ export default function StudyModePage() {
                     <FiArrowLeft className="w-5 h-5" />
                   </button>
                   <h1 className="text-lg sm:text-xl font-bold text-white">
-                    Modo Estudio
+                    Modo Estudio - Ejemplos
                   </h1>
                 </div>
                 <div className="flex items-center gap-3">
                   <div className="text-sm font-medium text-white/80">
-                    {currentKanjiIndex + 1} / {kanjiList.length}
+                    {currentExampleIndex + 1} / {examplesList.length}
                   </div>
                   <div className="w-px h-4 bg-white/20"></div>
                   <div className="text-sm font-medium text-white/80">
@@ -204,13 +222,13 @@ export default function StudyModePage() {
         <div className="absolute inset-0 bg-[radial-gradient(#e5e7eb_1px,transparent_1px)] [background-size:16px_16px] opacity-50"></div>
 
         {/* Contenido */}
-        <div className="relative max-w-4xl mx-auto px-4 py-6">
-          <div className="relative flex items-center justify-center min-h-[460px]">
+        <div className="relative max-w-4xl mx-auto px-4 py-6 sm:py-8">
+          <div className="relative flex items-center justify-center min-h-[520px] sm:min-h-[620px]">
 
-            {/* Tarjeta */}
+            {/* Tarjeta de Ejemplo */}
             <AnimatePresence mode="wait">
               <motion.div
-                key={currentKanjiIndex}
+                key={currentExampleIndex}
                 variants={slideVariants}
                 initial="enter"
                 animate="center"
@@ -219,8 +237,10 @@ export default function StudyModePage() {
                 transition={{ duration: 0.25, ease: 'easeInOut' }}
                 className="w-full flex justify-center"
               >
-                <KanjiCard
-                  kanji={kanjiList[currentKanjiIndex]}
+                <ExampleCard
+                  example={examplesList[currentExampleIndex]}
+                  kanjiCharacter={examplesList[currentExampleIndex].kanjiCharacter}
+                  kanjiMeaning={examplesList[currentExampleIndex].kanjiMeaning}
                 />
               </motion.div>
             </AnimatePresence>
@@ -240,7 +260,7 @@ export default function StudyModePage() {
                 </div>
                 <div className="flex items-center gap-2">
                   <kbd className="px-2 py-1 bg-slate-100 rounded-lg text-slate-700 font-mono text-xs">espacio</kbd>
-                  <span>Voltear</span>
+                  <span>Ver traducción</span>
                 </div>
               </div>
             </div>
