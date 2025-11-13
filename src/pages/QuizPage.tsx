@@ -288,30 +288,30 @@ export default function QuizPage() {
         <div className="bg-slate-800/50 rounded-xl p-3 border border-slate-700/50">
           <div className="flex flex-wrap items-center justify-center gap-4 text-xs text-slate-400">
             {!isAnswered ? (
-              <>
-                <div className="flex items-center gap-2">
-                  <kbd className="px-2 py-1 bg-slate-700 rounded text-xs font-mono text-slate-300">1</kbd>
-                  <kbd className="px-2 py-1 bg-slate-700 rounded text-xs font-mono text-slate-300">2</kbd>
-                  <kbd className="px-2 py-1 bg-slate-700 rounded text-xs font-mono text-slate-300">3</kbd>
-                  <kbd className="px-2 py-1 bg-slate-700 rounded text-xs font-mono text-slate-300">4</kbd>
-                  <span>Seleccionar respuesta</span>
-                </div>
-                <div className="flex items-center gap-2">
-                  <kbd className="px-2 py-1 bg-slate-700 rounded text-xs font-mono text-slate-300">Esc</kbd>
-                  <span>Salir</span>
-                </div>
-              </>
+              <div className="flex items-center gap-2">
+                {currentQuestion.options.map((_, index) => (
+                  <button
+                    key={index}
+                    onClick={() => handleAnswerSelect(currentQuestion.options[index])}
+                    className="px-2 py-1 bg-slate-700 rounded text-xs font-mono text-slate-300 hover:bg-slate-600 transition-colors cursor-pointer"
+                    title={`Seleccionar opción ${index + 1}`}
+                  >
+                    {index + 1}
+                  </button>
+                ))}
+                <span>Seleccionar respuesta</span>
+              </div>
             ) : (
-              <>
-                <div className="flex items-center gap-2">
-                  <kbd className="px-2 py-1 bg-slate-700 rounded text-xs font-mono text-slate-300">espacio</kbd>
-                  <span>Continuar</span>
-                </div>
-                <div className="flex items-center gap-2">
-                  <kbd className="px-2 py-1 bg-slate-700 rounded text-xs font-mono text-slate-300">Esc</kbd>
-                  <span>Salir</span>
-                </div>
-              </>
+              <div className="flex items-center gap-2">
+                <button
+                  onClick={handleNextQuestion}
+                  className="px-2 py-1 bg-slate-700 rounded text-xs font-mono text-slate-300 hover:bg-slate-600 transition-colors cursor-pointer"
+                  title="Continuar a la siguiente pregunta"
+                >
+                  espacio
+                </button>
+                <span>Continuar</span>
+              </div>
             )}
           </div>
         </div>
