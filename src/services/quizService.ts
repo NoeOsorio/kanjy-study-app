@@ -1,16 +1,30 @@
 import type { QuizQuestion, QuizMode, Kanji } from '../types';
 import { getLessonKanji } from './kanjiService';
 
-// Generar preguntas del quiz para una lección específica
-export const generateQuizQuestions = (lessonId: string, mode: QuizMode): QuizQuestion[] => {
-  const lessonKanji = getLessonKanji(lessonId);
+// Generar preguntas del quiz para una o múltiples lecciones
+export const generateQuizQuestions = (lessonIds: string | string[], mode: QuizMode): QuizQuestion[] => {
+  // Normalizar a array
+  const lessonIdsArray = Array.isArray(lessonIds) ? lessonIds : [lessonIds];
+  
+  // Obtener todos los kanji de todas las lecciones seleccionadas
+  const allKanji: Kanji[] = [];
+  lessonIdsArray.forEach(lessonId => {
+    const lessonKanji = getLessonKanji(lessonId);
+    allKanji.push(...lessonKanji);
+  });
+
+  // Eliminar duplicados basándose en el ID del kanji
+  const uniqueKanji = Array.from(
+    new Map(allKanji.map(kanji => [kanji.id, kanji])).values()
+  );
+
   const questions: QuizQuestion[] = [];
 
   if (mode === 'mixed') {
     // Para el modo mixto, generar más preguntas (3 por kanji para más variedad)
-    lessonKanji.forEach((kanji) => {
+    uniqueKanji.forEach((kanji) => {
       for (let i = 0; i < 3; i++) {
-        const question = createQuestion(kanji, mode);
+        const question = createQuestion(kanji, mode, uniqueKanji);
         if (question) {
           questions.push(question);
         }
@@ -18,8 +32,8 @@ export const generateQuizQuestions = (lessonId: string, mode: QuizMode): QuizQue
     });
   } else {
     // Para modos específicos, una pregunta por kanji
-    lessonKanji.forEach((kanji) => {
-      const question = createQuestion(kanji, mode);
+    uniqueKanji.forEach((kanji) => {
+      const question = createQuestion(kanji, mode, uniqueKanji);
       if (question) {
         questions.push(question);
       }
@@ -31,7 +45,7 @@ export const generateQuizQuestions = (lessonId: string, mode: QuizMode): QuizQue
 };
 
 // Crear una pregunta específica según el modo
-const createQuestion = (kanji: Kanji, mode: QuizMode): QuizQuestion | null => {
+const createQuestion = (kanji: Kanji, mode: QuizMode, availableKanji: Kanji[]): QuizQuestion | null => {
   const baseId = `q_${kanji.id}_${mode}`;
   
   switch (mode) {
@@ -40,7 +54,7 @@ const createQuestion = (kanji: Kanji, mode: QuizMode): QuizQuestion | null => {
         id: baseId,
         question: kanji.character,
         correctAnswer: kanji.meaning,
-        options: generateMeaningOptions(kanji.meaning),
+        options: generateMeaningOptions(kanji.meaning, availableKanji),
         type: mode,
         kanjiId: kanji.id
       };
@@ -50,7 +64,7 @@ const createQuestion = (kanji: Kanji, mode: QuizMode): QuizQuestion | null => {
         id: baseId,
         question: kanji.character,
         correctAnswer: kanji.readings.onyomi[0],
-        options: generateOnyomiOptions(kanji.readings.onyomi[0]),
+        options: generateOnyomiOptions(kanji.readings.onyomi[0], availableKanji),
         type: mode,
         kanjiId: kanji.id
       };
@@ -60,7 +74,7 @@ const createQuestion = (kanji: Kanji, mode: QuizMode): QuizQuestion | null => {
         id: baseId,
         question: kanji.meaning,
         correctAnswer: kanji.character,
-        options: generateKanjiOptions(kanji.character),
+        options: generateKanjiOptions(kanji.character, availableKanji),
         type: mode,
         kanjiId: kanji.id
       };
@@ -70,7 +84,7 @@ const createQuestion = (kanji: Kanji, mode: QuizMode): QuizQuestion | null => {
         id: baseId,
         question: kanji.readings.onyomi[0],
         correctAnswer: kanji.character,
-        options: generateKanjiOptions(kanji.character),
+        options: generateKanjiOptions(kanji.character, availableKanji),
         type: mode,
         kanjiId: kanji.id
       };
@@ -80,7 +94,7 @@ const createQuestion = (kanji: Kanji, mode: QuizMode): QuizQuestion | null => {
         id: baseId,
         question: kanji.readings.kunyomi[0],
         correctAnswer: kanji.character,
-        options: generateKanjiOptions(kanji.character),
+        options: generateKanjiOptions(kanji.character, availableKanji),
         type: mode,
         kanjiId: kanji.id
       };
@@ -88,7 +102,7 @@ const createQuestion = (kanji: Kanji, mode: QuizMode): QuizQuestion | null => {
     case 'mixed': {
       const mixedModes: QuizMode[] = ['kanji-to-meaning', 'kanji-to-onyomi', 'meaning-to-kanji', 'onyomi-to-kanji', 'kunyomi-to-kanji'];
       const randomMode = mixedModes[Math.floor(Math.random() * mixedModes.length)];
-      return createQuestion(kanji, randomMode);
+      return createQuestion(kanji, randomMode, availableKanji);
     }
 
     default:
@@ -97,11 +111,11 @@ const createQuestion = (kanji: Kanji, mode: QuizMode): QuizQuestion | null => {
 };
 
 // Generar opciones para preguntas de significado
-const generateMeaningOptions = (correctMeaning: string): string[] => {
-  const allMeanings = cachedAllKanji().map(k => k.meaning);
+const generateMeaningOptions = (correctMeaning: string, availableKanji: Kanji[]): string[] => {
+  const allMeanings = availableKanji.map(k => k.meaning);
   const incorrectMeanings = allMeanings.filter(m => m !== correctMeaning);
   
-  // Seleccionar 3 significados incorrectos aleatorios
+  // Seleccionar hasta 3 significados incorrectos aleatorios
   const shuffled = shuffleArray([...incorrectMeanings]);
   const options = [correctMeaning, ...shuffled.slice(0, 3)];
   
@@ -109,11 +123,11 @@ const generateMeaningOptions = (correctMeaning: string): string[] => {
 };
 
 // Generar opciones para preguntas de onyomi
-const generateOnyomiOptions = (correctOnyomi: string): string[] => {
-  const allOnyomi = cachedAllKanji().flatMap(k => k.readings.onyomi);
+const generateOnyomiOptions = (correctOnyomi: string, availableKanji: Kanji[]): string[] => {
+  const allOnyomi = availableKanji.flatMap(k => k.readings.onyomi);
   const incorrectOnyomi = allOnyomi.filter(o => o !== correctOnyomi);
   
-  // Seleccionar 3 onyomi incorrectos aleatorios
+  // Seleccionar hasta 3 onyomi incorrectos aleatorios
   const shuffled = shuffleArray([...incorrectOnyomi]);
   const options = [correctOnyomi, ...shuffled.slice(0, 3)];
   
@@ -121,11 +135,11 @@ const generateOnyomiOptions = (correctOnyomi: string): string[] => {
 };
 
 // Generar opciones para preguntas de kanji
-const generateKanjiOptions = (correctKanji: string): string[] => {
-  const allKanji = cachedAllKanji().map(k => k.character);
-  const incorrectKanji = allKanji.filter(k => k !== correctKanji);
+const generateKanjiOptions = (correctKanji: string, availableKanji: Kanji[]): string[] => {
+  const allKanjiChars = availableKanji.map(k => k.character);
+  const incorrectKanji = allKanjiChars.filter(k => k !== correctKanji);
   
-  // Seleccionar 3 kanji incorrectos aleatorios
+  // Seleccionar hasta 3 kanji incorrectos aleatorios
   const shuffled = shuffleArray([...incorrectKanji]);
   const options = [correctKanji, ...shuffled.slice(0, 3)];
   
@@ -142,25 +156,6 @@ const shuffleArray = <T>(array: T[]): T[] => {
   return shuffled;
 };
 
-// Cache simple para obtener todos los kanji disponibles de la primera lección encontrada
-let _allKanjiCache: Kanji[] | null = null;
-const cachedAllKanji = (): Kanji[] => {
-  if (_allKanjiCache) return _allKanjiCache;
-  // Intentar obtener desde una lección conocida; si no, usar la que tenga datos
-  const fallbackLessonIds = ['n5-basics-1', '1'];
-  for (const id of fallbackLessonIds) {
-    const list = getLessonKanji(id);
-    if (Array.isArray(list) && list.length) {
-      _allKanjiCache = list;
-      return list;
-    }
-  }
-  // Si no hay lecciones JSON, getLessonKanji devolverá los mocks
-  const list = getLessonKanji('any');
-  _allKanjiCache = list;
-  return list;
-};
-
 // Obtener el título del modo de quiz
 export const getQuizModeTitle = (mode: QuizMode): string => {
   switch (mode) {
@@ -175,7 +170,7 @@ export const getQuizModeTitle = (mode: QuizMode): string => {
     case 'kunyomi-to-kanji':
       return 'Kunyomi → Kanji';
     case 'mixed':
-      return '🎯 Quiz Mixto';
+      return 'Quiz Mixto';
     default:
       return 'Quiz';
   }

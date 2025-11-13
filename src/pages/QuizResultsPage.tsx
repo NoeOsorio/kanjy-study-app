@@ -6,7 +6,7 @@ import { getQuizModeTitle } from '../services/quizService';
 export default function QuizResultsPage() {
   const navigate = useNavigate();
   const location = useLocation();
-  const { results = [], mode = 'mixed' } = location.state as { results: QuizResult[], mode: QuizMode } || {};
+  const { results = [], mode = 'mixed', lessonIds = [] } = location.state as { results: QuizResult[], mode: QuizMode, lessonIds?: string[] } || {};
 
   const correctAnswers = results.filter(r => r.isCorrect).length;
   const totalQuestions = results.length;
@@ -112,7 +112,11 @@ export default function QuizResultsPage() {
       <div className="px-4 mt-auto pb-8">
         <div className="space-y-3">
           <button
-            onClick={() => navigate(`/quiz/${mode}`)}
+            onClick={() => {
+              const lessonsParam = lessonIds.length > 0 ? lessonIds.join(',') : '';
+              const url = lessonsParam ? `/quiz/${mode}?lessons=${lessonsParam}` : `/quiz/${mode}`;
+              navigate(url);
+            }}
             className="w-full bg-slate-800 hover:bg-slate-700 text-white p-4 rounded-2xl font-semibold text-lg flex items-center justify-center gap-2"
           >
             <FiRepeat className="w-5 h-5" />

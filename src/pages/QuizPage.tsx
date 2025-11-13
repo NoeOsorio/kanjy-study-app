@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { useNavigate, useParams } from 'react-router-dom';
+import { useNavigate, useParams, useSearchParams } from 'react-router-dom';
 import type { QuizQuestion, QuizResult, QuizMode } from '../types';
 import { getQuizModeTitle, generateQuizQuestions } from '../services/quizService';
 import { FiX, FiCheck, FiX as FiXCircle } from 'react-icons/fi';
@@ -7,6 +7,7 @@ import { FiX, FiCheck, FiX as FiXCircle } from 'react-icons/fi';
 export default function QuizPage() {
   const navigate = useNavigate();
   const { mode = 'mixed' } = useParams<{ mode: QuizMode }>();
+  const [searchParams] = useSearchParams();
   
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
   const [selectedAnswer, setSelectedAnswer] = useState<string | null>(null);
@@ -14,11 +15,20 @@ export default function QuizPage() {
   const [results, setResults] = useState<QuizResult[]>([]);
   const [startTime, setStartTime] = useState<number>(Date.now());
   const [questions, setQuestions] = useState<QuizQuestion[]>([]);
+  const [lessonIds, setLessonIds] = useState<string[]>([]);
 
   useEffect(() => {
-    const generatedQuestions = generateQuizQuestions('1', mode as QuizMode);
+    // Obtener las lecciones de los query params
+    const lessonsParam = searchParams.get('lessons');
+    const lessonIdsArray = lessonsParam ? lessonsParam.split(',') : [];
+    
+    // Si no hay lecciones seleccionadas, usar todas las disponibles como fallback
+    const lessonIdsToUse = lessonIdsArray.length > 0 ? lessonIdsArray : ['1'];
+    setLessonIds(lessonIdsToUse);
+    
+    const generatedQuestions = generateQuizQuestions(lessonIdsToUse, mode as QuizMode);
     setQuestions(generatedQuestions);
-  }, [mode]);
+  }, [mode, searchParams]);
 
   useEffect(() => {
     setStartTime(Date.now());
@@ -68,7 +78,7 @@ export default function QuizPage() {
 
   const handleNextQuestion = () => {
     if (isLastQuestion) {
-      navigate('/quiz/results', { state: { results, mode } });
+      navigate('/quiz/results', { state: { results, mode, lessonIds } });
       return;
     }
     

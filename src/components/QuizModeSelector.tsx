@@ -117,7 +117,7 @@ export default function QuizModeSelector({ onModeSelect }: QuizModeSelectorProps
       {/* Información adicional */}
       <div className="bg-white rounded-2xl p-6 shadow-sm border border-gray-100">
         <div className="text-center">
-          <h3 className="font-bold text-gray-800 mb-2">💡 Consejo</h3>
+          <h3 className="font-bold text-gray-800 mb-2">Consejo</h3>
           <p className="text-sm text-gray-600">
             Comienza con "Kanji → Significado" si eres principiante, o prueba el "Quiz Mixto" para un desafío completo.
           </p>
