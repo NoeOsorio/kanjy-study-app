@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import { getAvailableLessons } from '../services/kanjiService';
 import type { Lesson } from '../types';
-import { FiBook, FiCheck } from 'react-icons/fi';
+import { FiBook, FiCheck, FiCheckSquare, FiSquare } from 'react-icons/fi';
 
 interface LessonSelectorProps {
   onLessonsSelected: (lessonIds: string[]) => void;
@@ -41,6 +41,16 @@ export default function LessonSelector({ onLessonsSelected }: LessonSelectorProp
   const handleContinue = () => {
     if (selectedLessons.size > 0) {
       onLessonsSelected(Array.from(selectedLessons));
+    }
+  };
+
+  const handleSelectAll = () => {
+    if (selectedLessons.size === lessons.length) {
+      // Si todas están seleccionadas, deseleccionar todas
+      setSelectedLessons(new Set());
+    } else {
+      // Seleccionar todas
+      setSelectedLessons(new Set(lessons.map(lesson => lesson.id)));
     }
   };
 
@@ -96,6 +106,28 @@ export default function LessonSelector({ onLessonsSelected }: LessonSelectorProp
           <p className="text-sm text-teal-600 font-medium mt-2">
             {selectedLessons.size} lección{selectedLessons.size > 1 ? 'es' : ''} seleccionada{selectedLessons.size > 1 ? 's' : ''}
           </p>
+        )}
+        
+        {/* Botón seleccionar todas */}
+        {lessons.length > 0 && (
+          <div className="mt-4">
+            <button
+              onClick={handleSelectAll}
+              className="inline-flex items-center gap-2 px-4 py-2 bg-slate-100 hover:bg-slate-200 text-slate-700 rounded-xl font-medium transition-colors text-sm"
+            >
+              {selectedLessons.size === lessons.length ? (
+                <>
+                  <FiCheckSquare className="w-4 h-4" />
+                  <span>Deseleccionar todas</span>
+                </>
+              ) : (
+                <>
+                  <FiSquare className="w-4 h-4" />
+                  <span>Seleccionar todas</span>
+                </>
+              )}
+            </button>
+          </div>
         )}
       </div>
 
