@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { useNavigate, useParams, useSearchParams } from 'react-router-dom';
 import type { QuizQuestion, QuizResult, QuizMode } from '../types';
 import { getQuizModeTitle, generateQuizQuestions } from '../services/quizService';
@@ -16,6 +16,19 @@ export default function QuizPage() {
   const [startTime, setStartTime] = useState<number>(Date.now());
   const [questions, setQuestions] = useState<QuizQuestion[]>([]);
   const [lessonIds, setLessonIds] = useState<string[]>([]);
+  
+  // Refs para evitar problemas de dependencias en useEffect
+  const handleAnswerSelectRef = useRef<(answer: string) => void>();
+  const handleNextQuestionRef = useRef<() => void>();
+  const isAnsweredRef = useRef<boolean>(false);
+  const currentQuestionRef = useRef<QuizQuestion | null>(null);
+  const questionsRef = useRef<QuizQuestion[]>([]);
+  const currentQuestionIndexRef = useRef<number>(0);
+  const selectedAnswerRef = useRef<string | null>(null);
+  const resultsRef = useRef<QuizResult[]>([]);
+  const startTimeRef = useRef<number>(Date.now());
+  const isLastQuestionRef = useRef<boolean>(false);
+  const lessonIdsRef = useRef<string[]>([]);
 
   useEffect(() => {
     // Obtener las lecciones de los query params
@@ -33,6 +46,60 @@ export default function QuizPage() {
   useEffect(() => {
     setStartTime(Date.now());
   }, [currentQuestionIndex]);
+
+  // Actualizar refs con los valores actuales
+  useEffect(() => {
+    questionsRef.current = questions;
+    currentQuestionIndexRef.current = currentQuestionIndex;
+    isAnsweredRef.current = isAnswered;
+    selectedAnswerRef.current = selectedAnswer;
+    resultsRef.current = results;
+    startTimeRef.current = startTime;
+    lessonIdsRef.current = lessonIds;
+    
+    if (questions.length > 0 && currentQuestionIndex < questions.length) {
+      currentQuestionRef.current = questions[currentQuestionIndex];
+      isLastQuestionRef.current = currentQuestionIndex === questions.length - 1;
+    }
+  }, [questions, currentQuestionIndex, isAnswered, selectedAnswer, results, startTime, lessonIds]);
+
+  // Navegación por teclado - debe estar antes de los early returns
+  useEffect(() => {
+    const handleKeyDown = (event: KeyboardEvent) => {
+      // Esc para salir
+      if (event.key === 'Escape') {
+        event.preventDefault();
+        navigate('/practice');
+        return;
+      }
+
+      const currentIsAnswered = isAnsweredRef.current;
+      const currentQ = currentQuestionRef.current;
+      const handleAnswer = handleAnswerSelectRef.current;
+      const handleNext = handleNextQuestionRef.current;
+
+      // Si ya se respondió, solo permitir Espacio para continuar
+      if (currentIsAnswered) {
+        if (event.key === ' ') {
+          event.preventDefault();
+          handleNext?.();
+        }
+        return;
+      }
+
+      // Si no se ha respondido, permitir seleccionar opciones con 1, 2, 3, 4
+      if (event.key >= '1' && event.key <= '4' && currentQ) {
+        event.preventDefault();
+        const optionIndex = parseInt(event.key) - 1;
+        if (optionIndex >= 0 && optionIndex < currentQ.options.length) {
+          handleAnswer?.(currentQ.options[optionIndex]);
+        }
+      }
+    };
+
+    window.addEventListener('keydown', handleKeyDown);
+    return () => window.removeEventListener('keydown', handleKeyDown);
+  }, [navigate]);
 
   if (!questions || questions.length === 0) {
     return (
@@ -86,6 +153,10 @@ export default function QuizPage() {
     setSelectedAnswer(null);
     setIsAnswered(false);
   };
+
+  // Actualizar refs de funciones
+  handleAnswerSelectRef.current = handleAnswerSelect;
+  handleNextQuestionRef.current = handleNextQuestion;
 
   const getProgressPercentage = () => {
     return ((currentQuestionIndex + 1) / questions.length) * 100;
@@ -154,11 +225,18 @@ export default function QuizPage() {
                   : 'bg-slate-100'
               }`}
             >
-              <div className="flex items-center">
-                <div className="w-8 h-8 rounded-xl bg-slate-100 flex items-center justify-center text-sm font-bold text-slate-600 mr-3">
-                  {String.fromCharCode(65 + index)}
+              <div className="flex items-center justify-between w-full">
+                <div className="flex items-center">
+                  <div className="w-8 h-8 rounded-xl bg-slate-100 flex items-center justify-center text-sm font-bold text-slate-600 mr-3">
+                    {String.fromCharCode(65 + index)}
+                  </div>
+                  <span className="text-lg">{option}</span>
                 </div>
-                <span className="text-lg">{option}</span>
+                {!isAnswered && (
+                  <kbd className="px-2 py-1 bg-slate-200 rounded text-xs font-mono text-slate-700">
+                    {index + 1}
+                  </kbd>
+                )}
               </div>
             </button>
           ))}
@@ -195,12 +273,47 @@ export default function QuizPage() {
 
               <button
                 onClick={handleNextQuestion}
-                className="w-full bg-slate-800 text-white p-4 rounded-2xl font-semibold text-lg"
+                className="w-full bg-slate-800 text-white p-4 rounded-2xl font-semibold text-lg flex items-center justify-center gap-2"
               >
-                {isLastQuestion ? 'Ver Resultados' : 'Siguiente Pregunta'}
+                <span>{isLastQuestion ? 'Ver Resultados' : 'Siguiente Pregunta'}</span>
+                <kbd className="px-2 py-1 bg-slate-700 rounded text-xs font-mono">espacio</kbd>
               </button>
             </div>
           )}
+        </div>
+      </div>
+
+      {/* Panel de ayuda con atajos de teclado */}
+      <div className="px-4 pb-4">
+        <div className="bg-slate-800/50 rounded-xl p-3 border border-slate-700/50">
+          <div className="flex flex-wrap items-center justify-center gap-4 text-xs text-slate-400">
+            {!isAnswered ? (
+              <div className="flex items-center gap-2">
+                {currentQuestion.options.map((_, index) => (
+                  <button
+                    key={index}
+                    onClick={() => handleAnswerSelect(currentQuestion.options[index])}
+                    className="px-2 py-1 bg-slate-700 rounded text-xs font-mono text-slate-300 hover:bg-slate-600 transition-colors cursor-pointer"
+                    title={`Seleccionar opción ${index + 1}`}
+                  >
+                    {index + 1}
+                  </button>
+                ))}
+                <span>Seleccionar respuesta</span>
+              </div>
+            ) : (
+              <div className="flex items-center gap-2">
+                <button
+                  onClick={handleNextQuestion}
+                  className="px-2 py-1 bg-slate-700 rounded text-xs font-mono text-slate-300 hover:bg-slate-600 transition-colors cursor-pointer"
+                  title="Continuar a la siguiente pregunta"
+                >
+                  espacio
+                </button>
+                <span>Continuar</span>
+              </div>
+            )}
+          </div>
         </div>
       </div>
     </div>

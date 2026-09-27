@@ -46,6 +46,14 @@ export default function StudyModePage() {
     setCurrentExampleIndex((idx) => (idx > 0 ? idx - 1 : idx));
   }, []);
 
+  const handleFlipCard = useCallback(() => {
+    // Trigger card flip by simulating a click on the card
+    const card = document.querySelector('.cursor-pointer');
+    if (card) {
+      (card as HTMLElement).click();
+    }
+  }, []);
+
   useEffect(() => {
     // Keyboard navigation
     const handleKeyDown = (event: KeyboardEvent) => {
@@ -250,18 +258,30 @@ export default function StudyModePage() {
           <div className="mt-6 flex justify-center">
             <div className="bg-white/80 backdrop-blur rounded-2xl shadow-sm border border-gray-100">
               <div className="px-4 py-3 flex items-center gap-6 text-xs sm:text-sm text-slate-600">
-                <div className="flex items-center gap-2">
-                  <kbd className="px-2 py-1 bg-slate-100 rounded-lg text-slate-700 font-mono text-xs">←</kbd>
+                <button
+                  onClick={handlePreviousExample}
+                  className="flex items-center gap-2 hover:opacity-70 transition-opacity"
+                  title="Anterior ejemplo"
+                >
+                  <kbd className="px-2 py-1 bg-slate-100 rounded-lg text-slate-700 font-mono text-xs cursor-pointer">←</kbd>
                   <span>Anterior</span>
-                </div>
-                <div className="flex items-center gap-2">
-                  <kbd className="px-2 py-1 bg-slate-100 rounded-lg text-slate-700 font-mono text-xs">→</kbd>
+                </button>
+                <button
+                  onClick={handleNextExample}
+                  className="flex items-center gap-2 hover:opacity-70 transition-opacity"
+                  title="Siguiente ejemplo"
+                >
+                  <kbd className="px-2 py-1 bg-slate-100 rounded-lg text-slate-700 font-mono text-xs cursor-pointer">→</kbd>
                   <span>Siguiente</span>
-                </div>
-                <div className="flex items-center gap-2">
-                  <kbd className="px-2 py-1 bg-slate-100 rounded-lg text-slate-700 font-mono text-xs">espacio</kbd>
+                </button>
+                <button
+                  onClick={handleFlipCard}
+                  className="flex items-center gap-2 hover:opacity-70 transition-opacity"
+                  title="Ver traducción"
+                >
+                  <kbd className="px-2 py-1 bg-slate-100 rounded-lg text-slate-700 font-mono text-xs cursor-pointer">espacio</kbd>
                   <span>Ver traducción</span>
-                </div>
+                </button>
               </div>
             </div>
           </div>
