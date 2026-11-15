@@ -1,91 +1,103 @@
-# Cobertura de funciones del rediseño
+# Cobertura de funciones del rediseño (Camino)
 
-Regla (constitución XIV): ninguna función actual se pierde. Cada fila dice dónde vive en el rediseño.
-Inventario leído del código el 2026-11-14. Estado: **cubierta**, **falta maquetar** o **pide decisión de Noe**.
+Regla (constitución XIV): ninguna función actual se pierde. Inventario leído del código el 2026-11-14 y
+revisado por un revisor independiente contra las maquetas. Las pantallas están en Paper, página
+«Camino celular», y exportadas en `docs/rediseno/camino/`.
 
 ## Inicio
 
 | Función actual | Pantalla nueva | Estado |
 |---|---|---|
-| Estudiar lecciones | Hoy, «Empezar lección», y pestaña Kanji | cubierta |
-| Hacer quizzes (lecciones y modo) | Pestaña Quiz | falta maquetar |
-| Quiz rápido (todos los tipos) | Pestaña Quiz, botón principal | falta maquetar |
-| Animación al presionar tarjetas | Todos los botones (escala 0.97) | cubierta en DESIGN.md |
-| Texto «¿Cómo funciona?» | Primer uso de Hoy (estado del día 1) | falta maquetar |
+| Estudiar lecciones | Hoy (camino de lecciones), Kanji, Detalle de lección | cubierta |
+| Hacer quizzes (lecciones y modo) | Quiz: elegir lecciones, Quiz: elegir modo | cubierta |
+| Quiz rápido (todos los tipos) | Quiz: elegir lecciones, banner «Quiz rápido» | cubierta |
+| Animación al presionar | Todos los botones gruesos (DESIGN.md, movimiento) | cubierta |
+| Texto «¿Cómo funciona?» | Hoy primer día y su hoja «¿Cómo funciona?» | cubierta |
 
 ## Lecciones
 
 | Función actual | Pantalla nueva | Estado |
 |---|---|---|
-| Lista de lecciones | Kanji, agrupada por lección | cubierta |
-| Filtro por nivel N5 a N1 | Kanji, selector de nivel | cubierta |
-| Tarjeta con título y descripción | Detalle de lección | falta maquetar |
-| Dificultad, tiempo estimado, número de kanji | Detalle de lección | falta maquetar |
-| Estado completada o pendiente, progreso | Detalle de lección y etiqueta de lección en Kanji | falta maquetar |
-| Estado de carga | Esqueleto de la cuadrícula | falta maquetar |
+| Lista de lecciones | Kanji (agrupada por lección, cabecera tocable) | cubierta |
+| Filtro por nivel N5 a N1 | Kanji (selector de nivel) y Hoy (selector N5) | cubierta |
+| Título y descripción | Detalle de lección | cubierta |
+| Dificultad, tiempo estimado, número de kanji | Cabecera de cada lección en Kanji y Detalle de lección | cubierta |
+| Estado y progreso | Detalle de lección (barra y «3 de 10 aprendidos»), lección actual marcada en Kanji | cubierta |
+| Estado de carga | Cargando | cubierta |
 
 ## Detalle de lección
 
 | Función actual | Pantalla nueva | Estado |
 |---|---|---|
-| Progreso de la lección (barra y contador) | Detalle de lección | falta maquetar |
-| Modo estudio con tarjetas (botón) | Detalle de lección | falta maquetar |
-| Cuadrícula de kanji con significado, lectura y trazos | Detalle de lección | falta maquetar |
-| Entrada escalonada de los kanji | Detalle de lección (animación) | falta maquetar |
+| Progreso de la lección | Detalle de lección | cubierta |
+| Modo estudio con tarjetas | Detalle de lección, «Estudiar con tarjetas» | cubierta |
+| Kanji con significado, lecturas y trazos | Detalle de lección (ambas lecturas con etiqueta) | cubierta |
+| Entrada escalonada | DESIGN.md, movimiento | cubierta en especificación |
+| Quiz de la lección (nuevo) | Detalle de lección | cubierta |
 
-## Modo estudio con tarjetas (ejemplos)
+## Modo estudio con tarjetas
 
 | Función actual | Pantalla nueva | Estado |
 |---|---|---|
-| Mazo de frases de ejemplo de la lección | Tarjetas de ejemplos | falta maquetar |
-| Tarjeta que se voltea: frase y romaji, luego traducción | Tarjetas de ejemplos | falta maquetar |
-| Anterior y siguiente, deslizar, flechas, espacio, Esc | Tarjetas de ejemplos (atajos en tooltip) | falta maquetar |
-| Progreso del mazo | Tarjetas de ejemplos | falta maquetar |
-| Dificultad de cada frase | Tarjetas de ejemplos | falta maquetar |
-| Sin ejemplos: aviso y volver | Estado vacío de tarjetas | falta maquetar |
+| Mazo de frases de ejemplo | Tarjetas de ejemplos (frente) | cubierta |
+| Voltear: frase y romaji, luego traducción | Tarjetas frente y reverso | cubierta |
+| Anterior y siguiente, deslizar, flechas, espacio, Esc | Tarjetas (botones; atajos en tooltip de escritorio) | cubierta |
+| Progreso del mazo | Tarjetas, barra | cubierta |
+| Dificultad de cada frase | Tarjetas frente | cubierta |
+| Sin ejemplos | Lección sin frases | cubierta |
+| Practicar las frases de un solo kanji | Ficha de kanji, «Practicar con tarjetas» | cubierta |
 
 ## Ficha de kanji
 
 | Función actual | Pantalla nueva | Estado |
 |---|---|---|
-| Kanji grande, significado, nivel y trazos | Ficha | cubierta |
-| Todas las lecturas chinas y japonesas (pestañas) | Ficha, con todas las lecturas | falta (hoy solo una de cada) |
-| Información: trazos, frecuencia, grado escolar | Ficha | falta maquetar |
-| Práctica de escritura con guía, cuadrícula, deshacer y limpiar | Práctica de trazo | falta maquetar |
-| Frases de ejemplo con el kanji resaltado y traducción | Ficha | falta maquetar |
-| Botón Practicar (tarjetas de este kanji) | Ficha | falta maquetar |
-| Kanji no encontrado | Estado vacío de ficha | falta maquetar |
-| Orden de trazos (nuevo) | Ficha | cubierta |
-| Palabras con este kanji (nuevo) | Ficha | cubierta |
+| Kanji grande, significado, nivel, trazos | Ficha de kanji | cubierta |
+| Todas las lecturas chinas y japonesas | Ficha de kanji (fichas de lectura que se acomodan) | cubierta |
+| Trazos, frecuencia, grado escolar | Ficha de kanji, «Información» | cubierta |
+| Dificultad del kanji | Ficha de kanji, junto a N5 | cubierta |
+| Práctica de escritura con guía, deshacer y limpiar | Práctica de trazo | cubierta |
+| Frases de ejemplo con kanji resaltado, romaji, traducción y dificultad | Ficha de kanji | cubierta |
+| Kanji no encontrado | Kanji no encontrado | cubierta |
+| Orden de trazos, palabras, estado de repaso (nuevos) | Ficha de kanji, Práctica de trazo | cubierta |
 
 ## Quiz
 
 | Función actual | Pantalla nueva | Estado |
 |---|---|---|
-| Elegir una o varias lecciones, seleccionar todas | Quiz, paso 1 | falta maquetar |
-| Seis modos: kanji a significado, kanji a lectura china, significado a kanji, lectura china a kanji, lectura japonesa a kanji, mixto | Quiz, paso 2 | falta maquetar |
-| Consejo de qué modo usar | Quiz, paso 2 | falta maquetar |
-| Pregunta con 4 opciones | Repaso: pregunta | cubierta (falta mostrar cada modo) |
-| Teclas 1 a 4, espacio, Esc | Repaso (en tooltip, escritorio) | falta indicarlo |
-| Acierto e error con la respuesta correcta | Repaso: acierto y error | cubierta |
-| Progreso «pregunta i de N» | Repaso, barra | cubierta |
-| Cerrar el quiz | Repaso, botón cerrar | cubierta |
-| Tiempo por pregunta | Resultados | falta maquetar |
+| Elegir una o varias lecciones, seleccionar todas, descripción | Quiz: elegir lecciones | cubierta |
+| Seis modos | Quiz: elegir modo | cubierta |
+| Consejo de qué modo usar | Quiz: elegir modo (una línea con la mascota) | cubierta |
+| Pregunta con 4 opciones, en cada tipo de modo | Quiz: pregunta (significado), pregunta (lectura), pregunta (significado a kanji) | cubierta |
+| Teclas 1 a 4, espacio, Esc | Tooltips en escritorio (nombres de capa) | cubierta en especificación |
+| Acierto y error con la respuesta correcta | Quiz: acierto, Quiz: error | cubierta |
+| Progreso y cerrar | Quiz: pregunta | cubierta |
+| Tiempo por pregunta | Quiz: resultados | cubierta |
+| Sin preguntas para el modo | Quiz sin preguntas | cubierta |
 
 ## Resultados del quiz
 
 | Función actual | Pantalla nueva | Estado |
 |---|---|---|
-| Porcentaje con color por nivel y aciertos de N | Resultados | falta maquetar |
-| Tiempo promedio y precisión | Resultados | falta maquetar |
-| Resumen por pregunta | Resultados (con la pregunta y tu respuesta) | falta maquetar |
-| Intentar de nuevo, volver a práctica | Resultados | falta maquetar |
+| Porcentaje con color por nivel, modo del quiz | Quiz: resultados | cubierta |
+| Aciertos de N, tiempo promedio | Quiz: resultados | cubierta |
+| Resumen por pregunta con tu respuesta | Quiz: resultados | cubierta |
+| Intentar de nuevo (mismas lecciones y modo), volver | Quiz: resultados | cubierta |
+| Mensaje de ánimo según el resultado | Quiz: resultados, Repaso terminado | cubierta |
 
-## Piezas en el código que no se usaban
+## Piezas que no se usaban
 
-| Pieza | Propuesta | Estado |
+| Pieza | Pantalla nueva | Estado |
 |---|---|---|
-| Mascota con 4 ánimos (feliz, emocionada, pensando, celebrando) | Traerla de vuelta como personaje de Kanjy (estilo Duolingo o Finch) | pide decisión de Noe |
-| Mensajes de ánimo según el resultado | Resultados y Repaso terminado | falta maquetar |
-| Tarjeta de kanji que se voltea | Detalle de lección | falta maquetar |
-| Perfil (sin ruta) | Cuenta | cubierta |
+| Mascota con 4 ánimos | Componentes; Hoy, quiz, tarjetas, estados vacíos, cuenta | cubierta (Noe eligió el concepto con mascota) |
+| Tarjeta de kanji que se voltea | Detalle de lección (toca y abre la ficha) | cubierta |
+| Perfil sin ruta | Cuenta (invitado y con sesión) | cubierta |
+
+## Nuevas por la spec
+
+| Función | Pantalla |
+|---|---|
+| Repaso diario con camino y racha | Hoy, Repaso terminado |
+| Primer día y nada por repasar | Hoy primer día |
+| Cuenta, sincronización, borrar cuenta | Cuenta (invitado), Cuenta (con sesión) |
+| Créditos de los datos | De dónde salen los kanji |
+| Escritorio | Hoy (escritorio) |
