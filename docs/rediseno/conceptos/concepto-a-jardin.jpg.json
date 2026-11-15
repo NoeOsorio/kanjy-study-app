@@ -1,0 +1,28 @@
+{
+  "schema_version": 1,
+  "created_at": "2026-11-15T01:39:21.449390+00:00",
+  "provider": "Google Gemini Developer API",
+  "model": "gemini-3.1-flash-image",
+  "operation": "generate",
+  "aspect_ratio": "16:9",
+  "image_size": "1K",
+  "store": false,
+  "prompt_sha256": "73473faa59b1b8a8acfe54ce78725be6a6b152543fe43917617b55e2a890b4cb",
+  "visual_brief_schema_version": "banana.visual-brief.v1",
+  "brief_sha256": "6084e28dd2f9758e23f88fde943e98a4b5e97bdd360a2357494450b695afb557",
+  "brief_source": "planner_minimal",
+  "references": [],
+  "artifact": {
+    "path": "/Users/noe/Dev/Web/kanjy-noe-559/docs/rediseno/conceptos/banana_20261115T013921_448067Z_kanjy-concepto-a-jardin.jpg",
+    "mime_type": "image/jpeg",
+    "bytes": 513853,
+    "sha256": "7a1548a068dd8dc990152019252c975007a0204c3c31cf2a83f5c3250e791155",
+    "width": 1376,
+    "height": 768
+  },
+  "usage": {
+    "total_tokens": 1955
+  },
+  "grounding_used": false,
+  "provenance_notice": "Google documents SynthID on Gemini-generated images. Post-processing may alter provenance metadata."
+}

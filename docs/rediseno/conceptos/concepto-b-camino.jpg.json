@@ -1,0 +1,28 @@
+{
+  "schema_version": 1,
+  "created_at": "2026-11-15T01:41:48.522016+00:00",
+  "provider": "Google Gemini Developer API",
+  "model": "gemini-3.1-flash-image",
+  "operation": "generate",
+  "aspect_ratio": "16:9",
+  "image_size": "1K",
+  "store": false,
+  "prompt_sha256": "7c79549df9ec0aec4a639981300d409bd4bc4423b604d460a0366121cf950fba",
+  "visual_brief_schema_version": "banana.visual-brief.v1",
+  "brief_sha256": "ff60b9b5c8c9a7ae84ce1507f585fd36bfa575e358d6806849536dae2e9c35a6",
+  "brief_source": "planner_minimal",
+  "references": [],
+  "artifact": {
+    "path": "/Users/noe/Dev/Web/kanjy-noe-559/docs/rediseno/conceptos/banana_20261115T014148_520746Z_kanjy-concepto-b-camino.jpg",
+    "mime_type": "image/jpeg",
+    "bytes": 458619,
+    "sha256": "28877681de741a8c9de5b49496e191b39ebfd81360e9d35cdebc58a00b5a5cc8",
+    "width": 1376,
+    "height": 768
+  },
+  "usage": {
+    "total_tokens": 1860
+  },
+  "grounding_used": false,
+  "provenance_notice": "Google documents SynthID on Gemini-generated images. Post-processing may alter provenance metadata."
+}

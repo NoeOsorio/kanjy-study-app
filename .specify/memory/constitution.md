@@ -94,6 +94,13 @@ worktree created from `origin/main`.
 The interface speaks plain, natural Spanish with no invented terms. Code, specs, plans and code
 comments are written in English.
 
+### XIV. A Redesign Never Removes a Feature
+
+Every feature the app has today (from the code, not from memory) is listed in a coverage table and
+mapped to a screen of the redesign before mockups are shown or code is written. Removing or merging a
+feature requires Noe's explicit approval for that feature. A reviewer who did not make the design checks
+the coverage table against the code.
+
 ## Product and Data Constraints
 
 - Stack: React 19, Vite, Tailwind CSS 4, TypeScript, React Router. Mobile-first web app, installable.
@@ -117,4 +124,4 @@ versioning: MAJOR for removing or redefining a principle, MINOR for adding one o
 expanding guidance, PATCH for wording. `/speckit-analyze` checks every plan against these
 principles; a violation blocks implementation until it is resolved or Noe accepts it explicitly.
 
-**Version**: 1.0.0 | **Ratified**: 2026-11-14 | **Last Amended**: 2026-11-14
+**Version**: 1.1.0 | **Ratified**: 2026-11-14 | **Last Amended**: 2026-11-14

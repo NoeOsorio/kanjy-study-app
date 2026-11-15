@@ -1,0 +1,28 @@
+{
+  "schema_version": 1,
+  "created_at": "2026-11-15T01:42:03.075806+00:00",
+  "provider": "Google Gemini Developer API",
+  "model": "gemini-3.1-flash-image",
+  "operation": "generate",
+  "aspect_ratio": "16:9",
+  "image_size": "1K",
+  "store": false,
+  "prompt_sha256": "03155ad8514164eb4405273e7ef6da6f46c42460c0ab72561992aaf0316af87a",
+  "visual_brief_schema_version": "banana.visual-brief.v1",
+  "brief_sha256": "c698f6fbd199b67ff0c4c0bbfc47f430396124a098b98bda1deee4bd71ed765b",
+  "brief_source": "planner_minimal",
+  "references": [],
+  "artifact": {
+    "path": "/Users/noe/Dev/Web/kanjy-noe-559/docs/rediseno/conceptos/banana_20261115T014203_074160Z_kanjy-concepto-c-anillos.jpg",
+    "mime_type": "image/jpeg",
+    "bytes": 580858,
+    "sha256": "42a02f8e2f88fadc4a67a9d184feb6166f85b9454dc57fbaee8b75aa745a14eb",
+    "width": 1376,
+    "height": 768
+  },
+  "usage": {
+    "total_tokens": 1914
+  },
+  "grounding_used": false,
+  "provenance_notice": "Google documents SynthID on Gemini-generated images. Post-processing may alter provenance metadata."
+}
