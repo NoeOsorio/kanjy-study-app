@@ -1,83 +1,83 @@
-# Design System: Kanjy (Camino)
+# Kanjy: sistema de diseño
 
-Chosen by Noe on 2026-11-14 from three generated concepts (`docs/rediseno/conceptos/concepto-b-camino.jpg`).
-Replaces «marcatextos» and «sakura plano», both rejected as boring or basic. References: Duolingo
-(game, celebration), Headspace or Finch (warm illustration), Apple Fitness (progress you can feel).
+Dirección aprobada en noviembre de 2026: una libreta de kanji (la 漢字ドリル con la que aprenden en Japón)
+con el estilo visual de Essay Studio y papelería que cumple una función. Las maquetas viven en Paper,
+archivo «Kanjy rediseño», página «Doriru», en los tableros que terminan en «(estilo Essay Studio)» y en
+los de repaso, examen, estados, cuenta y créditos. Exportes en `docs/rediseno/doriru/es-*.png`.
 
-**Rule zero (constitution XIV):** every feature in `docs/rediseno/COBERTURA.md` has a screen. Nothing is
-removed without Noe's explicit yes.
+## Reglas que mandan
 
-## 1. Visual Theme & Atmosphere
+1. **La interfaz es la libreta, a pantalla completa.** Nada de escritorio alrededor, marcos ni objetos
+   flotando. La metáfora vive en los materiales: papel, hoja blanca, cuadrícula de práctica, sellos.
+2. **Papelería solo si sirve para aprender.** Cada pieza tiene un trabajo (ver tabla). Si no ayuda a
+   aprender o a orientarse, no va.
+3. **Sin plantilla.** Sin barra de pestañas, sin encabezado con título repetido, sin pilas de tarjetas.
+4. **Nada repetido en una pantalla, poco texto, sin numeración de adorno, sin punto medio «·».**
+5. **Pensado para 2.211 kanji.** Lo terminado se pliega, lo no empezado se resume en una fila.
+6. **Ninguna función actual se pierde** (constitución XIV). Ver `docs/rediseno/COBERTURA.md`.
 
-A playful, gamified study app. Each JLPT level is a mountain; its lessons are chunky round nodes on a
-winding path that climbs to a torii gate under cherry trees. A small blossom character, **Kanjy**, walks the
-path with the student, reacts to answers and celebrates. Density 4, variance 6, motion 7: bouncy and
-celebratory, never in the way of answering.
+## Colores
 
-## 2. Color Palette & Roles
+| Token | Valor | Uso |
+|---|---|---|
+| papel | `#FAF8F3` | fondo de la app |
+| hoja | `#FFFFFF` | superficie principal (hoja con radio 14 arriba) |
+| sombra | `#F1EEE6` | bandejas, chips neutros, paneles secundarios |
+| tinta | `#1D1B18` | texto principal y único acento de acción (botón principal negro) |
+| tinta 2 | `#4A463F` | texto secundario |
+| tinta 3 | `#6B665C` | etiquetas pequeñas |
+| sakura | `#FDF0F3` fondo, `#FBE4EA` chip, `#C2456A` y `#9E2A44` tinta | color de Kanjy: kanji grande, repaso, «Otra vez», frases |
+| lectura china | `#CADDFF` / `#234A9C` | etiqueta «china» |
+| lectura japonesa | `#BDEBD6` / `#0D5E46` | etiqueta «japonesa» |
+| marcatextos | `#FFE08A` | resaltar el kanji dentro de una frase; nota propia |
+| pluma roja | `#C8402F` | solo correcciones y 花丸 |
+| niveles (solo selector y escritorio) | N4 `#FFE08A`, N3 `#BDEBD6`, N2 `#CADDFF`, N1 `#E3D5FF` | |
 
-- **Cloud White** (#FFFFFF): screen background for study screens.
-- **Sky** (#BFE6FF to #E9F6FF gradient): background of the path screen only.
-- **Plum Ink** (#2B1F27): text and kanji. Never pure black.
-- **Mauve** (#6E5A66): secondary text.
-- **Sakura** (#FF5C93) with **Sakura Deep** (#D63B74) as its 3D bottom edge: the main action, completed
-  nodes, active tab. One accent.
-- **Leaf** (#58C25A) with **Leaf Deep** (#3E9A41): correct answers and success only.
-- **Torii Red** (#E5483B) with **Torii Deep** (#B8322A): wrong answers only, and the torii illustration.
-- **Sun** (#FFC83D): stars on completed nodes, streak flame.
-- **Stone** (#E6E1E5) with **Stone Deep** (#C9C1C7): locked or not-yet nodes, secondary chunky buttons.
-- **Mountain** (#7C8DA8 to #A9B6CB), **Grass** (#8BCB6A), **Path** (#F3E3C3): illustration only.
+El color siempre significa algo. No se usa verde para «correcto»: lo correcto se marca con tinta y el
+círculo rojo del maestro.
 
-## 3. Typography Rules
+## Tipografía
 
-- **UI:** Nunito. Titles 800 to 900, buttons 800, body 600. Rounded and friendly.
-- **Kanji and kana:** M PLUS Rounded 1c, 700 to 800.
-- Scale: 13, 15, 17, 20, 26, 34, 56, and 120 for the hero kanji. Body never below 15px.
+- **Geist** para la interfaz (botones, etiquetas, números).
+- **Newsreader** para el español con voz (significados, frases traducidas, mensajes).
+- **Klee One** para todo kanji y kana grande, con aspecto de libro de texto.
+- Tres familias con papeles fijos; ninguna otra.
 
-## 4. Component Stylings
+## Formas y sombras
 
-- **Chunky button:** 56px tall, 16px radius, fill color plus a 5px solid bottom edge in the deep shade
-  (box-shadow 0 5px 0 deep). Text Nunito 800, 17px, uppercase allowed only for short labels. Press: moves
-  down 5px and the edge disappears (100ms). Primary Sakura, success Leaf, secondary White with Stone edge.
-- **Path node:** 72px circle with a 6px deep bottom edge. Completed: Sakura with a Sun star badge. Current:
-  Sakura with a white ring and the mascot next to it. Due for review: Sakura with a small flame badge.
-  Locked: Stone with a lock.
-- **Answer tile:** white, 2px Stone border, 5px Stone bottom edge, 20px radius. Selected correct: Leaf.
-  Selected wrong: Torii Red; the correct one then turns Leaf.
-- **Kanji tile (library):** 56px or larger, same chunky edge. Learned: Sakura tint (#FFE3EE) with Sakura
-  border; due: Sakura fill, white kanji; new: white with Stone border.
-- **Feedback banner:** full-width bottom sheet. Correct: Leaf tint (#E5F7DF), title in Leaf Deep, Leaf
-  button, mascot cheering. Wrong: Torii tint (#FDE3E0), title in Torii Deep, Torii button, mascot thinking.
-- **Progress bar:** 16px tall, rounded, Stone track, Sakura fill with a small blossom at its tip.
-- **Mascot Kanjy:** round five-petal blossom, pink (#FF8FB5) with a deeper outline (#E5608F), face in the
-  center (two dark eyes with white highlights, small smile, blush cheeks), tiny arms. Moods: happy, cheering
-  (arms up, confetti petals), thinking (hand on chin), sleepy (empty states). Original character, never a
-  copy of another brand's mascot.
-- **Tab bar:** white, four items (Hoy, Kanji, Quiz, Cuenta), active item in Sakura with a filled icon.
+Radios 6, 8, 10, 12, 14 y 20 (tarjetas de repaso). Sombra de hoja:
+`0 0 0 1px rgba(29,27,24,0.08), 0 18px 40px -12px rgba(60,45,10,0.16)`. Sin bordes finos como estructura:
+las secciones se separan con espacio y superficies.
 
-## 5. Layout Principles
+## Componentes (pocos y reutilizados)
 
-- Phone first at 390px with 20px gutters; desktop 1440px with a left sidebar and content capped at 1200px.
-- The path screen is the home; everything else is white and calm so the kanji stay readable.
-- Lists hold 1,232 kanji: search, level switch, status filters, lessons in rows of five tiles.
-- Touch targets at least 44px. Keyboard shortcuts on desktop live in tooltips only.
+- **Hoja:** superficie blanca bajo la barra, margen 8.
+- **Bandeja:** fondo sombra, radio 14, contiene casillas blancas de radio 8.
+- **Casilla de kanji:** aprendido en tinta, de hoy con anillo negro de 2 px, por aprender desvanecido.
+- **Botón principal:** negro, radio 10 a 12, alto 52 a 54. Uno por pantalla.
+- **Botón secundario:** blanco con anillo de 1 px.
+- **Etiqueta:** pastel con tinta del mismo tono, radio 6.
+- **Barra:** botón de volver o cerrar a la izquierda, contexto mínimo a la derecha.
 
-## 6. Motion & Interaction
+## Papelería con función
 
-Load the Emil design engineering skill before writing motion code.
+| Pieza | Función |
+|---|---|
+| Stickers sakura | progreso del día y días de la semana, sin rachas que castigan |
+| Nota propia (sticky) | mnemotecnia del estudiante, una por kanji, se puede mover |
+| Marcatextos | el kanji estudiado dentro de una frase |
+| 花丸 y círculo rojo | acierto y calificación del examen |
+| Sello 済 | lecciones terminadas en el índice |
+| Washi «Hoy» | la lección actual en el índice |
+| Pestañas al borde (solo escritorio) | escribir, repasar (con pendientes), examen y notas |
 
-- Chunky press: translateY(5px) and edge to 0, 100ms ease-out; release 140ms.
-- Correct: tile turns Leaf with a 1.0 to 1.06 to 1.0 pop (220ms), petals burst, mascot jumps.
-- Wrong: tile shakes 6px twice (200ms) and turns Torii Red; mascot tilts its head.
-- Path: the current node bobs 4px (2s loop); finishing a lesson fills the next node with a star burst.
-- Session end: confetti petals for 1.2s, streak flame grows.
-- Respect prefers-reduced-motion: keep color changes, drop movement.
+## Pantallas
 
-## 7. Anti-Patterns (Banned)
+Celular: página de hoy, escribir, 花丸, índice (漢字表), selector de nivel, repaso frente y reverso,
+repaso terminado, tarjetas de frases, examen preparar, examen pregunta, resultado, cuenta, créditos,
+primer día, búsqueda fuera de nivel y cargando. Escritorio: índice a la izquierda y libreta a doble página.
 
-- No middle dot «·» as a separator. No numbering for its own sake. No cartoon names for features.
-- No colored bar on the left edge of anything. No nested bordered boxes. No hairline dividers.
-- No repeated information on one screen. Shortcuts only in tooltips.
-- No vendor names in the UI (only the sign-in choice may say Google).
-- No emojis as icons. No pure black. No neon glow. No copied mascots or brand assets.
-- No invented words: «por repasar», «aprendidos», «nuevos», «lección», plain Spanish.
+## Movimiento
+
+Antes de escribir cualquier animación se carga la skill de Emil. Pendiente de especificar: voltear la
+tarjeta, 花丸 que se dibuja, sticker que cae en su lugar, presión de botones (escala 0.97).
