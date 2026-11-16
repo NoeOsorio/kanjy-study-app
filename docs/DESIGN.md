@@ -12,7 +12,7 @@ los de repaso, examen, estados, cuenta y créditos. Exportes en `docs/rediseno/d
 2. **Papelería solo si sirve para aprender.** Cada pieza tiene un trabajo (ver tabla). Si no ayuda a
    aprender o a orientarse, no va.
 3. **Sin plantilla.** Sin barra de pestañas, sin encabezado con título repetido, sin pilas de tarjetas.
-4. **Nada repetido en una pantalla, poco texto, sin numeración de adorno, sin punto medio «·».**
+4. **Nada repetido en una pantalla, poco texto, sin numeración de adorno, sin punto medio como separador.**
 5. **Pensado para 2.211 kanji.** Lo terminado se pliega, lo no empezado se resume en una fila.
 6. **Ninguna función actual se pierde** (constitución XIV). Ver `docs/rediseno/COBERTURA.md`.
 
