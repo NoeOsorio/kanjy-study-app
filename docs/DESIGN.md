@@ -21,10 +21,10 @@ los de repaso, examen, estados, cuenta y créditos. Exportes en `docs/rediseno/d
 
 | Token | Valor | Uso |
 |---|---|---|
-| papel | `#F6F6F7` | fondo de la app (gris frío; nada de beige) |
+| papel | `#FFFFFF` | fondo de la app (nada de beige ni gris) |
 | hoja | `#FFFFFF` | superficie principal (hoja con radio 14 arriba) |
-| bandeja | `#EFEFF2` | bandejas, chips neutros, paneles secundarios |
-| riel | `#E2E2E7` | barras de progreso vacías, asas, puntos vacíos |
+| bandeja | `#FBF2F5` | bandejas, chips neutros, paneles secundarios |
+| riel | `#F2E1E7` | barras de progreso vacías, asas, puntos vacíos |
 | vino | `#A8325A` | botón principal y progreso; único color de acción |
 | tinta | `#1D1B18` | texto principal y anillo de selección |
 | tinta 2 | `#4A463F` | texto secundario |
