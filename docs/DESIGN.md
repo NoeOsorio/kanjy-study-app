@@ -14,7 +14,8 @@ los de repaso, examen, estados, cuenta y créditos. Exportes en `docs/rediseno/d
 3. **Sin plantilla.** Sin barra de pestañas, sin encabezado con título repetido, sin pilas de tarjetas.
 4. **Nada repetido en una pantalla, poco texto, sin numeración de adorno, sin punto medio como separador.**
 5. **Pensado para 2.211 kanji.** Lo terminado se pliega, lo no empezado se resume en una fila.
-6. **Ninguna función actual se pierde** (constitución XIV). Ver `docs/rediseno/COBERTURA.md`.
+6. **Furigana en todo kanji fuera de tu nivel.** Cualquier kanji que no sea de tu nivel o de uno anterior lleva su lectura en hiragana encima, en frases, palabras y resultados.
+7. **Ninguna función actual se pierde** (constitución XIV). Ver `docs/rediseno/COBERTURA.md`.
 
 ## Colores
 
@@ -64,7 +65,7 @@ las secciones se separan con espacio y superficies.
 | Pieza | Función |
 |---|---|
 | Stickers sakura | progreso del día y días de la semana, sin rachas que castigan |
-| Nota propia (sticky) | mnemotecnia del estudiante, una por kanji, se puede mover |
+| Nota propia (sticky) | mnemotecnia del estudiante, una por kanji, se puede mover. Solo para lo que escribe el estudiante, nunca para consejos de la app |
 | Marcatextos | el kanji estudiado dentro de una frase |
 | 花丸 y círculo rojo | acierto y calificación del examen |
 | Sello 済 | lecciones terminadas en el índice |
