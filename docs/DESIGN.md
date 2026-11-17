@@ -21,10 +21,12 @@ los de repaso, examen, estados, cuenta y créditos. Exportes en `docs/rediseno/d
 
 | Token | Valor | Uso |
 |---|---|---|
-| papel | `#FAF8F3` | fondo de la app |
+| papel | `#F6F6F7` | fondo de la app (gris frío; nada de beige) |
 | hoja | `#FFFFFF` | superficie principal (hoja con radio 14 arriba) |
-| sombra | `#F1EEE6` | bandejas, chips neutros, paneles secundarios |
-| tinta | `#1D1B18` | texto principal y único acento de acción (botón principal negro) |
+| bandeja | `#EFEFF2` | bandejas, chips neutros, paneles secundarios |
+| riel | `#E2E2E7` | barras de progreso vacías, asas, puntos vacíos |
+| vino | `#A8325A` | botón principal y progreso; único color de acción |
+| tinta | `#1D1B18` | texto principal y anillo de selección |
 | tinta 2 | `#4A463F` | texto secundario |
 | tinta 3 | `#6B665C` | etiquetas pequeñas |
 | sakura | `#FDF0F3` fondo, `#FBE4EA` chip, `#C2456A` y `#9E2A44` tinta | color de Kanjy: kanji grande, repaso, «Otra vez», frases |
@@ -53,9 +55,9 @@ las secciones se separan con espacio y superficies.
 ## Componentes (pocos y reutilizados)
 
 - **Hoja:** superficie blanca bajo la barra, margen 8.
-- **Bandeja:** fondo sombra, radio 14, contiene casillas blancas de radio 8.
+- **Bandeja:** fondo bandeja, radio 14, contiene casillas blancas de radio 8.
 - **Casilla de kanji:** aprendido en tinta, de hoy con anillo negro de 2 px, por aprender desvanecido.
-- **Botón principal:** negro, radio 10 a 12, alto 52 a 54. Uno por pantalla.
+- **Botón principal:** vino `#A8325A` con texto blanco, radio 10 a 12, alto 52 a 54. Uno por pantalla.
 - **Botón secundario:** blanco con anillo de 1 px.
 - **Etiqueta:** pastel con tinta del mismo tono, radio 6.
 - **Barra:** botón de volver o cerrar a la izquierda, contexto mínimo a la derecha.
