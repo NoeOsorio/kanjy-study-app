@@ -32,7 +32,7 @@ los de repaso, examen, estados, cuenta y créditos. Exportes en `docs/rediseno/d
 | sakura | `#FDF0F3` fondo, `#FBE4EA` chip, `#C2456A` y `#9E2A44` tinta | color de Kanjy: kanji grande, repaso, «Otra vez», frases |
 | lectura china | `#CADDFF` / `#234A9C` | etiqueta «china» |
 | lectura japonesa | `#BDEBD6` / `#0D5E46` | etiqueta «japonesa» |
-| marcatextos | `#FFE08A` | resaltar el kanji dentro de una frase; nota propia |
+| marcatextos | `#FFE08A` | solo resaltar el kanji dentro de una frase |
 | pluma roja | `#C8402F` | solo correcciones y 花丸 |
 | niveles (solo selector y escritorio) | N4 `#FFE08A`, N3 `#BDEBD6`, N2 `#CADDFF`, N1 `#E3D5FF` | |
 
@@ -67,7 +67,7 @@ las secciones se separan con espacio y superficies.
 | Pieza | Función |
 |---|---|
 | Stickers sakura | progreso del día y días de la semana, sin rachas que castigan |
-| Nota propia (sticky) | mnemotecnia del estudiante, una por kanji, se puede mover. Solo para lo que escribe el estudiante, nunca para consejos de la app |
+| Nota propia | mnemotecnia del estudiante, una por kanji: tarjeta blanca con renglones y «Tu nota» en vino. Nunca post-it ni sticky note, en ninguna pantalla |
 | Marcatextos | el kanji estudiado dentro de una frase |
 | 花丸 y círculo rojo | acierto y calificación del examen |
 | Sello 済 | lecciones terminadas en el índice |
