@@ -20,7 +20,7 @@ Pantallas en Paper, archivo «Kanjy rediseño», página «Doriru»; exportes en
 | Lista de lecciones | Índice: terminadas plegadas, actual con washi «Hoy», próximas en una fila | cubierta |
 | Filtro N5 a N1 | Selector de nivel; pestañas solo en escritorio | cubierta |
 | Título, progreso y número de kanji | Índice («8 de 10»), Selector de nivel | cubierta |
-| Dificultad y tiempo estimado | Primer día («unos 10 minutos»); dificultad por kanji pendiente en ficha | parcial, revisar en plan |
+| Dificultad y tiempo estimado | Ficha (etiqueta «Fácil» con tres barras); Primer día («unos 10 minutos») | cubierta |
 | Estado de carga | Cargando | cubierta |
 
 ## Detalle de lección y tarjetas
@@ -32,7 +32,7 @@ Pantallas en Paper, archivo «Kanjy rediseño», página «Doriru»; exportes en
 | Anterior y siguiente, deslizar, teclas | Tarjetas de frases (flecha y «Siguiente frase»); teclas en tooltip de escritorio | cubierta |
 | Progreso del mazo | Tarjetas de frases, barra superior | cubierta |
 | Dificultad de cada frase | Tarjetas de frases, etiqueta | cubierta |
-| Sin ejemplos | Mismo patrón que búsqueda vacía | en especificación |
+| Sin ejemplos | Frases: sin ejemplos (palabras donde aparece y casillas para escribirlo) | cubierta |
 
 ## Ficha de kanji
 
@@ -44,7 +44,7 @@ Pantallas en Paper, archivo «Kanjy rediseño», página «Doriru»; exportes en
 | Frases de ejemplo con kanji resaltado y traducción | Página de hoy, Escritorio («En frases, con cada lectura») | cubierta |
 | Orden de trazos | Botón de reproducir en el kanji; tira en escritorio | cubierta |
 | Kanji no encontrado | Búsqueda fuera de nivel | cubierta |
-| Frecuencia y grado escolar | Pendiente de lugar en la ficha | revisar en plan |
+| Frecuencia, grado escolar y trazos | Ficha («Muy común», «2.º de primaria», «8 trazos») | cubierta |
 
 ## Examen
 
@@ -56,7 +56,7 @@ Pantallas en Paper, archivo «Kanjy rediseño», página «Doriru»; exportes en
 | Sonido | Botón de audio en la pregunta | nueva |
 | Progreso y cerrar | Hoja de respuestas en la barra | cubierta |
 | Tiempo por pregunta | Resultado («4 s») | cubierta |
-| Sin preguntas | Mismo patrón que búsqueda vacía | en especificación |
+| Sin preguntas | Examen: sin preguntas (botón apagado «Elige al menos una lección») | cubierta |
 
 ## Resultados
 
