@@ -1,5 +1,5 @@
-import { Pagina } from '../../app/Pagina';
+import { Repaso } from './Repaso';
 
 export default function RepasoPage() {
-  return <Pagina kind="close" title="Repaso" />;
+  return <Repaso />;
 }
