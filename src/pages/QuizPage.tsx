@@ -18,8 +18,8 @@ export default function QuizPage() {
   const [lessonIds, setLessonIds] = useState<string[]>([]);
   
   // Refs para evitar problemas de dependencias en useEffect
-  const handleAnswerSelectRef = useRef<(answer: string) => void>();
-  const handleNextQuestionRef = useRef<() => void>();
+  const handleAnswerSelectRef = useRef<((answer: string) => void) | undefined>(undefined);
+  const handleNextQuestionRef = useRef<(() => void) | undefined>(undefined);
   const isAnsweredRef = useRef<boolean>(false);
   const currentQuestionRef = useRef<QuizQuestion | null>(null);
   const questionsRef = useRef<QuizQuestion[]>([]);
