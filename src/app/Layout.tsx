@@ -1,4 +1,6 @@
+import { Suspense } from 'react';
 import { Outlet, useLocation } from 'react-router-dom';
+import Cargando from './Cargando';
 import IndicePage from '../pages/indice';
 import HoyPage from '../pages/hoy';
 
@@ -15,14 +17,14 @@ export default function Layout() {
           <>
             {/* En celular el índice es la pantalla; en escritorio ya está a la izquierda y aquí va hoy. */}
             <div className="flex flex-1 flex-col lg:hidden">
-              <Outlet />
+              <Suspense fallback={<Cargando />}><Outlet /></Suspense>
             </div>
             <div className="hidden flex-1 flex-col lg:flex">
               <HoyPage />
             </div>
           </>
         ) : (
-          <Outlet />
+          <Suspense fallback={<Cargando />}><Outlet /></Suspense>
         )}
       </main>
     </div>

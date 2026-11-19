@@ -1,6 +1,7 @@
 import { lazy, Suspense } from 'react';
 import { Route, Routes } from 'react-router-dom';
 import Layout from './Layout';
+import Cargando from './Cargando';
 import NotFound from './NotFound';
 import HoyPage from '../pages/hoy';
 import IndicePage from '../pages/indice';
@@ -39,7 +40,7 @@ export default function AppRoutes() {
         <Route path="*" element={<NotFound />} />
       </Route>
       {ComponentSheet && (
-        <Route path="/_componentes" element={<Suspense fallback={null}><ComponentSheet /></Suspense>} />
+        <Route path="/_componentes" element={<Suspense fallback={<Cargando />}><ComponentSheet /></Suspense>} />
       )}
     </Routes>
   );
