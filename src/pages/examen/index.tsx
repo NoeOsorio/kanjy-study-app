@@ -1,8 +1,8 @@
 import { useEffect, useMemo, useState } from 'react';
 import Cargando from '../../app/Cargando';
 import type { ReactNode } from 'react';
-import { useNavigate } from 'react-router-dom';
-import { Barra, BotonPrincipal, BotonSecundario, CasillaKanji, Hoja, SelloSumi, Washi } from '../../design';
+import { useLocation, useNavigate } from 'react-router-dom';
+import { Barra, BotonPrincipal, BotonSecundario, CasillaKanji, Hoja, SelloSumi, Washi, PaginaDerecha, PaginaIzquierda } from '../../design';
 import type { CasillaEstado } from '../../design/CasillaKanji';
 import { loadLevel } from '../../data/levels';
 import type { LevelFile } from '../../data/types';
@@ -34,6 +34,7 @@ function porDefecto(lessons: { number: number; kanji: string[] }[], tipos: Tipo[
 
 export default function ExamenPage() {
   const navigate = useNavigate();
+  const elegida = (useLocation().state as { leccion?: number } | null)?.leccion;
   const [file, setFile] = useState<LevelFile | null>(null);
   const [tipos, setTipos] = useState<Tipo[]>([]);
   const [sel, setSel] = useState<Set<number>>(new Set());
@@ -53,7 +54,7 @@ export default function ExamenPage() {
       const t: Tipo[] = f.lessons.map((_, i) => (hecha[i] ? 'done' : i === actual ? 'today' : 'later'));
       setFile(f);
       setTipos(t);
-      const inicial = porDefecto(f.lessons, t);
+      const inicial = elegida ? new Set([elegida]) : porDefecto(f.lessons, t);
       setSel(inicial);
       const idx = f.lessons.map((l, i) => (inicial.has(l.number) ? i : -1)).filter((i) => i >= 0);
       const centro = actual >= 0 ? actual : f.lessons.length - 1;
@@ -86,8 +87,9 @@ export default function ExamenPage() {
   return (
     <div className="flex flex-1 flex-col">
       <Barra kind="close" onClick={() => navigate('/indice')} />
-      <Hoja className="flex flex-1 flex-col">
+      <Hoja doble className="flex flex-1 flex-col">
         <h1 className="sr-only">Examen</h1>
+        <PaginaIzquierda className="xl:gap-0">
         <Etiqueta>Qué entra</Etiqueta>
         {!file && <Cargando />}
         {file && (
@@ -117,7 +119,9 @@ export default function ExamenPage() {
           </div>
         )}
 
-        <div className="mt-6">
+        </PaginaIzquierda>
+        <PaginaDerecha className="xl:gap-0">
+        <div className="mt-6 xl:mt-0">
           <Etiqueta>Qué te pregunta</Etiqueta>
         </div>
         <div className="mt-2.5 grid grid-cols-2 gap-2.5" role="radiogroup" aria-label="Qué te pregunta">
@@ -141,6 +145,7 @@ export default function ExamenPage() {
             {cuenta === 0 ? 'Elige al menos una lección' : `Empezar con ${cuenta} kanji`}
           </BotonPrincipal>
         </div>
+        </PaginaDerecha>
       </Hoja>
     </div>
   );

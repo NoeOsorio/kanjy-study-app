@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { Navigate, useLocation, useNavigate } from 'react-router-dom';
-import { Barra, BotonPrincipal, BotonSecundario, CasillaKanji, Hanamaru, Hoja, StickerSakura } from '../../design';
+import { Barra, BotonPrincipal, BotonSecundario, CasillaKanji, Hanamaru, Hoja, StickerSakura, PaginaDerecha, PaginaIzquierda } from '../../design';
 import { getKanji } from '../../data/levels';
 import type { Kanji } from '../../data/types';
 import { allCards, markStudyDay, putCard } from '../../store/repo';
@@ -70,8 +70,9 @@ function Resultado({ st }: { st: Estado }) {
           {seg(promedio)}
         </span>
       </Barra>
-      <Hoja className="flex flex-1 flex-col">
+      <Hoja doble className="flex flex-1 flex-col">
         <h1 className="sr-only">Resultado</h1>
+        <PaginaIzquierda className="xl:items-center">
         <div className="relative mx-auto mt-2 h-[240px] w-[260px]">
           <div className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2">
             <Hanamaru size={210} spiral={false} draw>
@@ -123,8 +124,10 @@ function Resultado({ st }: { st: Estado }) {
           })}
         </ul>
 
+        </PaginaIzquierda>
+        <PaginaDerecha className="xl:gap-0">
         {falladas.length > 0 && (
-          <div className="mt-4 flex flex-col gap-2.5">
+          <div className="mt-4 flex flex-col gap-2.5 xl:mt-0">
             {falladas.map(({ q, a }) => {
               const k = kanji[q.char];
               const mia = q.options[a.chosen]?.text;
@@ -167,6 +170,7 @@ function Resultado({ st }: { st: Estado }) {
             Otra vez
           </BotonPrincipal>
         </div>
+        </PaginaDerecha>
       </Hoja>
     </div>
   );

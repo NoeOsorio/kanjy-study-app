@@ -125,10 +125,10 @@ export default function CuentaPage() {
 
   return (
     <div className="flex flex-1 flex-col">
-      <div className="lg:hidden">
+      <div className="md:hidden">
         <Barra kind="back" onClick={() => navigate(-1)} />
       </div>
-      <Hoja className="flex flex-1 flex-col gap-6">
+      <Hoja centrada className="flex flex-1 flex-col gap-6">
         <h1 className="sr-only">Cuenta</h1>
         <section className="rounded-[20px] bg-tray p-4">
           <label htmlFor="nombre" className="block pl-1 text-[13px] tracking-[0.3em] text-sakura-ink" style={{ fontFamily: 'var(--font-kanji)' }}>

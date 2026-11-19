@@ -1,5 +1,6 @@
 import { useEffect, useMemo, useRef, useState } from 'react';
 import { Navigate, useLocation, useNavigate } from 'react-router-dom';
+import { volver } from '../../app/volver';
 import { Barra, BotonPrincipal, CirculoRojo, Furigana, HojaRespuestas, Hoja, Marcatextos } from '../../design';
 import { needsReading } from '../../data/furigana';
 import type { Level } from '../../data/types';
@@ -100,7 +101,7 @@ function Jugar({ sel }: { sel: ExamSelection }) {
   if (!questions || !q) {
     return (
       <div className="flex flex-1 flex-col">
-        <Barra kind="close" onClick={() => navigate('/examen')} />
+        <Barra kind="close" onClick={() => volver(navigate, '/examen')} />
         <Hoja className="flex-1">
           <h1 className="sr-only">Examen</h1>
         </Hoja>
@@ -113,12 +114,12 @@ function Jugar({ sel }: { sel: ExamSelection }) {
 
   return (
     <div className="flex flex-1 flex-col">
-      <Barra kind="close" onClick={() => navigate('/examen')}>
+      <Barra kind="close" onClick={() => volver(navigate, '/examen')}>
         <div className="min-w-0 flex-1 rounded-xl bg-tray p-1 [&>div]:gap-1">
           <HojaRespuestas items={shownItems} />
         </div>
       </Barra>
-      <Hoja className="flex flex-1 flex-col">
+      <Hoja centrada className="flex flex-1 flex-col">
         <h1 className="text-center text-[18px] font-bold text-ink">{q.prompt}</h1>
         <div className="mt-3 flex justify-center">
           <Prompt q={q} />

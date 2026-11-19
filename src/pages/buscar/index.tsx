@@ -91,7 +91,7 @@ export default function BuscarPage() {
 
   return (
     <div className="flex flex-1 flex-col">
-      <header className="flex items-center gap-2 px-3.5 py-3">
+      <header className="flex items-center gap-2 px-3.5 py-3 md:mx-auto md:w-full md:max-w-[620px] md:px-6">
         <button
           type="button"
           onClick={() => navigate('/indice?selector=1')}
@@ -125,7 +125,7 @@ export default function BuscarPage() {
       </header>
 
       {view.kind !== 'empty' && (
-        <Hoja className="flex flex-1 flex-col gap-5 p-5">
+        <Hoja centrada className="flex flex-1 flex-col gap-5 p-5">
           {view.kind === 'loading' && <Cargando />}
           {view.kind === 'none' && <p className="font-voice text-[22px] text-ink">No encontré nada con eso.</p>}
           {view.kind === 'list' && <Lista rows={view.rows} />}

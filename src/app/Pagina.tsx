@@ -15,7 +15,7 @@ export function Pagina({
   const navigate = useNavigate();
   return (
     <div className="flex flex-1 flex-col">
-      <div className={kind === 'back' ? 'lg:hidden' : undefined}>
+      <div className={kind === 'back' ? 'md:hidden' : undefined}>
         <Barra kind={kind} onClick={() => navigate(-1)} />
       </div>
       <Hoja className="flex-1">

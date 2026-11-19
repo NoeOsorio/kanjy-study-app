@@ -56,10 +56,10 @@ export default function CreditosPage() {
   const navigate = useNavigate();
   return (
     <div className="flex flex-1 flex-col">
-      <div className="lg:hidden">
+      <div className="md:hidden">
         <Barra kind="back" onClick={() => navigate(-1)} />
       </div>
-      <Hoja className="flex-1">
+      <Hoja centrada className="flex-1">
         <h1 className="font-voice text-[32px] leading-tight text-ink">De dónde salen los kanji</h1>
         <p className="mt-3 font-voice text-[22px] leading-snug text-ink-2">
           Diccionarios abiertos. Gracias a quienes los mantienen.

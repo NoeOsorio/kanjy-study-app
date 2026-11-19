@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
-import { Bandeja, BotonPrincipal, CasillaKanji, EtiquetaLectura, Hoja, KanjiGrande, StickerSakura, Washi } from '../../design';
+import { Bandeja, BotonPrincipal, CasillaKanji, EtiquetaLectura, Hoja, KanjiGrande, StickerSakura, Washi, PaginaDerecha, PaginaIzquierda } from '../../design';
 import { getKanji, loadLevel } from '../../data/levels';
 import type { Kanji } from '../../data/types';
 import { todayPlan } from '../../study/plan';
@@ -68,10 +68,10 @@ export default function HoyPage() {
   return <Tranquilo d={datos} />;
 }
 
-function Marco({ children, nivel }: { children: React.ReactNode; nivel?: string }) {
+function Marco({ children, nivel, doble }: { children: React.ReactNode; nivel?: string; doble?: boolean }) {
   return (
     <div className="flex flex-1 flex-col">
-      <div className="flex min-h-[38px] items-center justify-between px-3.5 py-2">
+      <div className="flex min-h-[38px] items-center justify-between px-3.5 py-2 md:hidden">
         {nivel ? (
           <Link
             to="/indice"
@@ -97,7 +97,7 @@ function Marco({ children, nivel }: { children: React.ReactNode; nivel?: string 
           </svg>
         </Link>
       </div>
-      <Hoja className="flex flex-1 flex-col gap-5">{children}</Hoja>
+      <Hoja centrada={!doble} doble={doble} className={`flex flex-1 flex-col gap-5 ${doble ? '' : 'md:justify-center'}`}>{children}</Hoja>
     </div>
   );
 }
@@ -109,12 +109,21 @@ function PrimerDia({ d }: { d: Datos }) {
   const on = k?.onyomi[0] ? cleanReading(k.onyomi[0]) : '';
   const kun = k?.kunyomi[0] ? cleanReading(k.kunyomi[0]) : '';
   return (
-    <Marco nivel={d.plan.level}>
+    <Marco nivel={d.plan.level} doble>
+      <PaginaIzquierda>
       <div className="flex flex-col gap-2">
         <h1 className="m-0 font-voice text-[34px] leading-tight text-ink">Tus primeros kanji</h1>
         <p className="m-0 font-voice text-[17px] leading-snug text-ink-2">Los que más se usan en japonés. Unos 10 minutos.</p>
       </div>
       <Leccion d={d} />
+      <div className="hidden items-center gap-4 px-1 xl:flex">
+        <StickerSakura size={44} rotation={-8} />
+        <p className="m-0 font-voice text-[18px] leading-snug text-ink-2">
+          Cada día que estudias se gana un sticker. Si faltas, no pasa nada.
+        </p>
+      </div>
+      </PaginaIzquierda>
+      <PaginaDerecha>
       <section className="flex flex-col gap-4 rounded-[20px] bg-sakura-bg p-4">
         <div className="flex items-center gap-4">
           <KanjiGrande kanji={c} size={104} tone="white" className="!rounded-[20px]" />
@@ -141,15 +150,16 @@ function PrimerDia({ d }: { d: Datos }) {
         </div>
         <p className="m-0 font-voice text-[18px] leading-snug text-ink-2">Lo trazas con el dedo y mañana te lo volvemos a preguntar.</p>
       </section>
-      <div className="flex items-center gap-4 px-1">
+      <div className="flex items-center gap-4 px-1 xl:hidden">
         <StickerSakura size={44} rotation={-8} />
         <p className="m-0 font-voice text-[18px] leading-snug text-ink-2">
           Cada día que estudias se gana un sticker. Si faltas, no pasa nada.
         </p>
       </div>
-      <div className="mt-auto pt-2">
+      <div className="mt-auto pt-2 md:mt-4">
         <BotonPrincipal onClick={() => navigate(kanjiUrl(c))}>Empezar con {c}</BotonPrincipal>
       </div>
+      </PaginaDerecha>
     </Marco>
   );
 }
@@ -182,7 +192,7 @@ function Pendiente({ d }: { d: Datos }) {
         <KanjiGrande kanji={c} size={104} />
         <span className="font-voice text-[28px] leading-none text-ink">{d.primero!.meanings[0]}</span>
       </div>
-      <div className="mt-auto pt-2">
+      <div className="mt-auto pt-2 md:mt-4">
         <BotonPrincipal onClick={() => navigate(kanjiUrl(c))}>Empezar con {c}</BotonPrincipal>
       </div>
     </Marco>
@@ -194,7 +204,7 @@ function HayRepasos({ n }: { n: number }) {
   return (
     <Marco>
       <h1 className="m-0 font-voice text-[34px] leading-tight text-ink">{n === 1 ? '1 repaso' : `${n} repasos`}</h1>
-      <div className="mt-auto pt-2">
+      <div className="mt-auto pt-2 md:mt-4">
         <BotonPrincipal onClick={() => navigate('/repaso')}>Repasar</BotonPrincipal>
       </div>
     </Marco>
@@ -220,7 +230,7 @@ function Tranquilo({ d }: { d: Datos }) {
           );
         })}
       </div>
-      <div className="mt-auto pt-2">
+      <div className="mt-auto pt-2 md:mt-4">
         <BotonPrincipal onClick={() => navigate('/indice')}>Ir al índice</BotonPrincipal>
       </div>
     </Marco>

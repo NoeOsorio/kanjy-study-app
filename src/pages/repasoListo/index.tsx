@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Bandeja, Barra, BotonPrincipal, CasillaKanji, Hanamaru, Hoja, StickerSakura, Washi } from '../../design';
+import { Bandeja, Barra, BotonPrincipal, CasillaKanji, Hanamaru, Hoja, StickerSakura, Washi, PaginaDerecha, PaginaIzquierda } from '../../design';
 import { todayPlan } from '../../study/plan';
 import { weekStickers } from '../../study/week';
 import type { Sticker } from '../../study/week';
@@ -40,7 +40,8 @@ export default function RepasoListoPage() {
   return (
     <div className="flex flex-1 flex-col">
       <Barra kind="close" onClick={() => navigate('/indice')} />
-      <Hoja className="flex flex-1 flex-col gap-6">
+      <Hoja doble className="flex flex-1 flex-col gap-6">
+        <PaginaIzquierda className="xl:justify-center xl:gap-10">
         <div className="flex items-center gap-5 pt-1">
           <Hanamaru size={104}>{summary.reviewed}</Hanamaru>
           <div className="flex min-w-0 flex-col gap-1.5">
@@ -67,7 +68,9 @@ export default function RepasoListoPage() {
             })}
           </div>
         )}
+        </PaginaIzquierda>
 
+        <PaginaDerecha>
         <section className="flex flex-col gap-2.5">
           <div className="flex items-center justify-between">
             <h2 className="m-0 text-[17px] font-semibold text-ink">Hoy repasaste</h2>
@@ -100,11 +103,12 @@ export default function RepasoListoPage() {
           </section>
         )}
 
-        <div className="mt-auto pt-2">
+        <div className="mt-auto pt-2 md:max-w-[360px]">
           <BotonPrincipal onClick={irA} disabled={nuevo === null}>
             {n > 0 ? `Aprender ${n} ${n === 1 ? 'kanji nuevo' : 'kanji nuevos'}` : 'Ir al índice'}
           </BotonPrincipal>
         </div>
+        </PaginaDerecha>
       </Hoja>
     </div>
   );

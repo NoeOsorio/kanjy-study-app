@@ -1,7 +1,8 @@
 import { useEffect, useState } from 'react';
 import Cargando from '../../app/Cargando';
 import { useNavigate } from 'react-router-dom';
-import { Barra, BotonPrincipal, EtiquetaLectura, Furigana, Hoja, KanjiGrande } from '../../design';
+import { volver } from '../../app/volver';
+import { Barra, BotonPrincipal, EtiquetaLectura, Furigana, Hoja, KanjiGrande, PaginaDerecha, PaginaIzquierda, useDoble } from '../../design';
 import type { TokenFurigana } from '../../design';
 import { needsReading } from '../../data/furigana';
 import { getKanji } from '../../data/levels';
@@ -94,15 +95,15 @@ function Tarjeta({ r, char }: { r: UseRepaso; char: string }) {
 
   return (
     <div className="flex flex-1 flex-col">
-      <Barra kind="close" onClick={() => navigate('/indice')}>
+      <Barra kind="close" onClick={() => volver(navigate)}>
         <Progreso total={r.total} remaining={r.remaining} />
       </Barra>
-      <div className="relative mx-[17px] mt-3 flex min-h-0 flex-1 flex-col">
+      <div className="relative mx-[17px] mt-3 flex min-h-0 flex-1 flex-col md:mx-auto md:w-full md:max-w-[620px] xl:mx-10 xl:max-w-none">
         <div
           aria-hidden
-          className="absolute inset-x-5 -top-[7px] h-6 rounded-t-[20px] bg-paper shadow-[0_0_0_1px_rgba(29,27,24,0.07)]"
+          className="md:hidden absolute inset-x-5 -top-[7px] h-6 rounded-t-[20px] bg-paper shadow-[0_0_0_1px_rgba(29,27,24,0.07)]"
         />
-        <Hoja className={`relative mx-0 flex flex-1 flex-col overflow-y-auto rounded-[20px] p-[18px]`}>
+        <Hoja className={`relative mx-0 flex flex-1 flex-col overflow-y-auto rounded-[20px] p-[18px] md:rounded-none md:shadow-none xl:p-0`}>
           {!mostrada ? (
             <Frente char={char} />
           ) : (
@@ -110,7 +111,7 @@ function Tarjeta({ r, char }: { r: UseRepaso; char: string }) {
           )}
         </Hoja>
       </div>
-      <div className="px-[17px] pb-4 pt-3">
+      <div className="px-[17px] pb-4 pt-3 md:mx-auto md:w-full md:max-w-[620px] md:pb-6">
         {!mostrada ? (
           <BotonPrincipal onClick={() => setMostrada(true)} title="Espacio">
             Mostrar respuesta
@@ -147,7 +148,7 @@ function Progreso({ total, remaining }: { total: number; remaining: number }) {
 
 function Frente({ char }: { char: string }) {
   return (
-    <div className="flex flex-1 flex-col items-center justify-center gap-5">
+    <div className="flex flex-1 flex-col items-center justify-center gap-5 md:p-8">
       <span className="rounded-full bg-sakura-chip px-4 py-2 text-[15px] font-semibold text-sakura-deep">
         Significado o lectura
       </span>
@@ -161,6 +162,7 @@ function Frente({ char }: { char: string }) {
 }
 
 function Reverso({ char, k, level, nota }: { char: string; k: Kanji | null; level: Level; nota: string }) {
+  const doble = useDoble();
   if (!k) {
     return (
       <div className="kj-reveal flex items-center gap-4">
@@ -173,24 +175,28 @@ function Reverso({ char, k, level, nota }: { char: string; k: Kanji | null; leve
   const palabras = [...k.words.filter((w) => w.written !== char), ...k.words.filter((w) => w.written === char)].slice(0, 3);
   const frase = k.sentences[0];
   return (
-    <div className="kj-reveal flex flex-col gap-5">
-      <div className="flex items-start gap-4">
-        <KanjiGrande kanji={char} size={96} />
-        <div className="flex min-w-0 flex-col gap-2 pt-0.5">
-          <h1 className="m-0 font-voice text-[30px] leading-tight text-ink">{k.meanings[0]}</h1>
+    <div className="kj-reveal flex flex-col gap-5 xl:grid xl:flex-1 xl:grid-cols-2 xl:gap-0">
+      <PaginaIzquierda>
+      <div className="flex items-start gap-4 xl:flex-col xl:gap-6">
+        <KanjiGrande kanji={char} size={doble ? 200 : 96} className="xl:!rounded-[26px]" />
+        <div className="flex min-w-0 flex-col gap-2 pt-0.5 xl:gap-4">
+          <h1 className="m-0 font-voice text-[30px] leading-tight text-ink xl:text-[48px]">{k.meanings[0]}</h1>
           <div className="flex flex-wrap items-center gap-x-4 gap-y-2">
             {on && <EtiquetaLectura variant="china" reading={on} />}
             {kun && <EtiquetaLectura variant="japonesa" reading={kun} />}
           </div>
         </div>
       </div>
-      {palabras.length > 0 && <Palabras words={palabras} char={char} level={level} />}
+      </PaginaIzquierda>
+      <PaginaDerecha>
+      {palabras.length > 0 && <Palabras words={palabras} char={char} level={level} grande={doble} />}
       {frase && (
         <section className="rounded-[14px] bg-tray px-4 py-3.5">
-          <Oracion s={frase} char={char} level={level} size={22} />
+          <Oracion s={frase} char={char} level={level} size={doble ? 28 : 22} />
         </section>
       )}
       {nota && <Nota char={char} initial={nota} />}
+      </PaginaDerecha>
     </div>
   );
 }
@@ -201,7 +207,7 @@ function tokensPalabra(w: Word, char: string, level: Level): { tokens: TokenFuri
   return { furi, tokens: Array.from(w.written).map((c) => ({ text: c, accent: c === char })) };
 }
 
-function Palabras({ words, char, level }: { words: Word[]; char: string; level: Level }) {
+function Palabras({ words, char, level, grande }: { words: Word[]; char: string; level: Level; grande?: boolean }) {
   const sonido = useCanSpeak();
   return (
     <ul className={`m-0 grid list-none items-center gap-x-3 gap-y-2 p-0 ${sonido ? 'grid-cols-[auto_auto_1fr_auto]' : 'grid-cols-[auto_auto_1fr]'}`}>
@@ -209,7 +215,7 @@ function Palabras({ words, char, level }: { words: Word[]; char: string; level: 
         const { tokens, furi } = tokensPalabra(w, char, level);
         return (
           <li key={w.written} className="col-span-full grid grid-cols-subgrid items-center">
-            <Furigana size={28} tokens={tokens} />
+            <Furigana size={grande ? 36 : 28} tokens={tokens} />
             {!furi && (
               <span className="text-[14px] text-ink-3" style={{ fontFamily: 'var(--font-kanji)' }}>
                 {w.reading}

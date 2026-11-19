@@ -33,7 +33,7 @@ interface Loaded {
   lessonDone: number;
 }
 
-const QUERY = '(min-width: 1024px)';
+const QUERY = '(min-width: 1280px)';
 function useDesktop() {
   return useSyncExternalStore(
     (cb) => {

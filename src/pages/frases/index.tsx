@@ -8,9 +8,10 @@ import type { Kanji, Level, Sentence, Word } from '../../data/types';
 import { getSettings } from '../../store/repo';
 import { speak, useCanSpeak } from '../../sound';
 import NotFound from '../../app/NotFound';
-import { Barra, BotonPrincipal, CasillaKanji, Furigana, KanjiGrande, Marcatextos } from '../../design';
+import { Barra, BotonPrincipal, CasillaKanji, Furigana, KanjiGrande, Marcatextos, useDoble } from '../../design';
 import type { TokenFurigana } from '../../design';
 import { IconAtras, IconLapiz, IconPlay } from '../../design/icons';
+import { cx } from '../../design/cx';
 import { kata2hira, sentenceRomaji } from './romaji';
 
 const DIFICULTAD = { 1: 'Fácil', 2: 'Media', 3: 'Difícil' } as const;
@@ -57,7 +58,7 @@ const CHIP = {
   japonesa: 'bg-japonesa-bg text-japonesa-ink',
 };
 
-function BotonSonido({ text }: { text: string }) {
+function BotonSonido({ text, grande }: { text: string; grande?: boolean }) {
   const sonido = useCanSpeak();
   if (!sonido) return null;
   return (
@@ -65,9 +66,12 @@ function BotonSonido({ text }: { text: string }) {
       type="button"
       onClick={() => speak(text)}
       aria-label="Escuchar la frase"
-      className="kj-press flex h-[42px] w-[42px] shrink-0 items-center justify-center rounded-full bg-tray text-ink"
+      className={cx(
+        'kj-press flex shrink-0 items-center justify-center rounded-full bg-tray text-ink',
+        grande ? 'h-[52px] w-[52px]' : 'h-[42px] w-[42px]',
+      )}
     >
-      <IconPlay size={18} />
+      <IconPlay size={grande ? 22 : 18} />
     </button>
   );
 }
@@ -107,9 +111,8 @@ function Encabezado({
   );
 }
 
-function CartaFrase({ k, s, level }: { k: Kanji; s: Sentence; level: Level }) {
-  const toks = sentenceTokens(s);
-  const tokens: TokenFurigana[] = toks.map((t) => {
+function tokensDeFrase(k: Kanji, s: Sentence, level: Level): TokenFurigana[] {
+  return sentenceTokens(s).map((t) => {
     const estudiado = t.text.includes(k.char);
     return {
       text: t.text,
@@ -118,6 +121,11 @@ function CartaFrase({ k, s, level }: { k: Kanji; s: Sentence; level: Level }) {
       highlight: estudiado,
     };
   });
+}
+
+function CartaFrase({ k, s, level }: { k: Kanji; s: Sentence; level: Level }) {
+  const toks = sentenceTokens(s);
+  const tokens = tokensDeFrase(k, s, level);
   const palabras = k.words.slice(0, 3);
   return (
     <>
@@ -161,8 +169,8 @@ function PalabraDeKanji({ w, char }: { w: Word; char: string }) {
   );
 }
 
-function CartaVacia({ k }: { k: Kanji }) {
-  const palabras = k.words.slice(0, 3);
+function CartaVacia({ k, ancha }: { k: Kanji; ancha?: boolean }) {
+  const palabras = ancha ? [] : k.words.slice(0, 3);
   return (
     <>
       <div className="flex flex-1 flex-col gap-6 px-5 pb-4 pt-6">
@@ -197,6 +205,147 @@ function CartaVacia({ k }: { k: Kanji }) {
   );
 }
 
+function Palabra({ w }: { w: Word }) {
+  const sonido = useCanSpeak();
+  return (
+    <li className="flex items-center gap-3">
+      <span className="min-w-[72px] text-[24px] leading-none text-ink" style={{ fontFamily: 'var(--font-kanji)' }}>
+        {w.written}
+      </span>
+      <span className="w-[84px] shrink-0 text-[14px] text-ink-3" style={{ fontFamily: 'var(--font-kanji)' }}>
+        {w.reading}
+      </span>
+      <span className="min-w-0 flex-1 font-voice text-[18px] leading-tight text-ink">{w.meaning}</span>
+      {sonido && (
+        <button
+          type="button"
+          onClick={() => speak(w.reading)}
+          aria-label="Escuchar la palabra"
+          className="kj-press flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-tray text-ink"
+        >
+          <IconPlay size={15} />
+        </button>
+      )}
+    </li>
+  );
+}
+
+interface DobleProps {
+  state: Loaded;
+  i: number;
+  setI: (n: number) => void;
+  carta: Carta;
+  lesson: string;
+  anterior: () => void;
+  siguiente: () => void;
+  sigTexto: string;
+}
+
+/** Escritorio: página izquierda con la frase, página derecha con el contexto para estudiarla. */
+function FrasesDoble({ state, i, setI, carta, lesson, anterior, siguiente, sigTexto }: DobleProps) {
+  const { kanji: k, sentence: s } = carta;
+  const { level, cards } = state;
+  const delKanji = cards.map((c, n) => ({ c, n })).filter((x) => x.c.kanji.char === k.char && x.c.sentence);
+  const leccion = cards.filter((c, n) => cards.findIndex((d) => d.kanji.char === c.kanji.char) === n).map((c) => c.kanji.char);
+  const toks = s ? sentenceTokens(s) : [];
+  return (
+    <div className="mx-6 mt-3 grid min-h-0 flex-1 grid-cols-2 grid-rows-[1fr_auto]">
+      <span
+        aria-hidden
+        className="col-start-1 row-start-1 -mt-2 h-4 w-20 -rotate-2 self-start justify-self-center"
+        style={{
+          background: 'repeating-linear-gradient(135deg, rgba(244,163,180,0.9) 0 6px, rgba(248,190,202,0.9) 6px 12px)',
+        }}
+      />
+      <div className="col-start-1 row-start-1 flex min-w-0 flex-col gap-7 px-8 pb-6 pt-8">
+        <Encabezado k={k} lectura={s ? lecturaEnFrase(k, s) : null} size={96} />
+        {s ? (
+          <div className="flex flex-col gap-3">
+            <div className="flex items-start gap-4">
+              <Furigana tokens={tokensDeFrase(k, s, level)} size={40} className="block min-w-0 flex-1 [text-wrap:balance]" />
+              <div className="pt-4">
+                <BotonSonido text={kanaDeFrase(s)} grande />
+              </div>
+            </div>
+            <p className="m-0 text-[17px] text-ink-3">{sentenceRomaji(toks)}</p>
+            <p className="m-0 mt-2 font-voice text-[28px] leading-snug text-ink">{s.es}</p>
+          </div>
+        ) : (
+          <CartaVacia k={k} ancha />
+        )}
+      </div>
+      <div className="col-start-1 row-start-2 flex gap-3 px-8 pb-7">
+        <button
+          type="button"
+          onClick={anterior}
+          disabled={i === 0}
+          title="Frase anterior (flecha izquierda)"
+          aria-label="Anterior"
+          className="kj-press flex h-[52px] w-[56px] shrink-0 items-center justify-center rounded-xl bg-paper text-ink shadow-[0_0_0_1px_var(--rail)] disabled:text-faded"
+        >
+          <IconAtras size={20} />
+        </button>
+        <BotonPrincipal onClick={siguiente} title={`${sigTexto} (flecha derecha)`} className="!w-auto min-w-[240px] px-8">
+          {sigTexto}
+          {sigTexto !== 'Terminar' && <IconAtras size={18} className="rotate-180" />}
+        </BotonPrincipal>
+      </div>
+
+      <div className="col-start-2 row-span-2 row-start-1 flex min-w-0 flex-col gap-5 bg-[linear-gradient(to_right,rgba(29,27,24,0.07),transparent_36px)] px-8 pb-6 pt-6">
+        {delKanji.length > 0 && (
+          <section className="flex flex-col gap-3">
+            <h2 className="m-0 text-[17px] font-semibold text-ink-3">Frases de {k.char}</h2>
+            <ul className="m-0 flex list-none flex-col gap-2 p-0">
+              {delKanji.map(({ c, n }) => (
+                <li key={n}>
+                  <button
+                    type="button"
+                    onClick={() => setI(n)}
+                    aria-current={n === i}
+                    className={cx(
+                      'kj-press flex w-full flex-col gap-0.5 rounded-xl px-4 py-1.5 text-left',
+                      n === i ? 'bg-paper shadow-[0_0_0_2px_var(--ink)]' : 'bg-tray',
+                    )}
+                  >
+                    <Furigana tokens={tokensDeFrase(k, c.sentence!, level)} size={21} />
+                    <span className="font-voice text-[16px] text-ink-2">{c.sentence!.es}</span>
+                  </button>
+                </li>
+              ))}
+            </ul>
+          </section>
+        )}
+        {k.words.length > 0 && (
+          <section className="flex flex-col gap-3">
+            <h2 className="m-0 text-[17px] font-semibold text-ink-3">Palabras</h2>
+            <ul className="m-0 flex list-none flex-col gap-2.5 p-0">
+              {k.words.slice(0, 4).map((w) => (
+                <Palabra key={w.written} w={w} />
+              ))}
+            </ul>
+          </section>
+        )}
+        <section className="mt-auto flex flex-col gap-3">
+          <h2 className="m-0 text-[17px] font-semibold text-ink-3">Lección {lesson}</h2>
+          <div className="flex flex-wrap gap-1.5 rounded-[14px] bg-tray p-1.5">
+            {leccion.map((ch) => (
+              <button
+                key={ch}
+                type="button"
+                aria-label={ch}
+                onClick={() => setI(cards.findIndex((c) => c.kanji.char === ch))}
+                className="kj-press"
+              >
+                <CasillaKanji kanji={ch} size="sm" state={ch === k.char ? 'today' : 'empty'} />
+              </button>
+            ))}
+          </div>
+        </section>
+      </div>
+    </div>
+  );
+}
+
 export default function FrasesPage() {
   const { lesson = '' } = useParams();
   const navigate = useNavigate();
@@ -205,6 +354,7 @@ export default function FrasesPage() {
   const [state, setState] = useState<Loaded | 'missing' | null>(null);
   const [i, setI] = useState(0);
   const touchX = useRef<number | null>(null);
+  const doble = useDoble();
 
   useEffect(() => {
     let alive = true;
@@ -287,13 +437,26 @@ export default function FrasesPage() {
         <Link
           to={`/kanji/${encodeURIComponent(carta.kanji.char)}`}
           aria-label="Ver el kanji"
-          className="kj-press text-[28px] leading-none text-ink"
+          className="kj-press text-[28px] leading-none text-ink xl:hidden"
           style={{ fontFamily: 'var(--font-kanji)' }}
         >
           {carta.kanji.char}
         </Link>
       </Barra>
-      <div className="relative mx-4 mt-3 flex flex-1 flex-col rounded-[20px] bg-paper shadow-[var(--shadow-sheet)] ring-1 ring-rail">
+      {doble ? (
+        <FrasesDoble
+          state={state}
+          i={i}
+          setI={setI}
+          carta={carta}
+          lesson={lesson}
+          anterior={anterior}
+          siguiente={siguiente}
+          sigTexto={sigTexto}
+        />
+      ) : (
+      <>
+      <div className="relative mx-4 mt-3 flex flex-1 flex-col rounded-[20px] md:mx-auto md:w-full md:max-w-[620px] bg-paper shadow-[var(--shadow-sheet)] ring-1 ring-rail">
         <span
           aria-hidden
           className="absolute -top-2 left-1/2 h-4 w-20 -translate-x-1/2 -rotate-2"
@@ -304,7 +467,7 @@ export default function FrasesPage() {
         />
         {vacia ? <CartaVacia k={carta.kanji} /> : <CartaFrase k={carta.kanji} s={carta.sentence!} level={state.level} />}
       </div>
-      <div className="flex gap-3 px-4 pb-5 pt-4">
+      <div className="flex gap-3 px-4 pb-5 pt-4 md:mx-auto md:w-full md:max-w-[620px]">
         <button
           type="button"
           onClick={anterior}
@@ -320,6 +483,8 @@ export default function FrasesPage() {
           {!ultima && <IconAtras size={18} className="rotate-180" />}
         </BotonPrincipal>
       </div>
+      </>
+      )}
     </div>
   );
 }

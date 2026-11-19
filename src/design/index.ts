@@ -1,4 +1,4 @@
-export { Hoja } from './Hoja';
+export { Hoja, PaginaIzquierda, PaginaDerecha, useDoble } from './Hoja';
 export { Bandeja } from './Bandeja';
 export { CasillaKanji } from './CasillaKanji';
 export { KanjiGrande } from './KanjiGrande';

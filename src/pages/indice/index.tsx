@@ -1,7 +1,7 @@
 import { useCallback, useEffect, useLayoutEffect, useMemo, useRef, useState } from 'react';
 import Cargando from '../../app/Cargando';
 import type { ReactNode } from 'react';
-import { Link, useLocation, useNavigate, useSearchParams } from 'react-router-dom';
+import { Link, useLocation, useMatch, useNavigate, useSearchParams } from 'react-router-dom';
 import { Bandeja, BotonSecundario, CasillaKanji, Hoja, SelloSumi, Washi } from '../../design';
 import type { CasillaEstado } from '../../design/CasillaKanji';
 import { cx } from '../../design/cx';
@@ -36,6 +36,11 @@ export default function IndicePage() {
   const [selector, setSelector] = useState(params.get('selector') === '1');
   const scroller = useRef<HTMLDivElement>(null);
   const ruta = useLocation().pathname;
+  const enFrases = useMatch('/frases/:lesson');
+  const enKanji = useMatch('/kanji/:char/*');
+  const [abierta, setAbierta] = useState<number | null>(null);
+  const [plegadasAbiertas, setPlegadasAbiertas] = useState(false);
+  const kanjiAqui = enKanji?.params.char ? decodeURIComponent(enKanji.params.char) : null;
 
   // El índice de escritorio sigue montado al navegar: el avance se vuelve a leer en cada pantalla.
   useEffect(() => {
@@ -109,6 +114,25 @@ export default function IndicePage() {
     return { hechas, lesson, hoy, siguientes: file.lessons.slice(actual + 1) };
   }, [file, progreso, perDay]);
 
+  // Dónde está parado el estudiante: la lección de la ruta (frases) o la del kanji que mira.
+  const leccionAqui = useMemo(() => {
+    if (enFrases?.params.lesson) return Number(enFrases.params.lesson);
+    if (kanjiAqui && file) return file.lessons.find((l) => l.kanji.includes(kanjiAqui))?.number ?? null;
+    return null;
+  }, [enFrases?.params.lesson, kanjiAqui, file]);
+
+  // Si el lugar actual está en las terminadas, se abre ese pliegue; y el índice lo trae a la vista.
+  useEffect(() => {
+    if (leccionAqui != null && plan?.hechas.some((l) => l.number === leccionAqui)) setPlegadasAbiertas(true);
+  }, [leccionAqui, plan]);
+  useEffect(() => {
+    if (leccionAqui == null || !plan) return;
+    const id = requestAnimationFrame(() =>
+      scroller.current?.querySelector('[data-aqui]')?.scrollIntoView?.({ block: 'nearest' }),
+    );
+    return () => cancelAnimationFrame(id);
+  }, [ruta, leccionAqui, plan, plegadasAbiertas]);
+
   const estado = (c: string, hoy: Set<string>): CasillaEstado =>
     progreso.learned.has(c) ? 'learned' : hoy.has(c) ? 'today' : 'pending';
 
@@ -160,7 +184,17 @@ export default function IndicePage() {
         {!plan && <Cargando />}
         {plan && (
           <>
-            {plan.hechas.length > 0 && <Terminadas lessons={plan.hechas} />}
+            {plan.hechas.length > 0 && (
+              <Terminadas
+                lessons={plan.hechas}
+                abierto={plegadasAbiertas}
+                onToggle={() => setPlegadasAbiertas((v) => !v)}
+                leccionAqui={leccionAqui}
+                kanjiAqui={kanjiAqui}
+                abierta={abierta}
+                onAbrir={(n) => setAbierta((v) => (v === n ? null : n))}
+              />
+            )}
             {plan.lesson && (
               <Leccion
                 number={plan.lesson.number}
@@ -169,15 +203,21 @@ export default function IndicePage() {
                 separada={plan.hechas.length > 0}
                 aprendidos={plan.lesson.kanji.filter((c) => progreso.learned.has(c)).length}
                 estado={(c) => estado(c, plan.hoy)}
+                aqui={leccionAqui === plan.lesson.number}
+                kanjiAqui={kanjiAqui}
               />
             )}
             {plan.siguientes.map((l) => (
-              <Perezosa key={l.number} estimate={estimarAlto(l.kanji.length)}>
+              <Perezosa key={l.number} estimate={estimarAlto(l.kanji.length)} siempre={leccionAqui === l.number || abierta === l.number}>
                 <Leccion
                   number={l.number}
                   kanji={l.kanji}
                   aprendidos={l.kanji.filter((c) => progreso.learned.has(c)).length}
                   estado={() => 'pending'}
+                  abierta={abierta === l.number}
+                  onAbrir={() => setAbierta((v) => (v === l.number ? null : l.number))}
+                  aqui={leccionAqui === l.number}
+                  kanjiAqui={kanjiAqui}
                 />
               </Perezosa>
             ))}
@@ -204,25 +244,84 @@ function rango(a: number, b: number) {
   return a === b ? `Lección ${a}` : `Lecciones ${a} a ${b}`;
 }
 
-function Terminadas({ lessons }: { lessons: { number: number; kanji: string[] }[] }) {
+function Terminadas({
+  lessons,
+  abierto,
+  onToggle,
+  leccionAqui,
+  kanjiAqui,
+  abierta,
+  onAbrir,
+}: {
+  lessons: { number: number; kanji: string[] }[];
+  abierto: boolean;
+  onToggle: () => void;
+  leccionAqui: number | null;
+  kanjiAqui: string | null;
+  abierta: number | null;
+  onAbrir: (n: number) => void;
+}) {
+  // Una sola lección terminada no necesita pliegue: se muestra como cualquier otra.
+  if (lessons.length === 1) {
+    const l = lessons[0];
+    return (
+      <Leccion
+        number={l.number}
+        kanji={l.kanji}
+        aprendidos={l.kanji.length}
+        estado={() => 'learned'}
+        hecha
+        abierta={abierta === l.number}
+        onAbrir={() => onAbrir(l.number)}
+        aqui={leccionAqui === l.number}
+        kanjiAqui={kanjiAqui}
+      />
+    );
+  }
   const todos = lessons.flatMap((l) => l.kanji);
+  const aqui = leccionAqui != null && lessons.some((l) => l.number === leccionAqui);
   return (
     <section className="pt-1">
-      <div className="flex items-center gap-3">
+      <button
+        type="button"
+        onClick={onToggle}
+        aria-expanded={abierto}
+        className="kj-press flex items-center gap-3 text-left"
+      >
         <h2 className="text-[17px] font-bold text-ink">
           {rango(lessons[0].number, lessons[lessons.length - 1].number)}
         </h2>
         <SelloSumi />
-      </div>
-      <Bandeja className="mt-2.5 block p-3">
-        <p className="font-kanji text-[22px] leading-[1.45] tracking-[0.06em] text-ink" style={{ fontFamily: 'var(--font-kanji)' }}>
-          {todos.map((c) => (
-            <Link key={c} to={`/kanji/${c}`} aria-label={c} className="kj-press">
-              {c}
-            </Link>
+        <Chevron girado={abierto} />
+      </button>
+      {abierto ? (
+        <div className="mt-2.5 flex flex-col gap-4">
+          {lessons.map((l) => (
+            <Leccion
+              key={l.number}
+              number={l.number}
+              kanji={l.kanji}
+              aprendidos={l.kanji.length}
+              estado={() => 'learned'}
+              hecha
+              abierta={abierta === l.number}
+              onAbrir={() => onAbrir(l.number)}
+              aqui={leccionAqui === l.number}
+              kanjiAqui={kanjiAqui}
+            />
           ))}
-        </p>
-      </Bandeja>
+        </div>
+      ) : (
+        <Bandeja className={cx('mt-2.5 block p-3', aqui && 'shadow-[0_0_0_2px_var(--ink)]')}>
+          <p className="font-kanji text-[22px] leading-[1.45] tracking-[0.06em] text-ink" style={{ fontFamily: 'var(--font-kanji)' }}>
+            {todos.map((c) => (
+              <Link key={c} to={`/kanji/${c}`} aria-label={c} className="kj-press" data-aqui={c === kanjiAqui ? '' : undefined}>
+                {c}
+              </Link>
+            ))}
+          </p>
+        </Bandeja>
+      )}
     </section>
   );
 }
@@ -231,37 +330,72 @@ function Leccion({
   number,
   kanji,
   actual,
+  hecha,
   separada,
   aprendidos,
   estado,
+  abierta,
+  onAbrir,
+  aqui,
+  kanjiAqui,
 }: {
   number: number;
   kanji: string[];
   actual?: boolean;
+  hecha?: boolean;
   separada?: boolean;
   aprendidos: number;
   estado: (c: string) => CasillaEstado;
+  abierta?: boolean;
+  onAbrir?: () => void;
+  aqui?: boolean;
+  kanjiAqui?: string | null;
 }) {
   const navigate = useNavigate();
+  const acciones = actual || abierta;
+  const titulo = (
+    <>
+      {actual && <Washi label="Hoy" rotation={-3} className="-ml-1 mr-0.5" />}
+      <h2 className={cx('whitespace-nowrap text-[17px] font-bold', actual ? 'text-ink' : hecha ? 'text-ink' : 'text-ink-3')}>Lección {number}</h2>
+      <span className={cx('whitespace-nowrap text-[15px]', actual || hecha ? 'text-ink-3' : 'text-faded')}>
+        {aprendidos} de {kanji.length}
+      </span>
+    </>
+  );
   return (
-    <section className={separada ? 'pt-6' : undefined}>
+    <section className={separada ? 'pt-6' : undefined} data-aqui={aqui && !kanjiAqui ? '' : undefined}>
       <div className="flex min-h-8 flex-wrap items-center gap-x-2.5 gap-y-1.5">
-        {actual && <Washi label="Hoy" rotation={-3} className="-ml-1 mr-0.5" />}
-        <h2 className={cx('whitespace-nowrap text-[17px] font-bold', actual ? 'text-ink' : 'text-ink-3')}>Lección {number}</h2>
-        <span className={cx('whitespace-nowrap text-[15px]', actual ? 'text-ink-3' : 'text-faded')}>
-          {aprendidos} de {kanji.length}
-        </span>
-        {actual && (
+        {actual ? (
+          titulo
+        ) : (
+          <button
+            type="button"
+            onClick={onAbrir}
+            aria-expanded={!!abierta}
+            className="kj-press flex items-center gap-2.5 text-left"
+          >
+            {titulo}
+            <Chevron girado={!!abierta} />
+          </button>
+        )}
+        {acciones && (
           <div className="ml-auto flex gap-2">
             <BotonSecundario onClick={() => navigate(`/frases/${number}`)}>Frases</BotonSecundario>
-            <BotonSecundario onClick={() => navigate('/examen')}>Examen</BotonSecundario>
+            <BotonSecundario onClick={() => navigate('/examen', actual ? undefined : { state: { leccion: number } })}>
+              Examen
+            </BotonSecundario>
           </div>
         )}
       </div>
-      <Bandeja className="mt-2.5">
+      <Bandeja className={cx('mt-2.5', aqui && !kanjiAqui && 'shadow-[0_0_0_2px_var(--ink)]')}>
         {kanji.map((c) => (
-          <Link key={c} to={`/kanji/${c}`} aria-label={c} className="kj-press">
-            <CasillaKanji kanji={c} size="lg" state={estado(c)} />
+          <Link key={c} to={`/kanji/${c}`} aria-label={c} className="kj-press" data-aqui={c === kanjiAqui ? '' : undefined}>
+            <CasillaKanji
+              kanji={c}
+              size="lg"
+              state={c === kanjiAqui ? 'today' : estado(c)}
+              className={c === kanjiAqui ? '!bg-sakura-chip' : undefined}
+            />
           </Link>
         ))}
       </Bandeja>
@@ -281,10 +415,11 @@ function scrollPadre(el: HTMLElement | null): HTMLElement | null {
   return null;
 }
 
-function Perezosa({ estimate, children }: { estimate: number; children: ReactNode }) {
+function Perezosa({ estimate, siempre, children }: { estimate: number; siempre?: boolean; children: ReactNode }) {
   const ref = useRef<HTMLDivElement>(null);
   const alto = useRef(estimate);
-  const [visible, setVisible] = useState(false);
+  const [enVista, setVisible] = useState(false);
+  const visible = enVista || !!siempre;
 
   useEffect(() => {
     const el = ref.current;
@@ -451,8 +586,8 @@ function SelectorNivel({
 
 // ---------- Iconos locales ----------
 
-const Chevron = () => (
-  <svg width={18} height={18} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round" aria-hidden>
+const Chevron = ({ girado }: { girado?: boolean }) => (
+  <svg width={18} height={18} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round" aria-hidden style={girado ? { transform: 'rotate(180deg)' } : undefined}>
     <path d="m6 9 6 6 6-6" />
   </svg>
 );
