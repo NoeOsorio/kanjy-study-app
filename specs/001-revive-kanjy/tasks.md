@@ -56,8 +56,8 @@ Independent test: quickstart scenarios 6 and 7.
 
 Independent test: quickstart scenarios 5 and 8.
 
-- [ ] T024 [P] [US5] Account page in src/pages/cuenta/ (name box, minutes per day with the new-kanji preview, writing and sound toggles, credits link, sign out and delete hidden until accounts exist). Done: matches es-14.
-- [ ] T025 [P] [US5] Credits page in src/pages/creditos/ from LICENSE-DATA.md. Done: matches es-15.
+- [x] T024 [P] [US5] Account page in src/pages/cuenta/ (name box, minutes per day with the new-kanji preview, writing and sound toggles, credits link, sign out and delete hidden until accounts exist). Done: matches es-14.
+- [x] T025 [P] [US5] Credits page in src/pages/creditos/ from LICENSE-DATA.md. Done: matches es-15.
 - [x] T026 [P] [US5] Sound in src/sound/ (ja-JP voice, kana only, hidden without a voice, respects the toggle). Done: plays on a real phone with a Japanese voice.
 - [ ] T027 [P] [US5] Loading skeletons per page. Done: matches es-18.
 - [ ] T027b [US5] Press feedback and the four animations of FR-024, after loading the Emil skill. Done: a reviewer checks timing and easing on a phone.
