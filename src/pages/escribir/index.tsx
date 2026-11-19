@@ -232,7 +232,7 @@ function Practica({ d }: { d: Datos }) {
 
         {nota && <NotaPropia>{nota}</NotaPropia>}
 
-        <div className="relative">
+        <div className="relative mx-auto w-full lg:w-[min(100%,520px,calc(100dvh-480px))]">
           <KanjiCanvas
             ref={canvas}
             guidePaths={guide}

@@ -13,6 +13,13 @@ export function dayKey(d: Date): string {
 }
 
 // Cards
+
+/** Una tarjeta estudiada es la que ya existe y salió de New (Learning, Review o Relearning). */
+export function isStudied(card: ReviewCard | undefined | null): boolean {
+  if (!card) return false
+  const s = (card.fsrs as { state?: unknown }).state
+  return !(s === undefined || s === 0 || s === 'New')
+}
 export async function getCard(char: string): Promise<ReviewCard | undefined> {
   await ensureReady()
   return get<ReviewCard>(char, cardsStore)

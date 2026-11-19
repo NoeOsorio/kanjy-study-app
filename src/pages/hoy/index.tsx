@@ -68,10 +68,24 @@ export default function HoyPage() {
   return <Tranquilo d={datos} />;
 }
 
-function Marco({ children }: { children: React.ReactNode }) {
+function Marco({ children, nivel }: { children: React.ReactNode; nivel?: string }) {
   return (
     <div className="flex flex-1 flex-col">
-      <div className="flex min-h-[38px] items-center justify-end px-3.5 py-2">
+      <div className="flex min-h-[38px] items-center justify-between px-3.5 py-2">
+        {nivel ? (
+          <Link
+            to="/indice"
+            aria-label="Ver el índice de kanji"
+            className="kj-press flex h-[40px] shrink-0 items-center gap-1 rounded-xl bg-tray pl-3 pr-2 text-[15px] font-bold text-ink"
+          >
+            {nivel}
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden>
+              <path d="m6 9 6 6 6-6" />
+            </svg>
+          </Link>
+        ) : (
+          <span />
+        )}
         <Link
           to="/cuenta"
           aria-label="Cuenta"
@@ -95,7 +109,7 @@ function PrimerDia({ d }: { d: Datos }) {
   const on = k?.onyomi[0] ? cleanReading(k.onyomi[0]) : '';
   const kun = k?.kunyomi[0] ? cleanReading(k.kunyomi[0]) : '';
   return (
-    <Marco>
+    <Marco nivel={d.plan.level}>
       <div className="flex flex-col gap-2">
         <h1 className="m-0 font-voice text-[34px] leading-tight text-ink">Tus primeros kanji</h1>
         <p className="m-0 font-voice text-[17px] leading-snug text-ink-2">Los que más se usan en japonés. Unos 10 minutos.</p>

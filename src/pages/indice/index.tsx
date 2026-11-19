@@ -1,34 +1,26 @@
 import { useCallback, useEffect, useLayoutEffect, useMemo, useRef, useState } from 'react';
 import Cargando from '../../app/Cargando';
 import type { ReactNode } from 'react';
-import { Link, useNavigate, useSearchParams } from 'react-router-dom';
+import { Link, useLocation, useNavigate, useSearchParams } from 'react-router-dom';
 import { Bandeja, BotonSecundario, CasillaKanji, Hoja, SelloSumi, Washi } from '../../design';
 import type { CasillaEstado } from '../../design/CasillaKanji';
 import { cx } from '../../design/cx';
 import { LEVELS, loadLevel } from '../../data/levels';
 import type { Level, LevelFile } from '../../data/types';
-import { allCards, getSettings, newKanjiPerDay, putSettings } from '../../store/repo';
+import { allDueCards, allCards, getSettings, isStudied, newKanjiPerDay, putSettings } from '../../store/repo';
 
 // ---------- Datos del índice ----------
 
-const isLearnedState = (s: unknown) => s === 2 || s === 3 || s === 'Review' || s === 'Relearning';
-const isLearningState = (s: unknown) => s === 0 || s === 1 || s === 'New' || s === 'Learning';
-
 interface Progreso {
+  /** Kanji ya estudiados (su tarjeta salió de New). */
   learned: Set<string>;
-  inProgress: Set<string>;
+  /** Repasos que vencen ahora. */
+  due: number;
 }
 
 async function cargarProgreso(): Promise<Progreso> {
-  const cards = await allCards();
-  const learned = new Set<string>();
-  const inProgress = new Set<string>();
-  for (const c of cards) {
-    const s = (c.fsrs as { state?: unknown }).state;
-    if (isLearnedState(s)) learned.add(c.char);
-    else if (isLearningState(s)) inProgress.add(c.char);
-  }
-  return { learned, inProgress };
+  const [cards, due] = await Promise.all([allCards(), allDueCards()]);
+  return { learned: new Set(cards.filter(isStudied).map((c) => c.char)), due: due.length };
 }
 
 const fmt = (n: number) => String(n).replace(/\B(?=(\d{3})+(?!\d))/g, '.');
@@ -40,9 +32,19 @@ export default function IndicePage() {
   const [level, setLevel] = useState<Level | null>(null);
   const [perDay, setPerDay] = useState(2);
   const [file, setFile] = useState<LevelFile | null>(null);
-  const [progreso, setProgreso] = useState<Progreso>({ learned: new Set(), inProgress: new Set() });
+  const [progreso, setProgreso] = useState<Progreso>({ learned: new Set(), due: 0 });
   const [selector, setSelector] = useState(params.get('selector') === '1');
   const scroller = useRef<HTMLDivElement>(null);
+  const ruta = useLocation().pathname;
+
+  // El índice de escritorio sigue montado al navegar: el avance se vuelve a leer en cada pantalla.
+  useEffect(() => {
+    let vivo = true;
+    void cargarProgreso().then((p) => vivo && setProgreso(p));
+    return () => {
+      vivo = false;
+    };
+  }, [ruta]);
 
   // Ajustes y progreso, y el nivel opcional de la URL (se guarda y se quita de la barra).
   useEffect(() => {
@@ -93,7 +95,7 @@ export default function IndicePage() {
 
   const plan = useMemo(() => {
     if (!file) return null;
-    const { learned, inProgress } = progreso;
+    const { learned } = progreso;
     const terminada = (n: string[]) => n.every((c) => learned.has(c));
     let actual = file.lessons.findIndex((l) => !terminada(l.kanji));
     if (actual < 0) actual = file.lessons.length;
@@ -102,8 +104,7 @@ export default function IndicePage() {
     let hoy = new Set<string>();
     if (lesson) {
       const pend = lesson.kanji.filter((c) => !learned.has(c));
-      const enCurso = pend.filter((c) => inProgress.has(c));
-      hoy = new Set(enCurso.length ? enCurso : pend.slice(0, perDay));
+      hoy = new Set(pend.slice(0, perDay));
     }
     return { hechas, lesson, hoy, siguientes: file.lessons.slice(actual + 1) };
   }, [file, progreso, perDay]);
@@ -139,6 +140,20 @@ export default function IndicePage() {
           <Persona />
         </Link>
       </div>
+
+      {progreso.due > 0 && (
+        <div className="mx-3.5 mb-2 flex items-center justify-between gap-3 rounded-xl bg-tray lg:hidden py-1.5 pl-3.5 pr-1.5">
+          <span className="text-[15px] font-semibold text-ink">
+            {progreso.due === 1 ? '1 repaso' : `${progreso.due} repasos`}
+          </span>
+          <Link
+            to="/repaso"
+            className="kj-press inline-flex h-9 items-center justify-center rounded-[10px] bg-wine px-4 text-[15px] font-semibold text-white"
+          >
+            Repasar
+          </Link>
+        </div>
+      )}
 
       <Hoja className="flex-1">
         <h1 className="sr-only">漢字表</h1>
@@ -237,9 +252,10 @@ function Leccion({
           {aprendidos} de {kanji.length}
         </span>
         {actual && (
-          <BotonSecundario className="ml-auto" onClick={() => navigate('/examen')}>
-            Examen
-          </BotonSecundario>
+          <div className="ml-auto flex gap-2">
+            <BotonSecundario onClick={() => navigate(`/frases/${number}`)}>Frases</BotonSecundario>
+            <BotonSecundario onClick={() => navigate('/examen')}>Examen</BotonSecundario>
+          </div>
         )}
       </div>
       <Bandeja className="mt-2.5">

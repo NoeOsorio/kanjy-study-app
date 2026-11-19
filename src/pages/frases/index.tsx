@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import Cargando from '../../app/Cargando';
-import { Link, useNavigate, useParams } from 'react-router-dom';
+import { Link, useNavigate, useParams, useSearchParams } from 'react-router-dom';
 import { loadLevel } from '../../data/levels';
 import { needsReading } from '../../data/furigana';
 import { sentenceTokens } from '../../data/furigana';
@@ -200,6 +200,8 @@ function CartaVacia({ k }: { k: Kanji }) {
 export default function FrasesPage() {
   const { lesson = '' } = useParams();
   const navigate = useNavigate();
+  const [search] = useSearchParams();
+  const desde = search.get('k');
   const [state, setState] = useState<Loaded | 'missing' | null>(null);
   const [i, setI] = useState(0);
   const touchX = useRef<number | null>(null);
@@ -216,7 +218,12 @@ export default function FrasesPage() {
         const l = Number.isInteger(n) ? f.lessons.find((x) => x.number === n) : undefined;
         if (!l) return alive && setState('missing');
         const kanji = l.kanji.map((c) => f.kanji[c]).filter(Boolean);
-        if (alive) setState({ level: settings.level, cards: armarMazo(kanji) });
+        const cards = armarMazo(kanji);
+        if (alive) {
+          setState({ level: settings.level, cards });
+          const ini = desde ? cards.findIndex((c) => c.kanji.char === desde) : -1;
+          if (ini > 0) setI(ini);
+        }
       } catch {
         if (alive) setState('missing');
       }
@@ -224,7 +231,7 @@ export default function FrasesPage() {
     return () => {
       alive = false;
     };
-  }, [lesson]);
+  }, [lesson, desde]);
 
   const total = state && state !== 'missing' ? state.cards.length : 0;
   const ultima = i >= total - 1;

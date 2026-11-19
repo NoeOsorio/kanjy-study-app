@@ -164,7 +164,7 @@ function Contenido({ s, k }: { s: Loaded; k: Kanji }) {
           <FilaDatos chips={chips(k)} dificultad={k.difficulty} />
           <Palabras words={k.words} level={s.level} char={k.char} />
           {s.writing && <Cuadricula char={k.char} to={escribir} cols={6} cells={12} />}
-          {k.sentences[0] && <EnUnaFrase s={k.sentences[0]} char={k.char} level={s.level} />}
+          {k.sentences[0] && <EnUnaFrase s={k.sentences[0]} char={k.char} level={s.level} lesson={k.lesson} />}
           <Nota char={k.char} initial={s.note} />
           <div className="mt-auto pt-2">{accion}</div>
         </Hoja>

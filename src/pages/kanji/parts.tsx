@@ -138,12 +138,20 @@ export function BotonSonido({ text, label = 'Escuchar la frase' }: { text: strin
   );
 }
 
-export function EnUnaFrase({ s, char, level }: { s: Sentence; char: string; level: Level }) {
+export const urlFrases = (lesson: number, char: string) => `/frases/${lesson}?k=${encodeURIComponent(char)}`;
+
+export function EnUnaFrase({ s, char, level, lesson }: { s: Sentence; char: string; level: Level; lesson: number }) {
   return (
-    <section className="flex flex-col gap-2 rounded-[14px] bg-tray p-4">
+    <section className="relative flex flex-col gap-2 rounded-[14px] bg-tray p-4">
       <header className="flex items-center justify-between">
-        <h2 className="m-0 text-[14px] font-semibold text-ink-3">En una frase</h2>
-        <BotonSonido text={s.ja} />
+        <h2 className="m-0 text-[14px] font-semibold text-ink-3">
+          <Link to={urlFrases(lesson, char)} className="kj-press after:absolute after:inset-0 after:content-['']">
+            En una frase
+          </Link>
+        </h2>
+        <span className="relative z-10">
+          <BotonSonido text={s.ja} />
+        </span>
       </header>
       <Oracion s={s} char={char} level={level} />
     </section>
@@ -178,8 +186,12 @@ export function EnFrases({ k, level }: { k: Kanji; level: Level }) {
   const rows = frasesPorLectura(k);
   if (rows.length === 0) return null;
   return (
-    <section className="flex flex-col gap-3 rounded-[14px] bg-tray p-4">
-      <h2 className="m-0 text-[14px] font-semibold text-sakura-deep">En frases, con cada lectura</h2>
+    <section className="relative flex flex-col gap-3 rounded-[14px] bg-tray p-4">
+      <h2 className="m-0 text-[14px] font-semibold text-sakura-deep">
+        <Link to={urlFrases(k.lesson, k.char)} className="kj-press after:absolute after:inset-0 after:content-['']">
+          En frases, con cada lectura
+        </Link>
+      </h2>
       <ul className="m-0 flex list-none flex-col gap-3 p-0">
         {rows.map(({ tag, s }, i) => (
           <li key={i} className="flex items-start gap-3">
@@ -196,7 +208,9 @@ export function EnFrases({ k, level }: { k: Kanji; level: Level }) {
             <div className="min-w-0 flex-1">
               <Oracion s={s} char={k.char} level={level} size={22} />
             </div>
-            <BotonSonido text={s.ja} />
+            <span className="relative z-10">
+              <BotonSonido text={s.ja} />
+            </span>
           </li>
         ))}
       </ul>

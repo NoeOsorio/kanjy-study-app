@@ -5,15 +5,10 @@ import { Barra, CasillaKanji, Hoja } from '../../design';
 import { loadLevel } from '../../data/levels';
 import type { Level } from '../../data/types';
 import { useHasVoice } from '../../sound';
-import { allCards, getSettings, newKanjiPerDay, putSettings } from '../../store/repo';
+import { allCards, getSettings, isStudied, newKanjiPerDay, putSettings } from '../../store/repo';
 import type { Settings } from '../../store/types';
 
 const MINUTES: Settings['minutesPerDay'][] = [5, 10, 20, 30];
-
-/** Aprendido = ya pasó de Learning (Review o Relearning). */
-function esAprendido(state: unknown): boolean {
-  return state === 2 || state === 3 || state === 'Review' || state === 'Relearning';
-}
 
 function Interruptor({
   on,
@@ -97,7 +92,7 @@ export default function CuentaPage() {
       setName(s.name ?? '');
     });
     void allCards().then((cs) => {
-      setAprendidos(cs.filter((c) => esAprendido((c.fsrs as { state?: unknown }).state)).length);
+      setAprendidos(cs.filter(isStudied).length);
       setCards(new Set(cs.map((c) => c.char)));
     });
   }, []);

@@ -1,5 +1,5 @@
 import { loadLevel } from '../data/levels'
-import { allCards, getSettings, logsSince, newKanjiPerDay } from '../store/repo'
+import { allCards, getSettings, isStudied, logsSince, newKanjiPerDay } from '../store/repo'
 import type { Level } from '../data/types'
 
 export interface TodayPlan {
@@ -43,7 +43,7 @@ export async function todayPlan(now: Date = new Date()): Promise<TodayPlan> {
   const byDue = [...cards].sort((a, b) => new Date(a.fsrs.due).getTime() - new Date(b.fsrs.due).getTime())
   const due = byDue.filter((c) => new Date(c.fsrs.due).getTime() <= t).map((c) => c.char)
   const future = byDue.find((c) => new Date(c.fsrs.due).getTime() > t)
-  const known = new Set(cards.map((c) => c.char))
+  const known = new Set(cards.filter(isStudied).map((c) => c.char))
 
   const unlearned: { char: string; lesson: number }[] = []
   for (const lesson of file.lessons) {

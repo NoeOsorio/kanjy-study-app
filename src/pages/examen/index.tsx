@@ -6,11 +6,10 @@ import { Barra, BotonPrincipal, BotonSecundario, CasillaKanji, Hoja, SelloSumi, 
 import type { CasillaEstado } from '../../design/CasillaKanji';
 import { loadLevel } from '../../data/levels';
 import type { LevelFile } from '../../data/types';
-import { allCards, getSettings } from '../../store/repo';
+import { allCards, getSettings, isStudied } from '../../store/repo';
 import { countWithWords, MAX_QUESTIONS } from '../../exam/questions';
 import type { Mode } from '../../exam/questions';
 
-const isLearnedState = (s: unknown) => s === 2 || s === 3 || s === 'Review' || s === 'Relearning';
 const STEP = 12;
 
 type Tipo = 'done' | 'today' | 'later';
@@ -48,7 +47,7 @@ export default function ExamenPage() {
       const s = await getSettings();
       const [f, cards] = await Promise.all([loadLevel(s.level), allCards()]);
       if (!vivo) return;
-      const learned = new Set(cards.filter((c) => isLearnedState((c.fsrs as { state?: unknown }).state)).map((c) => c.char));
+      const learned = new Set(cards.filter(isStudied).map((c) => c.char));
       const hecha = f.lessons.map((l) => l.kanji.every((c) => learned.has(c)));
       const actual = hecha.indexOf(false);
       const t: Tipo[] = f.lessons.map((_, i) => (hecha[i] ? 'done' : i === actual ? 'today' : 'later'));
