@@ -24,6 +24,8 @@ const OUT = path.join(ROOT, 'public/data');
 const sources = JSON.parse(fs.readFileSync(path.join(HERE, 'sources.json'), 'utf8'));
 const overrides = JSON.parse(fs.readFileSync(path.join(HERE, 'overrides.json'), 'utf8'));
 const tokenReadings = overrides._tokenReadings ?? {};
+const wordMeanings = overrides._wordMeanings ?? {};
+const extraWords = overrides._extraWords ?? {};
 for (const k of Object.keys(overrides)) if (k.startsWith('_')) delete overrides[k];
 
 const LEVELS = ['N5', 'N4', 'N3', 'N2', 'N1'];
@@ -135,16 +137,20 @@ function loadJmdict(file, levelOf) {
         (r) => !r.nokanji && (r.restr.length === 0 || r.restr.includes(k.keb)),
       )?.reb;
       if (!reading) continue;
-      const sense = entry.senses.find(
-        (s) => s.spa.length && (!s.stagk.length || s.stagk.includes(k.keb)) && (!s.stagr.length || s.stagr.includes(reading)),
-      );
-      if (!sense) continue;
+      // first usable Spanish gloss: skip glosses that are only digits or note a
+      // restricted use («(usado en ...»), which teach nothing about the word
+      const meaning = entry.senses
+        .filter((s) => (!s.stagk.length || s.stagk.includes(k.keb)) && (!s.stagr.length || s.stagr.includes(reading)))
+        .flatMap((s) => s.spa)
+        .find((g) => !/^[\d\s.,]+$/.test(g) && !g.startsWith('(usado en'));
+      if (!meaning) continue;
       const nf = k.pri.map((p) => /^nf(\d\d)$/.exec(p)?.[1]).filter(Boolean).map(Number);
       const tier = k.pri.some((p) => R1_COMMON.test(p)) ? 0 : k.pri.length ? 1 : 2;
       const cand = {
         written: k.keb,
         reading,
-        meaning: sense.spa[0],
+        meaning,
+        verbal: entry.pos.some((p) => /^(v1|v5.*|vk|adj-i)$/.test(p)),
         nf: nf.length ? Math.min(...nf) : 99,
         tier,
       };
@@ -155,7 +161,7 @@ function loadJmdict(file, levelOf) {
     }
   };
   for (const line of lines) {
-    if (line === '<entry>') { entry = { kebs: [], rebs: [], senses: [] }; continue; }
+    if (line === '<entry>') { entry = { kebs: [], rebs: [], senses: [], pos: [] }; continue; }
     if (!entry) continue;
     if (line === '</entry>') { flush(); entry = null; continue; }
     if (line === '<k_ele>') { sec = { keb: '', pri: [] }; entry.kebs.push(sec); continue; }
@@ -167,6 +173,7 @@ function loadJmdict(file, levelOf) {
     else if ((m = /^<reb>(.*)<\/reb>$/.exec(line))) sec.reb = unescapeXml(m[1]);
     else if (line === '<re_nokanji/>') sec.nokanji = true;
     else if ((m = /^<re_restr>(.*)<\/re_restr>$/.exec(line))) sec.restr.push(unescapeXml(m[1]));
+    else if ((m = /^<pos>&(.*);<\/pos>$/.exec(line))) entry.pos.push(m[1]);
     else if ((m = /^<stagk>(.*)<\/stagk>$/.exec(line))) sec.stagk.push(unescapeXml(m[1]));
     else if ((m = /^<stagr>(.*)<\/stagr>$/.exec(line))) sec.stagr.push(unescapeXml(m[1]));
     else if ((m = /^<gloss xml:lang="spa"[^>]*>(.*)<\/gloss>$/.exec(line))) sec.spa.push(unescapeXml(m[1]));
@@ -266,6 +273,13 @@ async function main() {
   console.log('Reading KANJIDIC2, JMdict, Tatoeba');
   const kd = loadKanjidic(files.kanjidic2, levelOf);
   const jm = loadJmdict(files.jmdict, levelOf);
+  // words JMdict has no Spanish gloss for, curated in overrides.json
+  for (const [written, w] of Object.entries(extraWords)) {
+    for (const c of new Set([...written].filter((x) => levelOf.has(x)))) {
+      if (!jm.has(c)) jm.set(c, []);
+      if (!jm.get(c).some((x) => x.written === written)) jm.get(c).push({ written, reading: w.reading, meaning: w.meaning, nf: 99, tier: 0, verbal: false });
+    }
+  }
   const tb = loadTatoeba({ jpn: files.tatoebaJpn, spa: files.tatoebaSpa, links: files.tatoebaLinks }, levelOf);
   const svgDir = extractKanjivg(files.kanjivg);
   const tokenizer = await buildTokenizer();
@@ -341,14 +355,24 @@ async function main() {
         const seen = new Set();
         const cands = (jm.get(ch) ?? [])
           .filter((w) => !hidden.has(w.written))
+          .map((w) => (wordMeanings[w.written] ? { ...w, meaning: wordMeanings[w.written] } : w))
           .sort((a, b) =>
             a.tier - b.tier ||
+            // the bare kanji teaches least: last among words of its tier
+            Number(a.written === ch) - Number(b.written === ch) ||
             Number(!fits(a)) - Number(!fits(b)) ||
+            // verb or i-adjective form first (食べる before 食事)
+            Number(!(a.verbal && a.written[0] === ch)) - Number(!(b.verbal && b.written[0] === ch)) ||
             a.nf - b.nf ||
             [...a.written].length - [...b.written].length ||
             a.written.localeCompare(b.written, 'ja'))
           // one word per written form, keeping its best entry (sorted first)
           .filter((w) => !seen.has(w.written) && seen.add(w.written));
+        for (const form of [...(ov.words ?? [])].reverse()) {
+          const at = cands.findIndex((w) => w.written === form);
+          if (at < 0) { fail(`${ch}: words override «${form}» is not a JMdict word with a Spanish gloss`); continue; }
+          cands.unshift(...cands.splice(at, 1));
+        }
         if (cands.some((w) => w.tier === 0)) stat.commonWord++;
         if (cands.length) stat.anyWord++;
         const words = cands.slice(0, MAX_WORDS).map((w) => ({
