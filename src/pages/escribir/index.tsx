@@ -3,7 +3,8 @@ import type { ReactNode } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { getKanji, loadLevel, strokeUrl } from '../../data/levels';
 import type { Kanji } from '../../data/types';
-import { getNote, markStudyDay } from '../../store/repo';
+import { addLog, getCard, getNote, markStudyDay, putCard } from '../../store/repo';
+import { newCard, rate } from '../../store/scheduler';
 import NotFound from '../../app/NotFound';
 import KanjiCanvas from '../../components/KanjiCanvas';
 import type { KanjiCanvasHandle } from '../../components/KanjiCanvas';
@@ -135,6 +136,16 @@ function Practica({ d }: { d: Datos }) {
   useEffect(() => {
     if (hecho && !antes.current) {
       markStudyDay().catch(() => {});
+      // Writing a kanji for the first time is what adds it to the student's reviews.
+      const char = kanji.char;
+      getCard(char)
+        .then(async (c) => {
+          if (c) return;
+          const { card, log } = rate(newCard(char, 'lesson'), 'good');
+          await putCard(card);
+          await addLog(log);
+        })
+        .catch(() => {});
       setEscritos((n) => n + 1);
     }
     antes.current = hecho;
