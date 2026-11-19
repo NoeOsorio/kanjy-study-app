@@ -30,6 +30,22 @@ kanji por nivel N5, N4, etc. y los organizamos de forma entendible y fácil de u
 - Spaced repetition is the center of the app.
 - Inside each level, lessons of about ten kanji ordered by usage frequency.
 
+## Decisions from the Paper redesign (approved 2026-11-15 to 2026-11-18)
+
+- The app is a full-screen kanji drill notebook (漢字ドリル): no tab bar, no template header. The
+  approved screens live in Paper (file «Kanjy rediseño», page «Doriru») and are exported to
+  `docs/rediseno/doriru/es-*.png`; `docs/DESIGN.md` is the design system and
+  `docs/rediseno/COBERTURA.md` maps every current feature to a new screen.
+- Palette: white paper, very light sakura trays, wine primary button; no beige, no gray, no black
+  primary button. No sticky notes anywhere in the app.
+- Stationery only where it teaches or orients: sakura stickers for studied days (missing a day is
+  never punished), 済 stamp on finished lessons, washi «Hoy» on the current lesson, highlighter on
+  the studied kanji inside a sentence, red-pen 花丸 and circles for correct answers.
+- Any kanji above the student's level shows its hiragana reading (furigana) above it, everywhere.
+- Review uses four answer buttons (Otra vez, Difícil, Bien, Fácil) showing the next interval.
+- Quiz options never carry letters (no A, B, C, D).
+- Sound is in scope: a play button on kanji, words and quiz prompts, and a setting to turn it off.
+
 ## User Scenarios & Testing *(mandatory)*
 
 ### User Story 1 - Browse and study any kanji from N5 to N1 in Spanish (Priority: P1)
@@ -124,7 +140,34 @@ confirm questions come only from the chosen kanji, with no repeated question and
 2. **Given** a quiz on one lesson of 10 kanji, **When** it runs, **Then** no question repeats and
    the wrong options are plausible kanji of the same level.
 
+### User Story 5 - The notebook around the study (Priority: P2)
+
+The student keeps a personal note (mnemonic) on any kanji, sees a week of sakura stickers for the
+days they studied, chooses how many minutes a day to study, can turn handwriting practice and sound
+on or off, and on a computer sees the index and a two-page notebook side by side.
+
+**Why this priority**: These pieces make daily study feel like a notebook of one's own; they come
+from the approved redesign and depend on Stories 1 and 2.
+
+**Independent Test**: Write a note on 国, close and reopen the app, and see it on the kanji page,
+on the back of its review card and on the desktop page. Study two days, skip one, study again, and
+see two, then three stickers with the skipped day blank and no message about losing a streak.
+
+**Acceptance Scenarios**:
+
+1. **Given** a kanji with a note, **When** it comes up in review, **Then** the back of the card
+   shows the note under «Tu nota».
+2. **Given** the daily time set to 10 minutes, **When** the student opens the home page, **Then**
+   the plan holds about two new kanji plus the due reviews.
+3. **Given** a search for a kanji outside the student's level, **When** it shows, **Then** it says
+   which level it belongs to, shows its readings above it, and offers «Agregar a mis repasos».
+4. **Given** a kanji with no example sentence, **When** the phrase cards reach it, **Then** the
+   card says so in one line, offers practice writing it, and lists the words where it appears.
+
 ### Edge Cases
+
+- A student starts an exam with no lesson selected: the start button is disabled and says
+  «Elige al menos una lección».
 
 - A level with 1,232 kanji and 120+ lessons must stay fast to open and scroll on a phone.
 - Kanji whose Spanish meaning list starts with a rare sense (経 "sutra") need the curated order.
@@ -165,6 +208,20 @@ confirm questions come only from the chosen kanji, with no repeated question and
   note that JLPT levels are unofficial lists.
 - **FR-015**: The production build MUST compile with no type errors, and the app MUST be
   installable on a phone home screen.
+- **FR-016a**: The UI MUST follow `docs/DESIGN.md` and the approved Paper screens; every current
+  feature MUST keep a place as mapped in `docs/rediseno/COBERTURA.md`.
+- **FR-017**: Students MUST be able to write, edit and delete one personal note per kanji, shown
+  on the kanji page, on the back of its review card and on the desktop page.
+- **FR-018**: Every kanji above the student's level MUST show its kana reading above it in
+  sentences, words and results.
+- **FR-019**: The quiz MUST offer six modes (meaning, kanji from meaning, reading, kanji from
+  reading, words, mix), show the time per question in the result, and let the student add any
+  missed kanji to their reviews.
+- **FR-020**: The app MUST play the Japanese reading of kanji, words and sentences on demand, with
+  a setting to turn sound off; the interface never names the voice provider.
+- **FR-021**: The account page MUST let the student set minutes per day, turn handwriting
+  practice and sound on or off, see where the data comes from, sign out and delete the account.
+- **FR-022**: A week of study days MUST be shown as stickers with no streak penalty.
 - **FR-016**: Every screen of the redesign MUST be mocked up in Paper and approved by Noe before
   it is implemented, with before and after screenshots on the Linear ticket.
 
@@ -202,6 +259,8 @@ confirm questions come only from the chosen kanji, with no repeated question and
   KanjiVG; levels from the Waller lists. In a check on the 27 curated kanji, all 27 curated
   meanings appear among KANJIDIC2's first two Spanish meanings, so N5 and N4 curation is a small
   overrides pass, not a rewrite.
-- Example sentences beyond the existing curated ones are out of scope for this spec.
-- Audio, handwriting recognition, a teacher role and native mobile apps are out of scope.
+- Example sentences come from Tatoeba's Japanese and Spanish sentence pairs (CC BY 2.0 FR),
+  filtered to short sentences; kanji with none show the «sin ejemplos» card.
+- Handwriting recognition, a teacher role and native mobile apps are out of scope. Sound uses the
+  device's built-in Japanese voice, so it costs nothing and needs no account.
 - The web app is hosted on a free static host; publishing it to the internet needs Noe's yes.
