@@ -39,7 +39,7 @@ Independent test: quickstart scenarios 2, 3 and 5.
 
 Independent test: quickstart scenarios 1 and 4.
 
-- [ ] T017 [US2] FSRS scheduler in src/study/ using ts-fsrs `preview()` for the four buttons, session queue where «Otra vez» returns in the same session, daily plan from minutesPerDay. Done: with the clock moved one and four days, failed kanji are due first.
+- [x] T017 [US2] FSRS scheduler in src/study/ using ts-fsrs `preview()` for the four buttons, session queue where «Otra vez» returns in the same session, daily plan from minutesPerDay. Done: with the clock moved one and four days, failed kanji are due first.
 - [ ] T018 [P] [US2] Today page and first day in src/pages/hoy/ (first day when no progress), with the next review time when nothing is due. Done: matches es-16 and the plan shows due and new counts.
 - [ ] T019 [P] [US2] Review front and back in src/pages/repaso/ with note on the back, intervals on the buttons and play buttons. Done: matches es-8 and es-9.
 - [ ] T020 [US2] Review finished in src/pages/repaso/listo with 花丸 count, minutes, «te costaron», week of stickers from StudyDay, tomorrow tiles. Done: matches es-12; a skipped day is blank.
