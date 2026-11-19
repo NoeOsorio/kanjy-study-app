@@ -102,6 +102,8 @@ export async function getSettings(): Promise<Settings> {
 export async function putSettings(patch: Partial<Settings>): Promise<Settings> {
   const next = { ...(await getSettings()), ...patch }
   await set('settings', { ...next, updatedAt: now() }, settingsStore)
+  // Lets modules that depend on settings (sound) refresh without importing the store back.
+  if (typeof window !== 'undefined') window.dispatchEvent(new Event('kanjy-settings'))
   return next
 }
 
