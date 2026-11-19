@@ -1,0 +1,72 @@
+{
+  "pinnedOn": "2026-11-18",
+  "note": "The build downloads each file to .cache/, checks sha256 and fails on mismatch. EDRDG and Tatoeba files are rewritten upstream every day or week; when a hash stops matching, fetch the new files, review the diff of public/data and update sha256 here. A mirror of the pinned files can be listed in 'mirrors' and is tried when 'url' fails or no longer matches.",
+  "sources": {
+    "kanjiData": {
+      "file": "kanji-data.json",
+      "what": "Waller JLPT lists, read ONLY from the jlpt_new field. Nothing else in this file is read and nothing WaniKani-derived is shipped.",
+      "url": "https://raw.githubusercontent.com/davidluzgouveia/kanji-data/7ada8ddbfe7359286f4db4e766d1242b9e6f7969/kanji.json",
+      "version": "commit 7ada8ddbfe7359286f4db4e766d1242b9e6f7969 (last change to kanji.json)",
+      "sha256": "561b72ea9df703c58fae0c68585812e172aaa7611d2fcee6719d55fd2dfd4fa4",
+      "license": "MIT (repository); JLPT levels by Jonathan Waller (tanos.co.uk), unofficial lists",
+      "mirrors": []
+    },
+    "kanjidic2": {
+      "file": "kanjidic2.xml.gz",
+      "what": "Kanji meanings in Spanish, readings, strokes, grade, frequency",
+      "url": "https://www.edrdg.org/kanjidic/kanjidic2.xml.gz",
+      "version": "file_version 4, database_version 2026-322, created 2026-11-18",
+      "sha256": "aa9f26afb2aa9c97a20f5eaccf2630adcead0fe0e137027894ffe3b3d640c7f2",
+      "license": "CC BY-SA 4.0 (EDRDG)",
+      "mirrors": []
+    },
+    "jmdict": {
+      "file": "JMdict.gz",
+      "what": "Words with Spanish glosses (xml:lang=\"spa\")",
+      "url": "https://www.edrdg.org/pub/Nihongo/JMdict.gz",
+      "version": "JMdict created 2026-11-18",
+      "sha256": "1239c813c82c124fd4711c770acfef37494122e9052a7d2495cc1265620171b3",
+      "license": "CC BY-SA 4.0 (EDRDG)",
+      "mirrors": []
+    },
+    "kanjivg": {
+      "file": "kanjivg-20260714-main.zip",
+      "what": "Stroke order SVG, base file of each kanji",
+      "url": "https://github.com/KanjiVG/kanjivg/releases/download/r20260714/kanjivg-20260714-main.zip",
+      "version": "r20260714",
+      "sha256": "b5df6cd2bc249dd49b8041eb99e38ba9f8dc6b9ea57962a80084b4a315d1a7fc",
+      "license": "CC BY-SA 3.0 (Ulrich Apel)",
+      "mirrors": []
+    },
+    "tatoebaJpn": {
+      "file": "jpn_sentences.tsv.bz2",
+      "what": "Japanese sentences",
+      "url": "https://downloads.tatoeba.org/exports/per_language/jpn/jpn_sentences.tsv.bz2",
+      "version": "weekly export, 2026-11-14",
+      "sha256": "bf7ad05ade124312ca686de0209204b77c6e5ba3d808637b93906727d780f515",
+      "license": "CC BY 2.0 FR (Tatoeba contributors)",
+      "mirrors": []
+    },
+    "tatoebaSpa": {
+      "file": "spa_sentences.tsv.bz2",
+      "what": "Spanish sentences",
+      "url": "https://downloads.tatoeba.org/exports/per_language/spa/spa_sentences.tsv.bz2",
+      "version": "weekly export, 2026-11-14",
+      "sha256": "06b518dde1ba30a5547d8902c8e458ba0e45e67f22d3ca88855f701edbd5b359",
+      "license": "CC BY 2.0 FR (Tatoeba contributors)",
+      "mirrors": []
+    },
+    "tatoebaLinks": {
+      "file": "jpn-spa_links.tsv.bz2",
+      "what": "Translation links between Japanese and Spanish sentences",
+      "url": "https://downloads.tatoeba.org/exports/per_language/jpn/jpn-spa_links.tsv.bz2",
+      "version": "weekly export, 2026-11-14",
+      "sha256": "79f87a337c807ac6c7b295fcfe34a6e22bace9a8e2be2b6e0044b7bf388c2c12",
+      "license": "CC BY 2.0 FR (Tatoeba contributors)",
+      "mirrors": []
+    }
+  },
+  "tools": {
+    "kuromoji": { "version": "0.1.2", "dictionary": "IPAdic (bundled in node_modules/kuromoji/dict)", "use": "kana readings of sentences" }
+  }
+}

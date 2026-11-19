@@ -1,0 +1,118 @@
+{
+  "_readme": "Human corrections. Applied by index.mjs on every build. meanings replaces the whole list (first item is the everyday meaning shown large). _tokenReadings fixes dictionary readings of whole tokens in sentences. sentences are curated examples, placed before the Tatoeba ones; readings and levels are computed. hideWords lists written forms to drop. Keys starting with _ are ignored.",
+  "_tokenReadings": { "日本": "にほん", "日本人": "にほんじん" },
+  "一": { "meanings": ["uno"] },
+  "二": { "meanings": ["dos"] },
+  "三": { "meanings": ["tres"] },
+  "四": { "meanings": ["cuatro"] },
+  "五": { "meanings": ["cinco"] },
+  "六": { "meanings": ["seis"] },
+  "七": { "meanings": ["siete"] },
+  "八": { "meanings": ["ocho"] },
+  "九": { "meanings": ["nueve"] },
+  "十": { "meanings": ["diez"] },
+  "百": { "meanings": ["cien"] },
+  "千": { "meanings": ["mil"] },
+  "万": { "meanings": ["diez mil"] },
+  "円": { "meanings": ["yen", "círculo", "redondo"] },
+  "人": { "meanings": ["persona"] },
+  "男": { "meanings": ["hombre", "masculino"] },
+  "女": { "meanings": ["mujer", "femenino"] },
+  "子": { "meanings": ["niño", "hijo", "chiquillo"] },
+  "父": { "meanings": ["padre"] },
+  "母": { "meanings": ["madre"] },
+  "友": { "meanings": ["amigo", "compañero"] },
+  "先": { "meanings": ["antes", "anterior", "adelante", "punta"] },
+  "生": { "meanings": ["vida", "nacer", "vivir", "crudo"] },
+  "学": { "meanings": ["estudiar", "estudio", "aprendizaje", "ciencia"] },
+  "校": { "meanings": ["escuela", "colegio"] },
+  "名": { "meanings": ["nombre", "célebre", "reputación"] },
+  "日": {
+    "meanings": ["día, sol", "Japón"],
+    "sentences": [
+      { "ja": "今日は良い天気です。", "es": "Hoy hace buen tiempo." },
+      { "ja": "日本に行きたいです。", "es": "Quiero ir a Japón." },
+      { "ja": "明日は忙しいです。", "es": "Mañana estoy ocupado." }
+    ]
+  },
+  "月": {
+    "meanings": ["luna, mes"],
+    "sentences": [
+      { "ja": "月がきれいです。", "es": "La luna está hermosa." },
+      { "ja": "月曜日に会いましょう。", "es": "Veámonos el lunes." },
+      { "ja": "一ヶ月日本語を勉強しています。", "es": "Llevo un mes estudiando japonés." }
+    ]
+  },
+  "火": {
+    "meanings": ["fuego", "llama"],
+    "sentences": [
+      { "ja": "火曜日にテストがあります。", "es": "El martes hay un examen." },
+      { "ja": "火山が噴火しました。", "es": "El volcán hizo erupción." },
+      { "ja": "火事が起きました。", "es": "Se produjo un incendio." }
+    ]
+  },
+  "水": {
+    "meanings": ["agua"],
+    "sentences": [
+      { "ja": "水曜日に映画を見ます。", "es": "El miércoles veré una película." },
+      { "ja": "水泳が好きです。", "es": "Me gusta la natación." },
+      { "ja": "水道の水を飲みます。", "es": "Bebo agua del grifo." }
+    ]
+  },
+  "木": {
+    "meanings": ["árbol", "madera"],
+    "sentences": [
+      { "ja": "木曜日に買い物に行きます。", "es": "El jueves iré de compras." },
+      { "ja": "木造の家に住んでいます。", "es": "Vivo en una casa de madera." },
+      { "ja": "木製のテーブルを買いました。", "es": "Compré una mesa de madera." }
+    ]
+  },
+  "金": { "meanings": ["dinero", "oro", "metal"] },
+  "土": { "meanings": ["tierra", "suelo"] },
+  "山": { "meanings": ["montaña"] },
+  "川": { "meanings": ["río"] },
+  "雨": { "meanings": ["lluvia"] },
+  "天": { "meanings": ["cielo", "paraíso"] },
+  "電": { "meanings": ["electricidad", "eléctrico"] },
+  "国": { "meanings": ["país"] },
+  "大": { "meanings": ["grande", "mucho"] },
+  "小": { "meanings": ["pequeño", "poco"] },
+  "高": { "meanings": ["alto", "caro"] },
+  "長": { "meanings": ["largo", "jefe"] },
+  "上": { "meanings": ["arriba", "encima", "superficie"] },
+  "下": { "meanings": ["abajo", "debajo", "inferior"] },
+  "中": { "meanings": ["dentro", "centro", "medio"] },
+  "右": { "meanings": ["derecha"] },
+  "左": { "meanings": ["izquierda"] },
+  "東": { "meanings": ["este"] },
+  "西": { "meanings": ["oeste"] },
+  "南": { "meanings": ["sur"] },
+  "北": { "meanings": ["norte"] },
+  "外": { "meanings": ["afuera", "exterior", "otro"] },
+  "前": { "meanings": ["antes", "delante"] },
+  "後": { "meanings": ["después", "detrás"] },
+  "午": { "meanings": ["mediodía"] },
+  "今": { "meanings": ["ahora"] },
+  "時": { "meanings": ["hora", "tiempo", "ocasión"] },
+  "間": { "meanings": ["intervalo", "espacio", "entre"] },
+  "半": { "meanings": ["mitad", "medio"] },
+  "年": { "meanings": ["año", "edad"] },
+  "毎": { "meanings": ["cada", "todos los"] },
+  "白": { "meanings": ["blanco"] },
+  "休": { "meanings": ["descansar", "descanso"] },
+  "入": { "meanings": ["entrar", "meter", "admitir"] },
+  "出": { "meanings": ["salir", "sacar"] },
+  "行": { "meanings": ["ir", "fila", "línea"] },
+  "来": { "meanings": ["venir", "llegar"] },
+  "見": { "meanings": ["ver", "mirar", "opinión"] },
+  "食": { "meanings": ["comer", "comida"] },
+  "聞": { "meanings": ["escuchar", "oír", "preguntar"] },
+  "話": { "meanings": ["hablar", "charla", "cuento"] },
+  "読": { "meanings": ["leer"] },
+  "書": { "meanings": ["escribir", "escrito"] },
+  "語": { "meanings": ["idioma", "palabra", "hablar"] },
+  "車": { "meanings": ["coche", "vehículo", "rueda"] },
+  "気": { "meanings": ["ánimo", "espíritu", "mente"] },
+  "何": { "meanings": ["qué"] },
+  "本": { "meanings": ["libro", "origen", "contador de cosas alargadas"] }
+}

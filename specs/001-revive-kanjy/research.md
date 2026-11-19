@@ -81,3 +81,14 @@ require an initial value for `useRef`. The page is rebuilt in slice S4; the buil
 in S0 so every slice can be verified on a green build.
 </content>
 </invoke>
+
+## R8. Notes from slice S0 (2026-11-18)
+
+- ts-fsrs 5.4.2 is used instead of 6.x: v6 needs Node 24 and this machine runs Node 22; v5 has
+  the same four ratings and preview.
+- EDRDG rewrites JMdict and KANJIDIC2 daily and Tatoeba weekly, so the pinned checksums stop
+  matching within days. The committed `public/data/` is the source of truth between runs; to
+  regenerate, refresh the pins on purpose (a later task can host the source files as a release
+  asset of the repo, which needs Noe's yes because it publishes them).
+- 日本 is read にほん in sentences through `_tokenReadings` in overrides.json (the tokenizer
+  says にっぽん in about 35 sentences).

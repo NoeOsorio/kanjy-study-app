@@ -7,6 +7,7 @@
     "dev": "vite",
     "build": "tsc -b && vite build",
     "lint": "eslint .",
+    "data": "node scripts/build-data/index.mjs",
     "preview": "vite preview"
   },
   "dependencies": {
