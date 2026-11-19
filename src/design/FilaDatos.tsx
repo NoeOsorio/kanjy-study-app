@@ -1,6 +1,6 @@
 import { cx } from './cx';
 
-const chip = 'inline-flex h-8 items-center gap-1.5 rounded-lg bg-tray px-2.5 text-[13px] text-ink-2';
+const chip = 'inline-flex h-8 items-center gap-1.5 rounded-lg bg-tray px-2 text-[12px] text-ink-2';
 
 /** Fila de chips pequeños; el primero puede llevar tres barras de dificultad. */
 export function FilaDatos({
@@ -14,7 +14,7 @@ export function FilaDatos({
   className?: string;
 }) {
   return (
-    <div className={cx('flex flex-wrap gap-1.5', className)}>
+    <div className={cx('flex flex-wrap gap-1', className)}>
       {chips.map((c, i) => (
         <span key={c} className={cx(chip, i === 0 && dificultad && 'font-semibold text-ink')}>
           {i === 0 && dificultad && (

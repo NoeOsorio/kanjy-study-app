@@ -28,12 +28,12 @@ Every commit carries NOE-559 and is pushed. Executed by Sonnet subagents; Opus r
 
 Independent test: quickstart scenarios 2, 3 and 5.
 
-- [ ] T012 [P] [US1] Index 漢字表 in src/pages/indice/ with finished lessons folded with 済, current lesson with washi «Hoy», next lessons, virtualized for N1, and the level selector sheet with kanji previews; the state filter (FR-007) is mocked in Paper and approved by Noe before it is built. Done: N1 scrolls end to end smoothly at 375 px; matches es-2 and es-13.
-- [ ] T013 [P] [US1] Kanji page in src/pages/kanji/ with tile and stroke-order play, readings, chips (difficulty, frequency, grade, strokes), words with furigana rule, writing grid preview, sentence with highlighter, note, and play buttons on the kanji and words (T026). Done: matches es-1 for 国; an N1 kanji with no words hides the section.
-- [ ] T013b [US1] Desktop double page content in src/pages/kanji/ at 1024 px and wider: stroke-order strip, «En frases, con cada lectura», «No lo confundas con», writing pad and note. Done: matches es-7.
-- [ ] T014 [US1] Writing practice and 花丸 in src/pages/escribir/ reusing src/components/KanjiCanvas.tsx with the KanjiVG guide, undo, clear and hint. Done: matches es-3 and es-4.
-- [ ] T015 [P] [US1] Search page in src/pages/buscar/ with out-of-level card, furigana and «Agregar a mis repasos». Done: «gato» on N5 shows 猫 as in es-17.
-- [ ] T016 [US1] Note editing on the kanji page saving to the Note store. Done: note on 国 survives reload.
+- [x] T012 [P] [US1] Index 漢字表 in src/pages/indice/ with finished lessons folded with 済, current lesson with washi «Hoy», next lessons, virtualized for N1, and the level selector sheet with kanji previews; the state filter (FR-007) is mocked in Paper and approved by Noe before it is built. Done: N1 scrolls end to end smoothly at 375 px; matches es-2 and es-13.
+- [x] T013 [P] [US1] Kanji page in src/pages/kanji/ with tile and stroke-order play, readings, chips (difficulty, frequency, grade, strokes), words with furigana rule, writing grid preview, sentence with highlighter, note, and play buttons on the kanji and words (T026). Done: matches es-1 for 国; an N1 kanji with no words hides the section.
+- [x] T013b [US1] Desktop double page content in src/pages/kanji/ at 1024 px and wider: stroke-order strip, «En frases, con cada lectura», «No lo confundas con», writing pad and note. Done: matches es-7.
+- [x] T014 [US1] Writing practice and 花丸 in src/pages/escribir/ reusing src/components/KanjiCanvas.tsx with the KanjiVG guide, undo, clear and hint. Done: matches es-3 and es-4.
+- [x] T015 [P] [US1] Search page in src/pages/buscar/ with out-of-level card, furigana and «Agregar a mis repasos». Done: «gato» on N5 shows 猫 as in es-17.
+- [x] T016 [US1] Note editing on the kanji page saving to the Note store. Done: note on 国 survives reload.
 
 ## Phase 4: User Story 2, daily review (slice S3)
 
