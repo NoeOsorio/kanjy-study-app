@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react';
+import Cargando from '../../app/Cargando';
 import { Link, useNavigate, useSearchParams } from 'react-router-dom';
 import { getKanji } from '../../data/levels';
 import { needsReading, sentenceTokens } from '../../data/furigana';
@@ -15,6 +16,7 @@ const HAN = /\p{Script=Han}/u;
 
 type View =
   | { kind: 'empty' }
+  | { kind: 'loading' }
   | { kind: 'none' }
   | { kind: 'list'; rows: SearchResult[] }
   | { kind: 'outside'; best: SearchResult; kanji: Kanji; known: Set<string>; added: boolean };
@@ -45,7 +47,7 @@ export default function BuscarPage() {
   const q = params.get('q') ?? '';
   const [text, setText] = useState(q);
   const [level, setLevel] = useState<Level>('N5');
-  const [view, setView] = useState<View>({ kind: 'empty' });
+  const [view, setView] = useState<View>(q.trim() ? { kind: 'loading' } : { kind: 'empty' });
 
   // La URL sigue lo que se escribe, con 150 ms de espera.
   useEffect(() => {
@@ -124,6 +126,7 @@ export default function BuscarPage() {
 
       {view.kind !== 'empty' && (
         <Hoja className="flex flex-1 flex-col gap-5 p-5">
+          {view.kind === 'loading' && <Cargando />}
           {view.kind === 'none' && <p className="font-voice text-[22px] text-ink">No encontré nada con eso.</p>}
           {view.kind === 'list' && <Lista rows={view.rows} />}
           {view.kind === 'outside' && <Fuera view={view} level={level} onAgregar={agregar} />}

@@ -1,14 +1,14 @@
 import { useEffect, useState, useSyncExternalStore } from 'react';
+import Cargando from '../../app/Cargando';
 import { Link, useNavigate, useParams } from 'react-router-dom';
 import { getKanji, loadLevel } from '../../data/levels';
 import type { Kanji, Level } from '../../data/types';
 import { getCard, getNote, getSettings, putCard } from '../../store/repo';
 import { newCard } from '../../store/scheduler';
-import { Pagina } from '../../app/Pagina';
 import NotFound from '../../app/NotFound';
 import { Barra, BotonPrincipal, FilaDatos, Hoja, KanjiGrande } from '../../design';
 import { IconLapiz } from '../../design/icons';
-import { canSpeak, speak } from '../../sound';
+import { canSpeak, speak, useCanSpeak } from '../../sound';
 import { StrokeOverlay, StrokeStrip, useStrokePlayback, useStrokes } from './strokes';
 import {
   chips,
@@ -87,7 +87,7 @@ export default function KanjiPage() {
     };
   }, [char]);
 
-  if (!state || state.char !== char) return <Pagina title="" />;
+  if (!state || state.char !== char) return <Cargando />;
   if (!state.kanji) return <NotFound />;
   return <Contenido s={state} k={state.kanji} />;
 }
@@ -102,6 +102,7 @@ function Contenido({ s, k }: { s: Loaded; k: Kanji }) {
   const done = Math.min(s.lessonTotal, s.lessonDone + (added && !s.hasCard ? 1 : 0));
   const dots = s.lessonTotal > 0 ? <Dots total={s.lessonTotal} filled={done} size={desktop ? 22 : 18} /> : null;
 
+  const sonido = useCanSpeak();
   const onPlay = () => {
     pb.play();
     const t = lecturaHablada(k);
@@ -112,7 +113,7 @@ function Contenido({ s, k }: { s: Loaded; k: Kanji }) {
     <KanjiGrande
       kanji={pb.playing ? '' : k.char}
       size={desktop ? 142 : 116}
-      onPlay={paths.length > 0 || canSpeak() ? onPlay : undefined}
+      onPlay={paths.length > 0 || sonido ? onPlay : undefined}
       playLabel="Ver el orden de los trazos"
       className="relative"
     />

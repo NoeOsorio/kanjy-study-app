@@ -78,8 +78,37 @@ html, body {
 }
 
 .kj-press {
-  transition: transform 160ms ease-out;
+  transition: transform 160ms cubic-bezier(0.23, 1, 0.32, 1);
 }
 .kj-press:active:not(:disabled) {
   transform: scale(0.97);
+}
+
+/* Movimiento: solo transform, opacity y el trazo de la 花丸. Nada dura más de 300 ms salvo el trazo (600 ms). */
+@keyframes kj-flip {
+  from { transform: perspective(1000px) rotateY(-70deg) scale(0.98); opacity: 0.4; }
+  to { transform: perspective(1000px) rotateY(0deg) scale(1); opacity: 1; }
+}
+.kj-flip {
+  animation: kj-flip 260ms cubic-bezier(0.23, 1, 0.32, 1) both;
+  transform-origin: 50% 50%;
+}
+@keyframes kj-land {
+  from { transform: rotate(calc(var(--rot, 0deg) - 12deg)) scale(0.9); opacity: 0; }
+  to { transform: rotate(var(--rot, 0deg)) scale(1); opacity: 1; }
+}
+.kj-land {
+  animation: kj-land 250ms cubic-bezier(0.23, 1, 0.32, 1) both;
+}
+@keyframes kj-draw {
+  from { stroke-dashoffset: 1.02; }
+  to { stroke-dashoffset: 0; }
+}
+.kj-draw {
+  stroke-dasharray: 1;
+  animation: kj-draw 600ms cubic-bezier(0.23, 1, 0.32, 1) both;
+}
+.kj-draw-2 { animation-delay: 350ms; animation-duration: 300ms; }
+@media (prefers-reduced-motion: reduce) {
+  .kj-flip, .kj-land, .kj-draw { animation: none; }
 }

@@ -6,7 +6,7 @@ import { IconLapiz, IconPlay } from '../../design/icons';
 import { needsReading, sentenceTokens } from '../../data/furigana';
 import type { Kanji, Level, Sentence, Word } from '../../data/types';
 import { putNote } from '../../store/repo';
-import { canSpeak, speak } from '../../sound';
+import { speak, useCanSpeak } from '../../sound';
 
 /** Lectura en kana para hablar: primera kunyomi sin marcas, si no la primera onyomi en hiragana. */
 export function lecturaHablada(k: Kanji): string {
@@ -73,11 +73,12 @@ export function Readings({ k }: { k: Kanji }) {
 
 export function Palabras({ words, level, char }: { words: Word[]; level: Level; char: string }) {
   const list = [...words.filter((w) => w.written !== char), ...words.filter((w) => w.written === char)].slice(0, 3);
+  const sonido = useCanSpeak();
   if (list.length === 0) return null;
   return (
     <ul
       className={`m-0 grid list-none items-center gap-x-3 gap-y-1 p-0 ${
-        canSpeak() ? 'grid-cols-[auto_auto_1fr_auto]' : 'grid-cols-[auto_auto_1fr]'
+        sonido ? 'grid-cols-[auto_auto_1fr_auto]' : 'grid-cols-[auto_auto_1fr]'
       }`}
     >
       {list.map((w) => {
@@ -123,7 +124,8 @@ export function Oracion({ s, char, level, size = 24 }: { s: Sentence; char: stri
 }
 
 export function BotonSonido({ text, label = 'Escuchar la frase' }: { text: string; label?: string }) {
-  if (!canSpeak()) return null;
+  const sonido = useCanSpeak();
+  if (!sonido) return null;
   return (
     <button
       type="button"

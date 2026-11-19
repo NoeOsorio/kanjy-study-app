@@ -1,4 +1,5 @@
 import { useCallback, useEffect, useLayoutEffect, useMemo, useRef, useState } from 'react';
+import Cargando from '../../app/Cargando';
 import type { ReactNode } from 'react';
 import { Link, useNavigate, useSearchParams } from 'react-router-dom';
 import { Bandeja, BotonSecundario, CasillaKanji, Hoja, SelloSumi, Washi } from '../../design';
@@ -141,6 +142,7 @@ export default function IndicePage() {
 
       <Hoja className="flex-1">
         <h1 className="sr-only">漢字表</h1>
+        {!plan && <Cargando />}
         {plan && (
           <>
             {plan.hechas.length > 0 && <Terminadas lessons={plan.hechas} />}

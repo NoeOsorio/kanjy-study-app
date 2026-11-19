@@ -1,11 +1,12 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import Cargando from '../../app/Cargando';
 import { Link, useNavigate, useParams } from 'react-router-dom';
 import { loadLevel } from '../../data/levels';
 import { needsReading } from '../../data/furigana';
 import { sentenceTokens } from '../../data/furigana';
 import type { Kanji, Level, Sentence, Word } from '../../data/types';
 import { getSettings } from '../../store/repo';
-import { canSpeak, speak } from '../../sound';
+import { speak, useCanSpeak } from '../../sound';
 import NotFound from '../../app/NotFound';
 import { Barra, BotonPrincipal, CasillaKanji, Furigana, KanjiGrande, Marcatextos } from '../../design';
 import type { TokenFurigana } from '../../design';
@@ -57,7 +58,8 @@ const CHIP = {
 };
 
 function BotonSonido({ text }: { text: string }) {
-  if (!canSpeak()) return null;
+  const sonido = useCanSpeak();
+  if (!sonido) return null;
   return (
     <button
       type="button"
@@ -248,6 +250,7 @@ export default function FrasesPage() {
     return (
       <div className="flex flex-1 flex-col">
         <Barra kind="close" onClick={() => navigate(-1)} />
+        <Cargando />
       </div>
     );
   }

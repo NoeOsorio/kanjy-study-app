@@ -88,6 +88,20 @@ export function useCanSpeak(): boolean {
   return canSpeak()
 }
 
+/** True when the device has a Japanese voice, whatever the Sonido setting says (for the toggle itself). */
+export function useHasVoice(): boolean {
+  const [, tick] = useState(0)
+  useEffect(() => {
+    start()
+    const l = () => tick((n) => n + 1)
+    listeners.add(l)
+    return () => {
+      listeners.delete(l)
+    }
+  }, [])
+  return voice !== null
+}
+
 /** Must be called from a user gesture (tap/click): iOS and Android block speech otherwise. Pass kana. */
 export function speak(text: string): void {
   const s = synth()

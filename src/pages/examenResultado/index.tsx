@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { Navigate, useLocation, useNavigate } from 'react-router-dom';
-import { Barra, BotonPrincipal, BotonSecundario, CasillaKanji, Hoja, StickerSakura } from '../../design';
+import { Barra, BotonPrincipal, BotonSecundario, CasillaKanji, Hanamaru, Hoja, StickerSakura } from '../../design';
 import { getKanji } from '../../data/levels';
 import type { Kanji } from '../../data/types';
 import { allCards, markStudyDay, putCard } from '../../store/repo';
@@ -19,17 +19,6 @@ export default function ExamenResultadoPage() {
   if (!st?.questions?.length || st.answers?.length !== st.questions.length) return <Navigate to="/examen" replace />;
   return <Resultado st={st} />;
 }
-
-/** Nube festoneada de la 花丸, sin la espiral (la pantalla pone el puntaje dentro). */
-const FLOR = (() => {
-  const pts: string[] = [];
-  for (let i = 0; i <= 240; i++) {
-    const t = (i / 240) * Math.PI * 2;
-    const r = 40 + 12 * Math.abs(Math.cos(3 * t));
-    pts.push(`${i === 0 ? 'M' : 'L'}${(60 + r * Math.cos(t - Math.PI / 2)).toFixed(1)} ${(60 + r * Math.sin(t - Math.PI / 2)).toFixed(1)}`);
-  }
-  return pts.join(' ') + 'Z';
-})();
 
 const seg = (ms: number) => `${Math.max(1, Math.round(ms / 1000))} s`;
 
@@ -85,29 +74,26 @@ function Resultado({ st }: { st: Estado }) {
         <h1 className="sr-only">Resultado</h1>
         <div className="relative mx-auto mt-2 h-[240px] w-[260px]">
           <div className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2">
-            <span className="relative inline-flex h-[210px] w-[210px] items-center justify-center">
-              <svg width="210" height="210" viewBox="0 0 120 120" fill="none" stroke="var(--red-pen)" strokeWidth="3.2" strokeLinecap="round" strokeLinejoin="round" aria-hidden className="absolute inset-0">
-                <path d={FLOR} />
-              </svg>
-              <span className="relative flex items-baseline text-red-pen" style={{ fontFamily: 'var(--font-kanji)', fontSize: 78, lineHeight: 1 }}>
+            <Hanamaru size={210} spiral={false} draw>
+              <span className="flex items-baseline" style={{ fontSize: 78 }}>
                 {puntos}
                 <span style={{ fontSize: 30, marginLeft: 4 }}>点</span>
               </span>
-            </span>
+            </Hanamaru>
           </div>
           {stickers >= 1 && (
             <span className="absolute left-0 top-2">
-              <StickerSakura size={36} rotation={-14} />
+              <StickerSakura size={36} rotation={-14} land />
             </span>
           )}
           {stickers >= 2 && (
             <span className="absolute right-3 top-0">
-              <StickerSakura size={28} rotation={12} />
+              <StickerSakura size={28} rotation={12} land />
             </span>
           )}
           {stickers >= 3 && (
             <span className="absolute bottom-4 right-1">
-              <StickerSakura size={32} rotation={8} />
+              <StickerSakura size={32} rotation={8} land />
             </span>
           )}
         </div>

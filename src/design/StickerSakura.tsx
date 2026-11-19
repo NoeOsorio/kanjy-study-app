@@ -5,10 +5,13 @@ export function StickerSakura({
   size = 28,
   rotation = 0,
   empty = false,
+  land = false,
 }: {
   size?: number;
   rotation?: number;
   empty?: boolean;
+  /** Aterriza con un giro suave al aparecer. */
+  land?: boolean;
 }) {
   if (empty) {
     return (
@@ -25,7 +28,9 @@ export function StickerSakura({
       height={size}
       viewBox="0 0 100 100"
       aria-hidden
+      className={land ? 'kj-land' : undefined}
       style={{
+        ['--rot' as string]: `${rotation}deg`,
         transform: `rotate(${rotation}deg)`,
         filter: 'drop-shadow(0 2px 3px rgba(120,40,70,0.28))',
         flexShrink: 0,

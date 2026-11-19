@@ -1,9 +1,10 @@
 import { useEffect, useState } from 'react';
+import Cargando from '../../app/Cargando';
 import { Link, useNavigate } from 'react-router-dom';
 import { Barra, CasillaKanji, Hoja } from '../../design';
 import { loadLevel } from '../../data/levels';
 import type { Level } from '../../data/types';
-import { canSpeak } from '../../sound';
+import { useHasVoice } from '../../sound';
 import { allCards, getSettings, newKanjiPerDay, putSettings } from '../../store/repo';
 import type { Settings } from '../../store/types';
 
@@ -85,13 +86,7 @@ export default function CuentaPage() {
   const [proximos, setProximos] = useState<string[]>([]);
   const [cards, setCards] = useState<Set<string>>(new Set());
   const [orden, setOrden] = useState<{ level: Level; chars: string[] } | null>(null);
-  const [voz, setVoz] = useState(canSpeak());
-  useEffect(() => {
-    const t = () => setVoz(canSpeak());
-    t();
-    window.speechSynthesis?.addEventListener?.('voiceschanged', t);
-    return () => window.speechSynthesis?.removeEventListener?.('voiceschanged', t);
-  }, []);
+  const voz = useHasVoice();
 
   useEffect(() => {
     void getSettings().then((s) => {
@@ -128,7 +123,7 @@ export default function CuentaPage() {
     void putSettings(patch);
   };
 
-  if (!settings) return <div className="flex-1" />;
+  if (!settings) return <Cargando />;
 
   return (
     <div className="flex flex-1 flex-col">

@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react';
+import Cargando from '../../app/Cargando';
 import { useNavigate } from 'react-router-dom';
 import { Barra, BotonPrincipal, EtiquetaLectura, Furigana, Hoja, KanjiGrande } from '../../design';
 import type { TokenFurigana } from '../../design';
@@ -8,7 +9,7 @@ import type { Kanji, Level, Word } from '../../data/types';
 import { getNote, getSettings } from '../../store/repo';
 import type { Rating } from '../../store/types';
 import type { TodayPlan } from '../../study/plan';
-import { canSpeak, speak } from '../../sound';
+import { speak, useCanSpeak } from '../../sound';
 import { IconPlay } from '../../design/icons';
 import { cleanReading, Nota, Oracion } from '../kanji/parts';
 import { useRepaso } from './useRepaso';
@@ -45,7 +46,7 @@ export function Repaso({ plan }: { plan?: Pick<TodayPlan, 'due'> }) {
     if (r.empty) navigate('/', { replace: true });
   }, [r.empty, navigate]);
 
-  if (r.loading || !r.current) return <div className="flex-1" />;
+  if (r.loading || !r.current) return <Cargando />;
   return <Tarjeta key={r.current.char + r.remaining} r={r} char={r.current.char} />;
 }
 
@@ -101,7 +102,7 @@ function Tarjeta({ r, char }: { r: UseRepaso; char: string }) {
           aria-hidden
           className="absolute inset-x-5 -top-[7px] h-6 rounded-t-[20px] bg-paper shadow-[0_0_0_1px_rgba(29,27,24,0.07)]"
         />
-        <Hoja className="relative mx-0 flex flex-1 flex-col overflow-y-auto rounded-[20px] p-[18px]">
+        <Hoja className={`relative mx-0 flex flex-1 flex-col overflow-y-auto rounded-[20px] p-[18px] ${mostrada ? 'kj-flip' : ''}`}>
           {!mostrada ? (
             <Frente char={char} />
           ) : (
@@ -201,7 +202,7 @@ function tokensPalabra(w: Word, char: string, level: Level): { tokens: TokenFuri
 }
 
 function Palabras({ words, char, level }: { words: Word[]; char: string; level: Level }) {
-  const sonido = canSpeak();
+  const sonido = useCanSpeak();
   return (
     <ul className={`m-0 grid list-none items-center gap-x-3 gap-y-2 p-0 ${sonido ? 'grid-cols-[auto_auto_1fr_auto]' : 'grid-cols-[auto_auto_1fr]'}`}>
       {words.map((w) => {

@@ -1,4 +1,5 @@
 import { useEffect, useMemo, useState } from 'react';
+import Cargando from '../../app/Cargando';
 import type { ReactNode } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Barra, BotonPrincipal, BotonSecundario, CasillaKanji, Hoja, SelloSumi, Washi } from '../../design';
@@ -89,6 +90,7 @@ export default function ExamenPage() {
       <Hoja className="flex flex-1 flex-col">
         <h1 className="sr-only">Examen</h1>
         <Etiqueta>Qué entra</Etiqueta>
+        {!file && <Cargando />}
         {file && (
           <div className="mt-2.5 grid grid-cols-2 gap-x-2.5 gap-y-3">
             {desde > 0 && (

@@ -58,7 +58,7 @@ export default function RepasoListoPage() {
               const hoy = i === semana.length - 1;
               return (
                 <div key={i} className="flex w-10 flex-col items-center gap-2.5">
-                  <StickerSakura size={hoy ? 46 : 30} rotation={d.studied ? ((i * 37) % 24) - 12 : 0} empty={!d.studied} />
+                  <StickerSakura size={hoy ? 46 : 30} rotation={d.studied ? ((i * 37) % 24) - 12 : 0} empty={!d.studied} land={hoy && d.studied} />
                   <span className={`text-[13px] font-semibold ${hoy ? 'text-ink' : d.studied ? 'text-sakura-deep' : 'text-faded'}`}>
                     {d.label}
                   </span>

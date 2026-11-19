@@ -36,11 +36,17 @@ export function Hanamaru({
   size = 120,
   children,
   soft = false,
+  spiral = true,
+  draw = false,
 }: {
   size?: number;
   children?: ReactNode;
   /** Trazo translúcido para dibujarlo encima del kanji. */
   soft?: boolean;
+  /** Dibuja la espiral central; apágala cuando va un puntaje dentro. */
+  spiral?: boolean;
+  /** Dibuja el contorno con la pluma al aparecer (600 ms). */
+  draw?: boolean;
 }) {
   return (
     <span className="relative inline-flex shrink-0 items-center justify-center" style={{ width: size, height: size }}>
@@ -56,8 +62,8 @@ export function Hanamaru({
         aria-hidden
         style={{ position: 'absolute', inset: 0, opacity: soft ? 0.5 : 1 }}
       >
-        <path d={FLOWER} />
-        <path d={SPIRAL} />
+        <path d={FLOWER} pathLength={1} className={draw ? 'kj-draw' : undefined} />
+        {spiral && <path d={SPIRAL} pathLength={1} className={draw ? 'kj-draw kj-draw-2' : undefined} />}
       </svg>
       {children && (
         <span

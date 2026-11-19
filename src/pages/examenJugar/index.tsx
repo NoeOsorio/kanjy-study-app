@@ -5,7 +5,7 @@ import type { RespuestaEstado } from '../../design/HojaRespuestas';
 import { IconPlay } from '../../design/icons';
 import { getKanji, loadLevel } from '../../data/levels';
 import { getSettings } from '../../store/repo';
-import { canSpeak, speak } from '../../sound';
+import { speak, useCanSpeak } from '../../sound';
 import { buildQuestions } from '../../exam/questions';
 import type { ExamAnswer, ExamQuestion, ExamSelection } from '../../exam/questions';
 
@@ -174,7 +174,8 @@ function Prompt({ q }: { q: ExamQuestion }) {
   const size = 140;
   const kanjiSolo = [...q.shown.text].length === 1 && q.shown.script === 'kanji';
   const fs = kanjiSolo ? size * 0.68 : q.shown.script === 'voice' ? 32 : [...q.shown.text].length > 3 ? 36 : 48;
-  const sonar = q.speak && canSpeak() ? () => speak(q.speak as string) : undefined;
+  const hayVoz = useCanSpeak();
+  const sonar = q.speak && hayVoz ? () => speak(q.speak as string) : undefined;
   return (
     <div
       className="relative flex items-center justify-center rounded-[14px] bg-sakura-bg px-4 text-center text-ink"

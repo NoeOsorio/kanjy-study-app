@@ -185,7 +185,7 @@ function Practica({ d }: { d: Datos }) {
             return (
               <span key={c} className="inline-flex h-[22px] w-[22px] items-center justify-center">
                 {sticker ? (
-                  <StickerSakura size={i === idx ? 24 : 20} rotation={(i * 37) % 30 - 15} />
+                  <StickerSakura size={i === idx ? 24 : 20} rotation={(i * 37) % 30 - 15} land={i === idx} />
                 ) : (
                   <span
                     className={i === idx ? 'h-[18px] w-[18px] rounded-full bg-rail' : 'h-[14px] w-[14px] rounded-full bg-rail'}
