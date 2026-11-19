@@ -1,0 +1,85 @@
+:root {
+  --paper: #ffffff;
+  --tray: #fbf2f5;
+  --rail: #f2e1e7;
+  --wine: #a8325a;
+  --ink: #1d1b18;
+  --ink-2: #4a463f;
+  --ink-3: #6b665c;
+  --faded: #b8a9af;
+  --sakura-bg: #fdf0f3;
+  --sakura-chip: #fbe4ea;
+  --sakura-ink: #c2456a;
+  --sakura-deep: #9e2a44;
+  --china-bg: #caddff;
+  --china-ink: #234a9c;
+  --japonesa-bg: #bdebd6;
+  --japonesa-ink: #0d5e46;
+  --highlighter: #ffe08a;
+  --red-pen: #c8402f;
+  --n4-bg: #ffe08a;
+  --n4-ink: #6e4600;
+  --n3-bg: #bdebd6;
+  --n3-ink: #0d5e46;
+  --n2-bg: #caddff;
+  --n2-ink: #234a9c;
+  --n1-bg: #e3d5ff;
+  --n1-ink: #563397;
+  --shadow-sheet: 0 0 0 1px rgba(29, 27, 24, 0.08), 0 18px 40px -12px rgba(60, 45, 10, 0.16);
+  --font-ui: "Geist", system-ui, sans-serif;
+  --font-voice: "Newsreader", Georgia, serif;
+  --font-kanji: "Klee One", "Hiragino Mincho ProN", serif;
+}
+
+@theme {
+  --color-paper: #ffffff;
+  --color-tray: #fbf2f5;
+  --color-rail: #f2e1e7;
+  --color-wine: #a8325a;
+  --color-ink: #1d1b18;
+  --color-ink-2: #4a463f;
+  --color-ink-3: #6b665c;
+  --color-faded: #b8a9af;
+  --color-sakura-bg: #fdf0f3;
+  --color-sakura-chip: #fbe4ea;
+  --color-sakura-ink: #c2456a;
+  --color-sakura-deep: #9e2a44;
+  --color-china-bg: #caddff;
+  --color-china-ink: #234a9c;
+  --color-japonesa-bg: #bdebd6;
+  --color-japonesa-ink: #0d5e46;
+  --color-highlighter: #ffe08a;
+  --color-red-pen: #c8402f;
+  --color-n4-bg: #ffe08a;
+  --color-n4-ink: #6e4600;
+  --color-n3-bg: #bdebd6;
+  --color-n3-ink: #0d5e46;
+  --color-n2-bg: #caddff;
+  --color-n2-ink: #234a9c;
+  --color-n1-bg: #e3d5ff;
+  --color-n1-ink: #563397;
+  --radius-r6: 6px;
+  --radius-r8: 8px;
+  --radius-r10: 10px;
+  --radius-r12: 12px;
+  --radius-r14: 14px;
+  --radius-r20: 20px;
+  --shadow-sheet: 0 0 0 1px rgba(29, 27, 24, 0.08), 0 18px 40px -12px rgba(60, 45, 10, 0.16);
+  --font-ui: "Geist", system-ui, sans-serif;
+  --font-voice: "Newsreader", Georgia, serif;
+  --font-kanji: "Klee One", "Hiragino Mincho ProN", serif;
+}
+
+html, body {
+  background: var(--paper);
+  color: var(--ink);
+  font-family: var(--font-ui);
+  -webkit-font-smoothing: antialiased;
+}
+
+.kj-press {
+  transition: transform 160ms ease-out;
+}
+.kj-press:active:not(:disabled) {
+  transform: scale(0.97);
+}

@@ -1,3 +1,4 @@
+import { lazy, Suspense } from 'react';
 import { Routes, Route, Outlet } from 'react-router-dom';
 import AppLayout from './components/AppLayout';
 import HomePage from './pages/HomePage';
@@ -9,6 +10,9 @@ import StudyModePage from './pages/StudyModePage';
 import PracticePage from './pages/PracticePage';
 import QuizPage from './pages/QuizPage';
 import QuizResultsPage from './pages/QuizResultsPage';
+
+// Hoja de componentes del sistema de diseño (solo en desarrollo)
+const ComponentSheet = import.meta.env.DEV ? lazy(() => import('./design/ComponentSheet')) : null;
 
 // Wrapper para AppLayout que usa Outlet
 const AppLayoutWrapper = () => (
@@ -29,6 +33,10 @@ function App() {
         <Route path="/kanji/:kanjiId" element={<KanjiDetailPage />} />
         <Route path="/practice" element={<PracticePage />} />
       </Route>
+
+      {ComponentSheet && (
+        <Route path="/_componentes" element={<Suspense fallback={null}><ComponentSheet /></Suspense>} />
+      )}
 
       {/* Rutas sin navegación */}
       <Route path="/quiz/:mode" element={<QuizPage />} />

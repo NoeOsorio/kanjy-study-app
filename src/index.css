@@ -1,4 +1,5 @@
 @import "tailwindcss";
+@import "./design/tokens.css";
 
 /* Estilos para animaciones 3D de las cards */
 .perspective-1000 {
