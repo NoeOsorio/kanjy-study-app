@@ -1,211 +1,181 @@
-import { useEffect, useRef, useState } from 'react';
+import { forwardRef, useEffect, useImperativeHandle, useRef, useState } from 'react';
 
-type Point = { x: number; y: number };
+/** Punto normalizado, de 0 a 1, para que el trazo sobreviva a cambios de tamaño. */
+export type Point = { x: number; y: number };
+export type Stroke = Point[];
+
+export interface KanjiCanvasHandle {
+  undo: () => void;
+  clear: () => void;
+}
 
 interface KanjiCanvasProps {
-  character: string;
-  size?: number; // CSS pixels
-  defaultShowGrid?: boolean;
+  /** Trazos de KanjiVG (atributo d, caja de 109) para la guía tenue. */
+  guidePaths?: string[];
+  showGuide?: boolean;
+  /** Cuando es true ya no se aceptan más trazos. */
+  locked?: boolean;
+  onChange?: (strokes: Stroke[]) => void;
 }
 
-export default function KanjiCanvas({ character, size = 300, defaultShowGrid = true }: KanjiCanvasProps) {
+const INK = '#1D1B18';
+const RAIL = '#F2E1E7';
+
+/** Pizarra cuadrada para escribir con el dedo o el ratón. */
+const KanjiCanvas = forwardRef<KanjiCanvasHandle, KanjiCanvasProps>(function KanjiCanvas(
+  { guidePaths = [], showGuide = false, locked = false, onChange },
+  ref,
+) {
+  const wrapRef = useRef<HTMLDivElement | null>(null);
   const guideRef = useRef<HTMLCanvasElement | null>(null);
   const drawRef = useRef<HTMLCanvasElement | null>(null);
-  const [strokes, setStrokes] = useState<Point[][]>([]);
-  const [isDrawing, setIsDrawing] = useState(false);
-  const [showGrid, setShowGrid] = useState(defaultShowGrid);
-  const currentStrokeRef = useRef<Point[]>([]);
+  const [size, setSize] = useState(0);
+  const [strokes, setStrokes] = useState<Stroke[]>([]);
+  const currentRef = useRef<Stroke | null>(null);
 
-  // Resize both canvases only when size changes
+  useImperativeHandle(ref, () => ({
+    undo: () => setStrokes((s) => s.slice(0, -1)),
+    clear: () => setStrokes([]),
+  }));
+
   useEffect(() => {
-    resizeCanvas(guideRef.current);
-    resizeCanvas(drawRef.current);
-    renderGuide();
-    redrawStrokes();
+    onChange?.(strokes);
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [size]);
-
-  // Re-render guide when character or visibility changes
-  useEffect(() => {
-    renderGuide();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [character, showGrid]);
-
-  // Redraw strokes when strokes change
-  useEffect(() => {
-    redrawStrokes();
   }, [strokes]);
 
-  const resizeCanvas = (canvas: HTMLCanvasElement | null) => {
-    if (!canvas) return;
+  // El lienzo sigue al ancho disponible.
+  useEffect(() => {
+    const el = wrapRef.current;
+    if (!el) return;
+    const ro = new ResizeObserver(() => setSize(el.clientWidth));
+    ro.observe(el);
+    setSize(el.clientWidth);
+    return () => ro.disconnect();
+  }, []);
+
+  function prepare(canvas: HTMLCanvasElement | null) {
+    if (!canvas || !size) return null;
     const dpr = window.devicePixelRatio || 1;
-    const desired = size * dpr;
-    if (canvas.width !== desired || canvas.height !== desired) {
-      canvas.width = desired;
-      canvas.height = desired;
-      canvas.style.width = `${size}px`;
-      canvas.style.height = `${size}px`;
+    if (canvas.width !== Math.round(size * dpr)) {
+      canvas.width = Math.round(size * dpr);
+      canvas.height = Math.round(size * dpr);
     }
     const ctx = canvas.getContext('2d');
-    if (ctx) ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
-  };
-
-  const renderGuide = () => {
-    const canvas = guideRef.current;
-    if (!canvas) return;
-    const ctx = canvas.getContext('2d');
-    if (!ctx) return;
+    if (!ctx) return null;
+    ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
     ctx.clearRect(0, 0, size, size);
-    if (!showGrid) return; // ocultar guía
-    // Fondo
-    ctx.fillStyle = '#ffffff';
-    ctx.fillRect(0, 0, size, size);
-    // Marco
-    ctx.strokeStyle = '#e5e7eb';
-    ctx.lineWidth = 2;
-    ctx.strokeRect(1, 1, size - 2, size - 2);
-    // Guías
-    ctx.strokeStyle = '#e5e7eb';
-    ctx.lineWidth = 1;
-    ctx.beginPath();
-    ctx.moveTo(size / 2, 0);
-    ctx.lineTo(size / 2, size);
-    ctx.moveTo(0, size / 2);
-    ctx.lineTo(size, size / 2);
-    ctx.moveTo(0, 0);
-    ctx.lineTo(size, size);
-    ctx.moveTo(size, 0);
-    ctx.lineTo(0, size);
-    ctx.stroke();
-    // Kanji guía
-    ctx.fillStyle = '#cbd5e1';
-    ctx.textAlign = 'center';
-    ctx.textBaseline = 'middle';
-    const fontSize = size * 0.6;
-    ctx.font = `${fontSize}px 'Noto Sans JP', 'Hiragino Sans', 'Yu Gothic', 'Meiryo', sans-serif`;
-    ctx.fillText(character, size / 2, size / 2 + size * 0.02);
-  };
+    return ctx;
+  }
 
-  const redrawStrokes = () => {
-    const canvas = drawRef.current;
-    if (!canvas) return;
-    const ctx = canvas.getContext('2d');
-    if (!ctx) return;
-    ctx.clearRect(0, 0, size, size);
-    ctx.lineJoin = 'round';
+  // Guía de KanjiVG, muy tenue.
+  useEffect(() => {
+    const ctx = prepare(guideRef.current);
+    if (!ctx || !showGuide) return;
+    const k = size / 109;
+    ctx.scale(k, k);
+    ctx.strokeStyle = INK;
+    ctx.globalAlpha = 0.12;
+    ctx.lineWidth = 5;
     ctx.lineCap = 'round';
-    ctx.strokeStyle = 'rgba(15,23,42,0.95)';
-    strokes.forEach(stroke => {
-      if (stroke.length < 2) return;
-      for (let i = 1; i < stroke.length; i++) {
-        const prev = stroke[i - 1];
-        const curr = stroke[i];
-        const dx = curr.x - prev.x;
-        const dy = curr.y - prev.y;
-        const dist = Math.sqrt(dx * dx + dy * dy);
-        const minW = 6;
-        const maxW = 12;
-        const t = Math.min(1, Math.max(0, dist / 12));
-        ctx.lineWidth = maxW - t * (maxW - minW);
+    ctx.lineJoin = 'round';
+    guidePaths.forEach((d) => ctx.stroke(new Path2D(d)));
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [guidePaths, showGuide, size]);
+
+  function paint(all: Stroke[]) {
+    const ctx = prepare(drawRef.current);
+    if (!ctx) return;
+    ctx.strokeStyle = INK;
+    ctx.fillStyle = INK;
+    ctx.lineCap = 'round';
+    ctx.lineJoin = 'round';
+    ctx.lineWidth = Math.max(10, size * 0.042);
+    for (const s of all) {
+      const pts = s.map((p) => ({ x: p.x * size, y: p.y * size }));
+      if (pts.length === 1) {
         ctx.beginPath();
-        ctx.moveTo(prev.x, prev.y);
-        ctx.lineTo(curr.x, curr.y);
-        ctx.stroke();
+        ctx.arc(pts[0].x, pts[0].y, ctx.lineWidth / 2, 0, Math.PI * 2);
+        ctx.fill();
+        continue;
       }
-    });
-  };
+      // Curvas por puntos medios para que el trazo salga suave.
+      ctx.beginPath();
+      ctx.moveTo(pts[0].x, pts[0].y);
+      for (let i = 1; i < pts.length - 1; i++) {
+        const mx = (pts[i].x + pts[i + 1].x) / 2;
+        const my = (pts[i].y + pts[i + 1].y) / 2;
+        ctx.quadraticCurveTo(pts[i].x, pts[i].y, mx, my);
+      }
+      const last = pts[pts.length - 1];
+      ctx.lineTo(last.x, last.y);
+      ctx.stroke();
+    }
+  }
 
-  const pointFromEvent = (e: React.MouseEvent | React.TouchEvent): Point | null => {
-    const canvas = drawRef.current;
-    if (!canvas) return null;
-    const rect = canvas.getBoundingClientRect();
-    const clientX = 'touches' in e ? e.touches[0]?.clientX : (e as React.MouseEvent).clientX;
-    const clientY = 'touches' in e ? e.touches[0]?.clientY : (e as React.MouseEvent).clientY;
-    if (clientX === undefined || clientY === undefined) return null;
-    return { x: clientX - rect.left, y: clientY - rect.top };
-  };
+  useEffect(() => {
+    paint(strokes);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [strokes, size]);
 
-  const handleDown = (e: React.MouseEvent | React.TouchEvent) => {
+  function point(e: React.PointerEvent): Point {
+    const r = drawRef.current!.getBoundingClientRect();
+    return {
+      x: Math.min(1, Math.max(0, (e.clientX - r.left) / r.width)),
+      y: Math.min(1, Math.max(0, (e.clientY - r.top) / r.height)),
+    };
+  }
+
+  function down(e: React.PointerEvent) {
+    if (locked || (e.pointerType === 'mouse' && e.button !== 0)) return;
     e.preventDefault();
-    const p = pointFromEvent(e);
-    if (!p) return;
-    setIsDrawing(true);
-    currentStrokeRef.current = [p];
-  };
+    e.currentTarget.setPointerCapture(e.pointerId);
+    currentRef.current = [point(e)];
+    paint([...strokes, currentRef.current]);
+  }
 
-  const handleMove = (e: React.MouseEvent | React.TouchEvent) => {
-    if (!isDrawing) return;
-    const p = pointFromEvent(e);
-    if (!p) return;
-    currentStrokeRef.current.push(p);
-    // Draw incremental only on drawing canvas
-    const canvas = drawRef.current;
-    if (!canvas) return;
-    const ctx = canvas.getContext('2d');
-    if (!ctx) return;
-    const s = currentStrokeRef.current;
-    if (s.length < 2) return;
-    ctx.lineJoin = 'round';
-    ctx.lineCap = 'round';
-    const prev = s[s.length - 2];
-    const curr = s[s.length - 1];
-    const dx = curr.x - prev.x;
-    const dy = curr.y - prev.y;
-    const dist = Math.sqrt(dx * dx + dy * dy);
-    const minW = 6;
-    const maxW = 12;
-    const t = Math.min(1, Math.max(0, dist / 12));
-    ctx.strokeStyle = 'rgba(15,23,42,0.95)';
-    ctx.lineWidth = maxW - t * (maxW - minW);
-    ctx.beginPath();
-    ctx.moveTo(prev.x, prev.y);
-    ctx.lineTo(curr.x, curr.y);
-    ctx.stroke();
-  };
+  function move(e: React.PointerEvent) {
+    const cur = currentRef.current;
+    if (!cur) return;
+    const p = point(e);
+    const prev = cur[cur.length - 1];
+    if (Math.hypot(p.x - prev.x, p.y - prev.y) * size < 1.5) return;
+    cur.push(p);
+    paint([...strokes, cur]);
+  }
 
-  const handleUp = () => {
-    if (!isDrawing) return;
-    setIsDrawing(false);
-    const stroke = currentStrokeRef.current;
-    currentStrokeRef.current = [];
-    if (stroke.length > 1) setStrokes(prev => [...prev, stroke]);
-  };
-
-  const handleLeave = () => {
-    if (isDrawing) handleUp();
-  };
-
-  const handleClear = () => setStrokes([]);
-  const handleUndo = () => setStrokes(prev => prev.slice(0, -1));
+  function up() {
+    const cur = currentRef.current;
+    currentRef.current = null;
+    if (!cur) return;
+    // Un toque suelto no cuenta como trazo.
+    if (cur.length < 2) return paint(strokes);
+    setStrokes((s) => [...s, cur]);
+  }
 
   return (
-    <div className="w-full">
-      <div className="relative mx-auto" style={{ width: size, maxWidth: '100%' }}>
-        {/* Capa de guía */}
-        <canvas ref={guideRef} className="block rounded-2xl border border-slate-200 bg-white" />
-        {/* Capa de dibujo */}
-        <canvas
-          ref={drawRef}
-          className="absolute inset-0 rounded-2xl touch-none select-none"
-          onMouseDown={handleDown}
-          onMouseMove={handleMove}
-          onMouseUp={handleUp}
-          onMouseLeave={handleLeave}
-          onTouchStart={handleDown}
-          onTouchMove={handleMove}
-          onTouchEnd={handleUp}
-        />
-      </div>
-      <div className="mt-3 flex items-center gap-2">
-        <button onClick={handleUndo} className="px-3 py-2 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-800 text-sm font-medium border border-slate-200">Deshacer</button>
-        <button onClick={handleClear} className="px-3 py-2 rounded-xl bg-slate-700 hover:bg-slate-800 text-white text-sm font-semibold">Limpiar</button>
-        <label className="ml-auto inline-flex items-center gap-2 text-sm text-slate-600 cursor-pointer">
-          <input type="checkbox" className="accent-teal-600" checked={showGrid} onChange={() => setShowGrid(v => !v)} />
-          Guía
-        </label>
-      </div>
+    <div
+      ref={wrapRef}
+      className="relative aspect-square w-full overflow-hidden rounded-xl bg-white"
+      style={{ border: '2px solid var(--ink)' }}
+    >
+      <svg className="absolute inset-0 h-full w-full" aria-hidden>
+        <line x1="50%" y1="4%" x2="50%" y2="96%" stroke={RAIL} strokeWidth="2" strokeDasharray="8 8" />
+        <line x1="4%" y1="50%" x2="96%" y2="50%" stroke={RAIL} strokeWidth="2" strokeDasharray="8 8" />
+      </svg>
+      <canvas ref={guideRef} className="absolute inset-0 h-full w-full" aria-hidden />
+      <canvas
+        ref={drawRef}
+        role="img"
+        aria-label="Espacio para escribir el kanji"
+        className="absolute inset-0 h-full w-full select-none"
+        style={{ touchAction: 'none' }}
+        onPointerDown={down}
+        onPointerMove={move}
+        onPointerUp={up}
+        onPointerCancel={up}
+      />
     </div>
   );
-}
+});
 
-
+export default KanjiCanvas;
