@@ -1,7 +1,7 @@
 <!--
 Sync Impact Report
-- Version change: template → 1.0.0 (initial ratification)
-- Principles defined: I through XIII (all new)
+- Version change: 1.0.0 → 1.1.0 (added XIV, a redesign never removes a feature)
+- Principles defined: I through XIV
 - Added sections: Product and Data Constraints, Development Workflow
 - Removed sections: none
 - Deferred TODOs: none

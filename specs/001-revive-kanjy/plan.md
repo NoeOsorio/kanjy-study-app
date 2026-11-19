@@ -21,7 +21,7 @@ cannot come back.
 **Language/Version**: TypeScript 5.8, React 19, Node 24 for the data script.
 
 **Primary Dependencies**: Vite 7, Tailwind CSS 4, React Router 7, ts-fsrs 6, vite-plugin-pwa 2,
-idb-keyval (IndexedDB). Fonts: Geist, Newsreader, Klee One. framer-motion stays for the few
+idb-keyval (IndexedDB); kuromoji at build time only for sentence readings. Fonts: Geist, Newsreader, Klee One. framer-motion stays for the few
 animations (loaded with the Emil skill rules before writing motion).
 
 **Storage**: static JSON and SVG generated into `public/data/`; student data in IndexedDB; sync

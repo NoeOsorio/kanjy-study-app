@@ -24,6 +24,9 @@ Measured over the 2,211 kanji of the Waller lists (N5 79, N4 166, N3 367, N2 367
   with a Spanish gloss (covers 97%); otherwise the words section is absent (FR-004).
 - **Sentences rule**: up to three sentences of 25 characters or less; the 487 kanji without one
   (N1 477, N2 10) show the «sin ejemplos» card. N5 to N3 have 100% coverage.
+- **Sentence readings**: Tatoeba has no kana; the build runs the kuromoji tokenizer (IPAdic,
+  pinned) to produce readings for furigana and marks each kanji's level. A reviewer checks 20
+  random sentences.
 - **Quality**: coverage is not quality. The overrides file fixes meaning order; SC-004 has a
   reviewer check all 79 N5 first meanings, and N4 is spot-checked before release.
 - **Alternatives rejected**: machine-translating English meanings (adds cost and errors, and

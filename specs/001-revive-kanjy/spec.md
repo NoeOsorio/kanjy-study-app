@@ -125,7 +125,7 @@ browser and see the same due reviews and learned kanji.
 ### User Story 4 - Quizzes by lesson or level (Priority: P3)
 
 Besides the daily review, a student can pick one or more lessons or a whole level and run a quiz
-in any of the existing modes (meaning, onyomi, kunyomi, mixed), and see what they missed.
+in any of six modes (meaning, kanji from meaning, reading, kanji from reading, words, mix), and see what they missed.
 
 **Why this priority**: It already exists in part; it is fixed and adapted to the new content, but
 the daily review covers most study.
@@ -166,6 +166,8 @@ see two, then three stickers with the skipped day blank and no message about los
 
 ### Edge Cases
 
+- The words mode only asks kanji that have words; if the selection has none, that mode is
+  disabled with its reason.
 - A student starts an exam with no lesson selected: the start button is disabled and says
   «Elige al menos una lección».
 
@@ -174,7 +176,8 @@ see two, then three stickers with the skipped day blank and no message about los
 - Kanji with no kunyomi or no onyomi: the quiz never asks for the missing reading.
 - A guest clears the browser data before creating an account: progress is lost, and the app says
   so plainly in the account invitation.
-- Two devices review the same kanji offline: the later answer wins and both answers are counted.
+- Two devices review the same kanji offline: the later card state wins; each device keeps its own
+  answer history for its summaries.
 - Opening a lesson or kanji link that does not exist shows a not-found screen, never mock data.
 
 ## Requirements *(mandatory)*
@@ -194,8 +197,8 @@ see two, then three stickers with the skipped day blank and no message about los
   hand-written Spanish example sentences as curated examples.
 - **FR-006**: Students MUST be able to search kanji by Spanish meaning, kana reading, romaji
   reading and the character itself, within a level or across all levels.
-- **FR-007**: The library MUST offer a dense grid view and filters by level and by study state
-  (new, learning, known).
+- **FR-007**: The index MUST be a dense grid of every kanji of the level, with a filter by study
+  state (new, learning, known) mocked in Paper and approved before it is built.
 - **FR-008**: The app MUST schedule reviews with a published spaced-repetition algorithm and show
   a daily "review now" and "learn new" plan on the home screen.
 - **FR-009**: Students MUST be able to study as guests with progress stored on the device.
@@ -208,7 +211,7 @@ see two, then three stickers with the skipped day blank and no message about los
   note that JLPT levels are unofficial lists.
 - **FR-015**: The production build MUST compile with no type errors, and the app MUST be
   installable on a phone home screen.
-- **FR-016a**: The UI MUST follow `docs/DESIGN.md` and the approved Paper screens; every current
+- **FR-023**: The UI MUST follow `docs/DESIGN.md` and the approved Paper screens; every current
   feature MUST keep a place as mapped in `docs/rediseno/COBERTURA.md`.
 - **FR-017**: Students MUST be able to write, edit and delete one personal note per kanji, shown
   on the kanji page, on the back of its review card and on the desktop page.
@@ -222,6 +225,9 @@ see two, then three stickers with the skipped day blank and no message about los
 - **FR-021**: The account page MUST let the student set minutes per day, turn handwriting
   practice and sound on or off, see where the data comes from, sign out and delete the account.
 - **FR-022**: A week of study days MUST be shown as stickers with no streak penalty.
+- **FR-024**: Pressing a button MUST give immediate feedback (scale 0.97); the card flip, the 花丸
+  being drawn and a sticker landing are the only decorative animations, each under 300 ms except
+  the 花丸 stroke.
 - **FR-016**: Every screen of the redesign MUST be mocked up in Paper and approved by Noe before
   it is implemented, with before and after screenshots on the Linear ticket.
 
