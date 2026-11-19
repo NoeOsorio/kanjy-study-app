@@ -1,0 +1,30 @@
+import { Outlet, useLocation } from 'react-router-dom';
+import IndicePage from '../pages/indice';
+import HoyPage from '../pages/hoy';
+
+/** Celular: libreta a pantalla completa. Escritorio (1024 px o más): índice a la izquierda, doble página a la derecha. */
+export default function Layout() {
+  const enIndice = useLocation().pathname === '/indice';
+  return (
+    <div className="min-h-dvh bg-paper pt-[env(safe-area-inset-top)] lg:grid lg:h-dvh lg:grid-cols-[330px_1fr] lg:gap-6 lg:p-5">
+      <aside className="hidden overflow-y-auto lg:block">
+        <IndicePage />
+      </aside>
+      <main className="flex min-h-dvh flex-col lg:min-h-0 lg:overflow-y-auto lg:rounded-[20px] lg:bg-paper lg:shadow-[var(--shadow-sheet)]">
+        {enIndice ? (
+          <>
+            {/* En celular el índice es la pantalla; en escritorio ya está a la izquierda y aquí va hoy. */}
+            <div className="flex flex-1 flex-col lg:hidden">
+              <Outlet />
+            </div>
+            <div className="hidden flex-1 flex-col lg:flex">
+              <HoyPage />
+            </div>
+          </>
+        ) : (
+          <Outlet />
+        )}
+      </main>
+    </div>
+  );
+}

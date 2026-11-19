@@ -14,7 +14,7 @@ Every commit carries NOE-559 and is pushed. Executed by Sonnet subagents; Opus r
 - [x] T003 Create scripts/build-data/sources.json with pinned URLs and checksums for kanji-data (jlpt_new only), KANJIDIC2, JMdict, KanjiVG r20260714 and Tatoeba jpn, spa and jpn-spa links; add `.cache/` to .gitignore. Done: file lists six sources with versions.
 - [x] T004 Write scripts/build-data/index.mjs that downloads to .cache/, verifies checksums, builds levels, lessons of about ten by KANJIDIC2 frequency, words (common first, any Spanish gloss as fallback, max five), sentences (max three, 25 chars or less) with kana readings from the kuromoji tokenizer (pinned version, IPAdic) and the level of each kanji, difficulty, grade and frequency label, and writes public/data/levels/*.json, public/data/strokes/*.svg and public/data/search.json per data-model.md; it exits non-zero if any kanji lacks a meaning or strokes. Add `npm run data`. Done: report prints 2,211 of 2,211 with meanings and strokes, coverage per level matches research.md R1; a reviewer checks the readings of 20 random sentences.
 - [x] T005 Create scripts/build-data/overrides.json with the everyday first meaning for all 79 N5 kanji and the curated sentences from the four old lessons; create scripts/build-data/LICENSE-DATA.md. Done: 日 first meaning is «día, sol»; regeneration keeps overrides.
-- [ ] T006 Delete src/data/lessons/, src/data/lesson.template.json, src/services/kanjiService.ts and src/services/quizService.ts, and point the old pages at the new data loader or a not-found screen. Done: `grep -ri "mock" src` finds nothing; build passes.
+- [x] T006 Delete src/data/lessons/, src/data/lesson.template.json, src/services/kanjiService.ts and src/services/quizService.ts, and point the old pages at the new data loader or a not-found screen. Done: `grep -ri "mock" src` finds nothing; build passes.
 
 ## Phase 2: Foundation (slice S1, blocks every story)
 
@@ -22,7 +22,7 @@ Every commit carries NOE-559 and is pushed. Executed by Sonnet subagents; Opus r
 - [x] T008 [P] Create notebook components in src/design/: Hoja, Bandeja, CasillaKanji (learned, today, pending), BotonPrincipal, BotonSecundario, EtiquetaLectura, Furigana, Marcatextos, Washi, Sello済, StickerSakura, Hanamaru, NotaPropia, HojaRespuestas. Done: component sheet at /_componentes (dev only) matches the exports by eye and by a reviewer.
 - [x] T009 [P] Create src/data/ loader (per-level fetch, cache), types from data-model.md and search over search.json (meaning, kana, romaji, character). Done: in the browser console, search «agua», «みず», «mizu», «水» returns 水 first.
 - [x] T010 [P] Create src/store/ with IndexedDB stores for ReviewCard, ReviewLog, Note, StudyDay, Settings and a `SyncAdapter` interface with a local implementation. Done: data survives a reload.
-- [ ] T011 Create src/app/ router per contracts/screens.md, phone layout and desktop double page (index left at 1024 px and wider), not-found screen; delete src/components/MascotCharacter.tsx, PageHeader.tsx, AppLayout.tsx and the old pages as their routes move. Done: every route opens; unknown routes show not-found; build passes.
+- [x] T011 Create src/app/ router per contracts/screens.md, phone layout and desktop double page (index left at 1024 px and wider), not-found screen; delete src/components/MascotCharacter.tsx, PageHeader.tsx, AppLayout.tsx and the old pages as their routes move. Done: every route opens; unknown routes show not-found; build passes.
 
 ## Phase 3: User Story 1, browse and study any kanji (slice S2)
 
