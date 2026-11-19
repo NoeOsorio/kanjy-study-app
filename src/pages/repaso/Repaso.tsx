@@ -102,7 +102,7 @@ function Tarjeta({ r, char }: { r: UseRepaso; char: string }) {
           aria-hidden
           className="absolute inset-x-5 -top-[7px] h-6 rounded-t-[20px] bg-paper shadow-[0_0_0_1px_rgba(29,27,24,0.07)]"
         />
-        <Hoja className={`relative mx-0 flex flex-1 flex-col overflow-y-auto rounded-[20px] p-[18px] ${mostrada ? 'kj-flip' : ''}`}>
+        <Hoja className={`relative mx-0 flex flex-1 flex-col overflow-y-auto rounded-[20px] p-[18px]`}>
           {!mostrada ? (
             <Frente char={char} />
           ) : (
@@ -163,7 +163,7 @@ function Frente({ char }: { char: string }) {
 function Reverso({ char, k, level, nota }: { char: string; k: Kanji | null; level: Level; nota: string }) {
   if (!k) {
     return (
-      <div className="flex items-center gap-4">
+      <div className="kj-reveal flex items-center gap-4">
         <KanjiGrande kanji={char} size={96} />
       </div>
     );
@@ -173,7 +173,7 @@ function Reverso({ char, k, level, nota }: { char: string; k: Kanji | null; leve
   const palabras = [...k.words.filter((w) => w.written !== char), ...k.words.filter((w) => w.written === char)].slice(0, 3);
   const frase = k.sentences[0];
   return (
-    <div className="flex flex-col gap-5">
+    <div className="kj-reveal flex flex-col gap-5">
       <div className="flex items-start gap-4">
         <KanjiGrande kanji={char} size={96} />
         <div className="flex min-w-0 flex-col gap-2 pt-0.5">

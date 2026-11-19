@@ -34,13 +34,16 @@ function Interruptor({
       aria-label={label}
       disabled={disabled}
       onClick={() => onChange(!on)}
-      className={`kj-press relative h-[30px] w-[50px] shrink-0 rounded-full transition-colors duration-150 disabled:cursor-not-allowed ${
+      className={`kj-press relative h-[30px] w-[50px] shrink-0 rounded-full transition-colors duration-150 ease-[ease] disabled:cursor-not-allowed ${
         on && !disabled ? 'bg-wine' : 'bg-rail'
       }`}
     >
       <span
-        className="absolute top-[3px] left-[3px] h-6 w-6 rounded-full bg-white shadow-sm transition-transform duration-150"
-        style={{ transform: on && !disabled ? 'translateX(20px)' : 'none' }}
+        className="absolute top-[3px] left-[3px] h-6 w-6 rounded-full bg-white shadow-sm"
+        style={{
+          transform: on && !disabled ? 'translateX(20px)' : 'none',
+          transition: 'transform 160ms cubic-bezier(0.23, 1, 0.32, 1)',
+        }}
       />
     </button>
   );

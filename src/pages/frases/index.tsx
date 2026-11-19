@@ -273,8 +273,8 @@ export default function FrasesPage() {
       <Barra kind="close" onClick={() => navigate(-1)}>
         <div className="h-1.5 flex-1 overflow-hidden rounded-full bg-rail">
           <div
-            className="h-full rounded-full bg-wine transition-[width] duration-200 ease-out"
-            style={{ width: `${((i + 1) / total) * 100}%` }}
+            className="h-full w-full origin-left rounded-full bg-wine transition-transform duration-200 ease-out"
+            style={{ transform: `scaleX(${(i + 1) / total})` }}
           />
         </div>
         <Link

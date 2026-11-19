@@ -1,4 +1,4 @@
-import { useEffect, useLayoutEffect, useRef, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import type { ReactNode } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { getKanji, loadLevel, strokeUrl } from '../../data/levels';
@@ -265,30 +265,10 @@ function Practica({ d }: { d: Datos }) {
   );
 }
 
-/** 花丸 con pluma roja sobre el trazo del estudiante, se dibuja en menos de 700 ms. */
+/** 花丸 con pluma roja sobre el trazo del estudiante. */
 function Sello() {
-  const ref = useRef<HTMLDivElement>(null);
-  useLayoutEffect(() => {
-    const el = ref.current;
-    if (!el) return;
-    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
-    el.querySelectorAll('path').forEach((p, i) => {
-      const len = p.getTotalLength();
-      p.style.strokeDasharray = `${len}`;
-      p.animate([{ strokeDashoffset: len }, { strokeDashoffset: 0 }], {
-        duration: i === 0 ? 450 : 300,
-        delay: i === 0 ? 0 : 350,
-        easing: 'cubic-bezier(0.23, 1, 0.32, 1)',
-        fill: 'both',
-      });
-    });
-  }, []);
   return (
-    <div
-      ref={ref}
-      aria-hidden
-      className="pointer-events-none absolute inset-0 flex items-center justify-center"
-    >
+    <div aria-hidden className="pointer-events-none absolute inset-0 flex items-center justify-center">
       <HanamaruFluido />
     </div>
   );
@@ -298,7 +278,7 @@ function Sello() {
 function HanamaruFluido() {
   return (
     <div className="flex aspect-square w-[89%] items-center justify-center [&>span]:!h-full [&>span]:!w-full [&_svg]:!h-full [&_svg]:!w-full">
-      <Hanamaru size={300} soft />
+      <Hanamaru size={300} soft draw />
     </div>
   );
 }

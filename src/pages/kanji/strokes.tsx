@@ -1,8 +1,33 @@
 import { useEffect, useRef, useState } from 'react';
 import { strokeUrl } from '../../data/levels';
 
-const EASE = 'cubic-bezier(0.23, 1, 0.32, 1)';
-export const MS_PER_STROKE = 300;
+const EASE = 'cubic-bezier(0.65, 0, 0.35, 1)';
+/** ms por unidad de longitud (viewBox 109): un trazo medio de 40 dura unos 280 ms. */
+const MS_PER_UNIT = 7;
+
+const lengthCache = new Map<string, number>();
+function pathLength(d: string): number {
+  let n = lengthCache.get(d);
+  if (n === undefined) {
+    const el = document.createElementNS('http://www.w3.org/2000/svg', 'path');
+    el.setAttribute('d', d);
+    n = el.getTotalLength();
+    lengthCache.set(d, n);
+  }
+  return n;
+}
+
+/** Duración y retraso de cada trazo: proporcional a su largo, uno empieza cuando acaba el anterior. */
+export function strokeTimings(paths: string[]): { dur: number; delay: number }[] & { total?: number } {
+  let t = 0;
+  const out: { dur: number; delay: number }[] = paths.map((d) => {
+    const dur = Math.round(Math.min(420, Math.max(180, pathLength(d) * MS_PER_UNIT)));
+    const item = { dur, delay: t };
+    t += dur;
+    return item;
+  });
+  return Object.assign(out, { total: t });
+}
 
 const cache = new Map<string, Promise<string[]>>();
 
@@ -38,7 +63,8 @@ export function useStrokes(char: string): string[] {
 }
 
 /** Controla la reproducción del orden de trazos. `run` cambia en cada reproducción. */
-export function useStrokePlayback(count: number) {
+export function useStrokePlayback(paths: string[]) {
+  const count = paths.length;
   const [playing, setPlaying] = useState(false);
   const [go, setGo] = useState(false);
   const [run, setRun] = useState(0);
@@ -67,7 +93,7 @@ export function useStrokePlayback(count: number) {
     });
     timer.current = window.setTimeout(
       () => setPlaying(false),
-      reduced() ? 1200 : count * MS_PER_STROKE + 700,
+      reduced() ? 1200 : (strokeTimings(paths).total ?? 0) + 700,
     );
   };
   return { playing, go, run, play, instant: typeof window !== 'undefined' && reduced() };
@@ -85,6 +111,7 @@ export function StrokeOverlay({
   run: number;
   instant: boolean;
 }) {
+  const timings = strokeTimings(paths);
   return (
     <svg
       key={run}
@@ -97,7 +124,9 @@ export function StrokeOverlay({
       strokeLinecap="round"
       strokeLinejoin="round"
     >
-      {paths.map((d, i) => (
+      {paths.map((d, i) => {
+        const tm = timings[i];
+        return (
         <path
           key={i}
           d={d}
@@ -105,10 +134,11 @@ export function StrokeOverlay({
           style={{
             strokeDasharray: '1 2',
             strokeDashoffset: instant || go ? 0 : 1.02,
-            transition: instant ? 'none' : `stroke-dashoffset ${MS_PER_STROKE}ms ${EASE} ${i * MS_PER_STROKE}ms`,
+            transition: instant ? 'none' : `stroke-dashoffset ${tm.dur}ms ${EASE} ${tm.delay}ms`,
           }}
         />
-      ))}
+        );
+      })}
     </svg>
   );
 }

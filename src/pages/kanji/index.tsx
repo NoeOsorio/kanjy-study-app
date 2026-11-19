@@ -96,7 +96,7 @@ function Contenido({ s, k }: { s: Loaded; k: Kanji }) {
   const navigate = useNavigate();
   const desktop = useDesktop();
   const paths = useStrokes(k.char);
-  const pb = useStrokePlayback(paths.length);
+  const pb = useStrokePlayback(paths);
   const [added, setAdded] = useState(s.hasCard);
   const escribir = `/kanji/${encodeURIComponent(k.char)}/escribir`;
   const done = Math.min(s.lessonTotal, s.lessonDone + (added && !s.hasCard ? 1 : 0));

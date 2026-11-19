@@ -85,13 +85,32 @@ html, body {
 }
 
 /* Movimiento: solo transform, opacity y el trazo de la 花丸. Nada dura más de 300 ms salvo el trazo (600 ms). */
-@keyframes kj-flip {
-  from { transform: perspective(1000px) rotateY(-70deg) scale(0.98); opacity: 0.4; }
-  to { transform: perspective(1000px) rotateY(0deg) scale(1); opacity: 1; }
+@keyframes kj-reveal {
+  from { transform: scale(0.98); opacity: 0; }
+  to { transform: scale(1); opacity: 1; }
 }
-.kj-flip {
-  animation: kj-flip 260ms cubic-bezier(0.23, 1, 0.32, 1) both;
-  transform-origin: 50% 50%;
+.kj-reveal {
+  animation: kj-reveal 160ms cubic-bezier(0.23, 1, 0.32, 1) both;
+  transform-origin: center;
+}
+/* Selector de nivel: se desliza con transiciones (interrumpibles). */
+.kj-backdrop {
+  opacity: 0;
+  transition: opacity 200ms ease-out;
+}
+.kj-backdrop[data-open='true'] { opacity: 1; }
+.kj-sheet {
+  transform: translateY(100%);
+  transition: transform 200ms ease-out;
+}
+.kj-sheet[data-open='true'] {
+  transform: translateY(0);
+  transition: transform 280ms cubic-bezier(0.32, 0.72, 0, 1);
+}
+@media (prefers-reduced-motion: reduce) {
+  .kj-sheet, .kj-sheet[data-open='true'] { transform: none; opacity: 0; transition: opacity 150ms ease; }
+  .kj-sheet[data-open='true'] { opacity: 1; }
+  .kj-backdrop { transition-duration: 150ms; }
 }
 @keyframes kj-land {
   from { transform: rotate(calc(var(--rot, 0deg) - 12deg)) scale(0.9); opacity: 0; }
@@ -110,5 +129,5 @@ html, body {
 }
 .kj-draw-2 { animation-delay: 350ms; animation-duration: 300ms; }
 @media (prefers-reduced-motion: reduce) {
-  .kj-flip, .kj-land, .kj-draw { animation: none; }
+  .kj-reveal, .kj-land, .kj-draw { animation: none; }
 }

@@ -334,20 +334,40 @@ function SelectorNivel({
     };
   }, []);
 
+  // Entra al siguiente cuadro y sale antes de desmontarse.
+  const [abierto, setAbierto] = useState(false);
+  const timer = useRef<number | undefined>(undefined);
   useEffect(() => {
-    const k = (e: KeyboardEvent) => e.key === 'Escape' && onClose();
+    const id = requestAnimationFrame(() => requestAnimationFrame(() => setAbierto(true)));
+    return () => {
+      cancelAnimationFrame(id);
+      window.clearTimeout(timer.current);
+    };
+  }, []);
+  const salir = (despues: () => void) => {
+    setAbierto(false);
+    window.clearTimeout(timer.current);
+    timer.current = window.setTimeout(despues, 200);
+  };
+  const cerrar = () => salir(onClose);
+
+  useEffect(() => {
+    const k = (e: KeyboardEvent) => e.key === 'Escape' && cerrar();
     window.addEventListener('keydown', k);
     return () => window.removeEventListener('keydown', k);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [onClose]);
 
   return (
-    <div className="fixed inset-0 z-50 flex flex-col justify-end bg-ink/30" onClick={onClose}>
+    <div className="fixed inset-0 z-50 flex flex-col justify-end" onClick={cerrar}>
+      <div aria-hidden data-open={abierto} className="kj-backdrop absolute inset-0 bg-ink/30" />
       <div
         role="dialog"
         aria-modal="true"
         aria-label="Nivel"
         onClick={(e) => e.stopPropagation()}
-        className="mx-auto w-full max-w-[480px] rounded-t-[22px] bg-paper px-3.5 pb-[max(20px,env(safe-area-inset-bottom))] pt-3 shadow-[var(--shadow-sheet)]"
+        data-open={abierto}
+        className="kj-sheet relative mx-auto w-full max-w-[480px] rounded-t-[22px] bg-paper px-3.5 pb-[max(20px,env(safe-area-inset-bottom))] pt-3 shadow-[var(--shadow-sheet)]"
       >
         <div className="mx-auto mb-3 h-1 w-10 rounded-full bg-rail" />
         <ul className="flex flex-col gap-1">
@@ -359,7 +379,7 @@ function SelectorNivel({
               <li key={l}>
                 <button
                   type="button"
-                  onClick={() => onPick(l)}
+                  onClick={() => salir(() => onPick(l))}
                   aria-pressed={actual}
                   className={cx(
                     'kj-press flex w-full items-start gap-3.5 rounded-2xl p-3 text-left',
