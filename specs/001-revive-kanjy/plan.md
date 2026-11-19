@@ -65,7 +65,7 @@ in the UI; no keys in text.
 
 No violations. Gate passes.
 
-## Decisions that need Noe's yes (Gate A)
+## Decisions approved by Noe at Gate A (2026-11-18: «Sí, todo»)
 
 1. **Accounts**: Supabase (auth and database in one, free tier, works without our own server)
    instead of WorkOS plus a separate database and server. Creating the project needs his yes.
