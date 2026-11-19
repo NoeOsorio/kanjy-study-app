@@ -72,7 +72,7 @@ Independent test: quickstart scenarios 5 and 8.
 
 - [x] T031 Run every quickstart scenario at 375 and 1280 px headless, save screenshots next to the Paper exports, attach to NOE-559. Done: evidence on the ticket.
 - [x] T032 Independent reviewers (design, copy and repetition, function, coverage table against code) score each screen; a reviewer checks the 79 N5 first meanings against a dictionary (SC-004) and spot-checks 40 N4 kanji; fix below 8. Done: every screen at 8 or more and the meaning checks pass.
-- [ ] T033 Cloudflare Pages preview deployment after Noe's yes (Ask Human ticket in Linear when reached). Done: public link opens on a phone.
+- [x] T033 Cloudflare Pages preview deployment after Noe's yes (Ask Human ticket in Linear when reached). Done: public link opens on a phone.
 
 ## Dependencies
 
