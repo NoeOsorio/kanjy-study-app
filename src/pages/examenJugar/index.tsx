@@ -1,6 +1,8 @@
 import { useEffect, useMemo, useRef, useState } from 'react';
 import { Navigate, useLocation, useNavigate } from 'react-router-dom';
-import { Barra, BotonPrincipal, CirculoRojo, HojaRespuestas, Hoja, Marcatextos } from '../../design';
+import { Barra, BotonPrincipal, CirculoRojo, Furigana, HojaRespuestas, Hoja, Marcatextos } from '../../design';
+import { needsReading } from '../../data/furigana';
+import type { Level } from '../../data/types';
 import type { RespuestaEstado } from '../../design/HojaRespuestas';
 import { IconPlay } from '../../design/icons';
 import { getKanji, loadLevel } from '../../data/levels';
@@ -20,6 +22,7 @@ function Jugar({ sel }: { sel: ExamSelection }) {
   const [questions, setQuestions] = useState<ExamQuestion[] | null>(null);
   const [answers, setAnswers] = useState<ExamAnswer[]>([]);
   const [chosen, setChosen] = useState<number | null>(null);
+  const [nivel, setNivel] = useState<Level>('N5');
   const inicio = useRef(0);
   /** Milisegundos que tardó en responder la pregunta actual. */
   const tiempo = useRef(0);
@@ -31,6 +34,7 @@ function Jugar({ sel }: { sel: ExamSelection }) {
       const s = await getSettings();
       const file = await loadLevel(first?.level ?? s.level);
       if (!vivo) return;
+      setNivel(s.level);
       const qs = buildQuestions(sel.mode, sel.chars, file);
       if (!qs.length) navigate('/examen', { replace: true });
       else setQuestions(qs);
@@ -155,7 +159,7 @@ function Jugar({ sel }: { sel: ExamSelection }) {
         </div>
 
         <div className="mt-auto flex flex-col gap-3 pt-5">
-          {pistaOn && <Pista q={q} />}
+          {pistaOn && <Pista q={q} nivel={nivel} />}
           {pistaOn && (
             <BotonPrincipal onClick={siguiente} title="Enter">
               {ultima ? 'Ver resultado' : 'Siguiente'}
@@ -204,19 +208,23 @@ function Prompt({ q }: { q: ExamQuestion }) {
   );
 }
 
-function Pista({ q }: { q: ExamQuestion }) {
+function Pista({ q, nivel }: { q: ExamQuestion; nivel: Level }) {
   const w = q.hint.word;
   return (
     <div className="rounded-xl bg-sakura-bg px-4 py-3">
       {w ? (
         <>
-          <div className="text-[22px] text-ink" style={{ fontFamily: 'var(--font-kanji)', lineHeight: 1.6 }}>
-            {[...w.written].map((ch, n) =>
-              ch === q.char ? <Marcatextos key={n}>{ch}</Marcatextos> : <span key={n}>{ch}</span>,
-            )}
-          </div>
+          {needsReading(w.level, nivel) ? (
+            <Furigana tokens={[{ text: w.written, reading: w.reading, showReading: true }]} size={22} />
+          ) : (
+            <div className="text-[22px] text-ink" style={{ fontFamily: 'var(--font-kanji)', lineHeight: 1.6 }}>
+              {[...w.written].map((ch, n) =>
+                ch === q.char ? <Marcatextos key={n}>{ch}</Marcatextos> : <span key={n}>{ch}</span>,
+              )}
+            </div>
+          )}
           <div className="font-voice text-[16px] text-ink-2">
-            {w.reading}, {w.meaning}
+            {needsReading(w.level, nivel) ? w.meaning : `${w.reading}, ${w.meaning}`}
           </div>
         </>
       ) : (

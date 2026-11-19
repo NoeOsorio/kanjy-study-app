@@ -11,7 +11,7 @@ export function BotonPrincipal({ icon, children, className, ...rest }: Props) {
       {...rest}
       className={cx(
         'kj-press flex h-[52px] w-full items-center justify-center gap-2.5 rounded-xl bg-wine px-5 text-[18px] font-semibold text-white',
-        'disabled:bg-rail disabled:text-faded disabled:cursor-not-allowed',
+        'disabled:bg-rail disabled:text-ink-3 disabled:cursor-not-allowed',
         className,
       )}
     >

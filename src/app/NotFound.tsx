@@ -15,7 +15,7 @@ export default function NotFound() {
           to="/"
           className="kj-press flex h-[52px] items-center justify-center rounded-xl bg-wine px-8 text-[18px] font-semibold text-white"
         >
-          Ir a hoy
+          Ir al inicio
         </Link>
       </Hoja>
     </div>

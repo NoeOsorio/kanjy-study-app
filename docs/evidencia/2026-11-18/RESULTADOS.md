@@ -122,3 +122,16 @@ Después de la corrida se corrigieron cuatro hallazgos. Se verificaron en `vite`
 - Frases sin entrada: la tarjeta «En una frase» (celular) y «En frases, con cada lectura» (escritorio) de la página del kanji abre `/frases/<lección>?k=<kanji>` y el mazo empieza en ese kanji (probado con 国: abre en 国, `fix-frases-en-kanji`, `fix-kanji-frase-tarjeta`). La fila de la lección actual del índice tiene el botón «Frases» junto a «Examen»; caben en 375 px y en la columna de 330 px.
 - Repasos desde el índice en celular: con repasos vencidos aparece, bajo la búsqueda, una fila con «N repasos» y el botón vino «Repasar» que abre `/repaso` (`fix-repasos-fila`, `fix-repasar-abre`; con 10 tarjetas vencidas dice «10 repasos»). En escritorio la fila no se muestra porque el panel de hoy ya tiene «Repasar». La página del primer día tiene arriba a la izquierda el botón «N5» que lleva a `/indice` (`fix-primer-dia`).
 - Pizarra de escritura en escritorio: ahora mide lo que quepa entre el tope de la ventana, las casillas y las herramientas (máximo 520 px). A 1280x900 y a 1440x900 el borde de abajo de la pizarra queda en 709 px, las herramientas en 773 y «Siguiente» en 839, todo dentro de los 900 px sin desplazar (`fix-escribir-hecho-1280`, `fix-escribir-hecho-1440`). El celular no cambia.
+
+## Ronda 2
+
+Se corrigieron los hallazgos de la revisión independiente. Verificado con `npm run build` (pasa) y con Playwright en `vite` (puerto 5194), a 375x812 y 1280x900. Capturas `r2-<qué>-<375|1280>.png` en esta carpeta.
+
+- Pestañas al borde (solo escritorio): columna a la derecha de la libreta con Escribir, Repasar (con círculo vino con el número de repasos vencidos), Examen y Notas; título en tooltip; la pestaña de la ruta activa va en blanco. Con una tarjeta vencida el círculo muestra «1» (`r2-kanji-pestanas-1280`). En celular no se ven.
+- Progreso del examen: con más de 10 preguntas las casillas miden 18 px y la fila no se parte; con 20 queda en una sola fila que se desplaza sin barra y mantiene visible la casilla actual. Tras responder salen el círculo rojo en la correcta, el tachón en la errónea y la pista con el botón «Siguiente» (`r2-examen-20-error-375`, `r2-examen-1280`).
+- Furigana en el examen: la pista de la palabra usa `Furigana` cuando el nivel de la palabra está por encima del nivel del estudiante. No se pone en la pregunta de «¿Cómo se lee esta palabra?» porque regalaría la respuesta. La pantalla de resultado solo muestra el kanji estudiado y significados, no hay palabras ni frases ahí.
+- Botón principal deshabilitado: texto en ink-3 sobre el fondo rail.
+- Textos: «No tienes más repasos hoy», «En mis repasos» (página del kanji y resultado del examen), «Ir al inicio», «Tu dispositivo no tiene voz en japonés.».
+- Botón de nivel en Buscar: abre el índice con el selector de nivel abierto (`r2-nivel-buscar-375`).
+- Pantallas que no tenían captura: `r2-creditos-375`, `r2-creditos-1280`, `r2-no-encontrada-375`, `r2-cargando-375` (con `/data` retrasado 4 s) y `r2-nivel-indice-375`.
+- Pendiente visto, sin tocar: a 1280 `/creditos` dibuja la hoja dentro de la libreta, con doble marco.

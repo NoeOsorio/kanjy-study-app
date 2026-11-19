@@ -142,7 +142,7 @@ function Resultado({ st }: { st: Estado }) {
                     </div>
                   </div>
                   {ya ? (
-                    <span className="shrink-0 text-[14px] font-medium text-ink-3">En tus repasos</span>
+                    <span className="shrink-0 text-[14px] font-medium text-ink-3">En mis repasos</span>
                   ) : (
                     <BotonSecundario onClick={() => void repasar(q.char)} className="!h-10 shrink-0">
                       + Repasar

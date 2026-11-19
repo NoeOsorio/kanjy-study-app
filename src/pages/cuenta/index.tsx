@@ -195,7 +195,7 @@ export default function CuentaPage() {
             fondo="var(--china-bg)"
             tinta="var(--china-ink)"
             titulo="Sonido"
-            detalle={voz ? 'Oír cada lectura y frase' : 'Este dispositivo no tiene voz en japonés.'}
+            detalle={voz ? 'Oír cada lectura y frase' : 'Tu dispositivo no tiene voz en japonés.'}
           >
             <Interruptor on={settings.sound} onChange={(v) => guardar({ sound: v })} label="Sonido" disabled={!voz} />
           </Fila>

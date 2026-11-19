@@ -207,7 +207,7 @@ function Tranquilo({ d }: { d: Datos }) {
   return (
     <Marco>
       <h1 className="m-0 font-voice text-[34px] leading-tight text-ink">
-        {sig ? `Tu próximo repaso es ${cuando(sig, new Date())}` : 'Por hoy no hay nada más'}
+        {sig ? `Tu próximo repaso es ${cuando(sig, new Date())}` : 'No tienes más repasos hoy'}
       </h1>
       <div className="flex items-end justify-between rounded-[14px] bg-tray px-4 py-5">
         {d.semana.map((s, i) => {

@@ -149,7 +149,7 @@ function Contenido({ s, k }: { s: Loaded; k: Kanji }) {
     </BotonPrincipal>
   ) : (
     <BotonPrincipal icon={<IconLapiz size={20} />} onClick={agregar} disabled={added}>
-      {added ? 'En tus repasos' : 'Agregar a mis repasos'}
+      {added ? 'En mis repasos' : 'Agregar a mis repasos'}
     </BotonPrincipal>
   );
 
@@ -212,7 +212,7 @@ function Contenido({ s, k }: { s: Loaded; k: Kanji }) {
         ) : (
           accion
         )}
-        <Nota char={k.char} initial={s.note} />
+        <div id="nota"><Nota char={k.char} initial={s.note} /></div>
       </section>
     </div>
   );

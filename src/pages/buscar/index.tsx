@@ -94,7 +94,7 @@ export default function BuscarPage() {
       <header className="flex items-center gap-2 px-3.5 py-3">
         <button
           type="button"
-          onClick={() => navigate('/indice')}
+          onClick={() => navigate('/indice?selector=1')}
           aria-label="Cambiar de nivel"
           className="kj-press flex h-[46px] shrink-0 items-center gap-1.5 rounded-xl bg-tray px-3.5 text-[17px] font-semibold text-ink"
         >
