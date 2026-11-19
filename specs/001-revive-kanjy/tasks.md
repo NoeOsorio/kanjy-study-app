@@ -50,7 +50,7 @@ Independent test: quickstart scenarios 6 and 7.
 
 - [ ] T021 [P] [US4] Exam setup in src/pages/examen/ with lesson trays, six modes, washi «Para empezar» on Significado, disabled state. Done: matches es-10 and es-20.
 - [ ] T022 [US4] Exam question and result with no letters on options, plausible same-level distractors, no repeats, time per question, «+ Repasar», play button on the prompt, words mode disabled when the selection has no words. Done: matches es-5 and es-6 for each mode.
-- [ ] T023 [P] [US4] Phrase cards in src/pages/frases/ with furigana, highlighter, words, meaning, play button, and the empty card. Done: matches es-11 and es-19.
+- [x] T023 [P] [US4] Phrase cards in src/pages/frases/ with furigana, highlighter, words, meaning, play button, and the empty card. Done: matches es-11 and es-19.
 
 ## Phase 6: User Story 5, the notebook around the study (slice S5)
 
